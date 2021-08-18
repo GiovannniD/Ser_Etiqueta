@@ -1,0 +1,142 @@
+﻿@model Ser_Etiqueta.Models.Libro;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_layout";
+}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Formulario de libros</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <form method="post"  id="ajaxForm">
+                            @*<form method="post" asp-action="Create" id="ajaxForm">*@
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Titulo</label>
+                                        <input type="text" class="form-control" id="Titulo" name="titulo" placeholder="Ingresa el titulo" asp-for="Titulo">
+                                        <span asp-validation-for="Titulo"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Descripcion</label>
+                                        <input type="text" class="form-control" id="Descripcion" name="Descripcion" placeholder="Descripcion" asp-for="Descripcion">
+                                        <span asp-validation-for="Descripcion"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Fecha de Lanzamiento</label>
+                                        <input type="date" class="form-control" id="FechaLanzamiento" name="FechaLanzamiento" placeholder="Fecha" asp-for="FechaLanzamiento">
+                                        <span asp-validation-for="FechaLanzamiento"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Autor</label>
+                                        <input type="text" class="form-control" id="Autor" name="Autor" placeholder="Autor" asp-for="Autor">
+                                        <span asp-validation-for="Autor"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Precio</label>
+                                        <input type="number" class="form-control" id="Precio" name="Precio" placeholder="Precio" asp-for="Precio">
+                                        <span asp-validation-for="Precio"></span>
+                                    </div>
+
+
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button class="btn btn-primary" type="submit" id="SubmitBtn">Submit</button>
+                                </div>
+                            </form>
+
+
+</div>
+                    <!-- /.card -->
+
+                </div>
+                <!--/.col (right) -->
+                <!-- form start -->
+
+            </div>
+        </div>
+    </section>
+</div>
+@section Scripts{
+
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <script type="text/javascript">
+
+        $(function () {
+            $("#AjaxForm").submit(function (e) {
+                e.preventDefault();
+
+                // Mostramos el Ajax Loader
+                $("#AjaxLoader").show("fast");
+
+                // Deshabilitamos el botón de Submit
+                $("#SubmitBtn").prop("disabled", true);
+               var data= $("#AjaxForm").serialize()
+                $.ajax({    
+                    url: "@Url.Action("Create", "Libros")", // Url
+                    data: data,
+                    type: "post"  // Verbo HTTP
+                })
+                // Se ejecuta si todo fue bien.
+                .done(function (result) {
+                    if (result != null) {
+
+                        // Actualiza el resultado HTML
+                      //  $("#PostList").html(result);
+
+                        // Un pequeño esfecto especial ;)
+                     //   $("#PostList .row").first().hide();
+                     //   $("#PostList .row").first().slideToggle("fast");
+
+                        // Limpia el formulario
+                     //   $("#Comentario").val("");
+                     //   $("#Nombre").val("");
+                     //   $("#Email").val("");
+                     //   $("#Titulo").val("");
+
+                        // Escondemos el Ajax Loader
+                     //   $("#AjaxLoader").hide("slow");
+
+                        // Habilitamos el botón de Submit
+                        $("#SubmitBtn").prop("disabled", false);
+
+                        // Mostramos un mensaje de éxito.
+                     //   $("#ExitoAlert").show("slow").delay(2000).hide("slow");
+                    }
+                })
+                // Se ejecuta si se produjo un error.
+                .fail(function (xhr, status, error) {
+                    // Mostramos un mensaje de error.
+                //    $("#ErrorAlert").show("slow").delay(2000).hide("slow");
+
+                    // Escondemos el Ajax Loader
+                  //  $("#AjaxLoader").hide("slow");
+
+                    // Habilitamos el botón de Submit
+                  //  $("#SubmitBtn").prop("disabled", false);
+                })
+                // Hacer algo siempre, haya sido exitosa o no.
+                .always(function () {
+
+                });
+            });
+        });
+    </script>
+
+}

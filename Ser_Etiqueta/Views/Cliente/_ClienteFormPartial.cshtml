@@ -1,0 +1,73 @@
+﻿@model Ser_Etiqueta.Models.DB.Cliente;
+<div class="col-md-6">
+    <div class="form-group">
+        <label for="Codigo">Codigo</label>
+        
+        <input type="text" class="form-control" id="Codigo" name="Codigo" placeholder="Codigo" asp-for="Codigo">
+        <span asp-validation-for="Codigo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="NombreEmpresa">Nombre del cliente</label>
+        <input type="text" class="form-control" id="NombreCliente" name="NombreCliente" placeholder="Nombre del cliente" asp-for="NombreCliente">
+        <span asp-validation-for="NombreCliente" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="NombreComercial">Nombre Comercial</label>
+        <input type="text" class="form-control" id="NombreComercial" name="NombreComercial" placeholder="Nombre Comercial" asp-for="NombreComercial">
+        <span asp-validation-for="NombreComercial" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" id="idCliente" name="idCliente" value="" />
+    <div class="form-group">
+        <label for="Contacto">Contacto</label>
+        <input type="text" class="form-control" id="Contacto" placeholder="Contacto" asp-for="Contacto">
+        <span asp-validation-for="Contacto" data-inputmask='"mask": "9999-9999"' data-mask class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Cargo">Cargo</label>
+        <input type="text" class="form-control" id="Cargo" name="Cargo" placeholder="Cargo" asp-for="Cargo">
+        <span asp-validation-for="Cargo" class="text-danger"></span>
+    </div>
+
+
+
+
+</div>
+<div class="col-md-6">
+    <div class="form-group">
+        <label for="Telefono">Telefono</label>
+        <input type="text" class="form-control" id="Telefono" name="Telefono" placeholder="Telefono" asp-for="Telefono">
+        <span asp-validation-for="Telefono" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Movil">Movil</label>
+        <input type="text" class="form-control" id="Movil" name="Movil" placeholder="Movil" asp-for="Movil">
+        <span asp-validation-for="Movil" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="email" class="form-control" id="Email" name="Email" placeholder="example@etiquetas.com" asp-for="Email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Direccion">Direccion</label>
+        <textarea  class="form-control" id="Direccion" name="Direccion" placeholder="Direccion" asp-for="Direccion"> </textarea>
+        <span asp-validation-for="Direccion" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="idDepartamento">Departamento</label>
+        <select class="form-control select2bs4" style="width: 100%;" id=idDepartamento name=idDepartamento onchange="getMunicipio(this.value,1)">
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="idMunicipio">Municipio</label>
+        <select class="form-control select2bs4" style="width: 100%;" id=idMunicipio name=idMunicipio>
+        </select>
+    </div>
+
+</div>

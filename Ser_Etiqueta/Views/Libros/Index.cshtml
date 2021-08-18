@@ -1,0 +1,118 @@
+﻿@model IEnumerable<Ser_Etiqueta.Models.Libro>;
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout";
+}
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+
+    @if (TempData["Mensaje"]!=null) 
+    {
+    <div class="alert alert-warning alert-dismissible fade show" role="alter">
+        @TempData["Mensaje"]
+        <button  type="button" class="close" data-dismiss="alter" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    }
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>General Form</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">General Form</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-6">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Formulario de libros</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <a asp-controller="Libros" asp-action="Create" class="btn btn-success">Crear Nuevo Libro</a>
+
+
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                    <!--/.col (right) -->
+     
+            </div>
+            <!-- /.row -->
+
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <h3>Lista de Libros</h3>
+                        @if (Model.Count() > 0)
+                        {
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <td>@Html.DisplayNameFor(m => m.Id)</td>
+                                        <td>@Html.DisplayNameFor(m => m.Titulo)</td>
+                                        <td>@Html.DisplayNameFor(m => m.Descripcion)</td>
+                                        <td>@Html.DisplayNameFor(m => m.FechaLanzamiento)</td>
+                                        <td>@Html.DisplayNameFor(m => m.Autor)</td>
+                                        <td>@Html.DisplayNameFor(m => m.Precio)</td>
+                                        <td>Acciones</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.Id</td>
+                                            <td>@item.Titulo</td>
+                                            <td>@item.Descripcion</td>
+                                            <td>@item.FechaLanzamiento</td>
+                                            <td>@item.Autor</td>
+                                            <td>@item.Precio</td>
+                
+                                            <td>
+                                                <a asp-controller="Libros" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
+                                                <a asp-controller="Libros" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Eliminar</a>
+                                            </td>
+
+                                        </tr>
+
+
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p>No existe Registro</p>
+                        }
+                    </div>
+                    <!--/.col (right) -->
+                </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+

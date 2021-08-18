@@ -1,0 +1,35 @@
+﻿@font-face {
+    font-family: "Miedinger";
+    src: url('/adminlte/Miedinger W01 Bold/Miedinger W01 Bold.otf')
+}
+
+@font-face {
+    font-family: "Winner";
+    src: url('/adminlte/Miedinger W01 Bold/sportsfonts - Winner Sans Cond Regular.otf')
+}
+
+.Miedinger {
+    font-family: "Miedinger";
+    font-size: 20px;
+    font-weight:bold;
+    letter-spacing: 1px;
+}
+
+.Winner {
+    font-family: "Winner";
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+
+
+    .nav-pills .nav-link.active,
+    .nav-pills .show > .nav-link {
+        color: white;
+        background-color: #BB0423;
+    }
+
+.nav-pills .nav-link {
+    color: #014377;
+}

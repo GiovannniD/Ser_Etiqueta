@@ -1,0 +1,274 @@
+﻿@*
+    @*
+        For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_layout";
+}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0" style="color: #014377;">Registro de Empresas</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Empresas</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header ui-sortable-handle" style="cursor: move;">
+                <h3 class="card-title" style="color: #014377;">
+                    <i class="fas fa-dot-circle mr-1"></i>
+                    Registros
+                </h3>
+                <div class="card-tools">
+                    <ul class="nav nav-pills ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#revenue-chart" data-toggle="tab" >Registro de empresas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#sales-chart" data-toggle="tab">Sucursales</a>
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+                <div class="tab-content p-0">
+                    <!-- Morris chart - Sales -->
+                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; ">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <button type="button" class="btn col-12" style="background:#014377; color:white;" onclick="addNew()">Agregar nuevo</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-12">
+
+                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+
+
+                                            <th>Codigo Sersa</th>
+                                            <th>Nombre de la empresa</th>
+                                            <th>Departamento</th>
+                                            <th>Municipio</th>
+                                            <th>Fecha de Registro</th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+
+                                    <tfoot>
+                                        <tr>
+
+                                            <th>Codigo Sersa</th>
+                                            <th>Nombre de la empresa</th>
+                                            <th>Departamento</th>
+                                            <th>Municipio</th>
+                                            <th>Fecha de Registro</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart tab-pane" id="sales-chart" style="position: relative; ">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-outline-success col-12" onclick="addNewSucursal()">Agregar nueva Sucursal</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-12">
+
+                                <table id="example2" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+
+
+                                            <th>Id Sucursal</th>
+                                            <th>Nombre de la Sucursal</th>
+                                            <th>Empresa</th>
+                                            <th>Departamento</th>
+                                            <th>Municipio</th>
+                                            <th>Fecha de registro</th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+
+                                    <tfoot>
+                                        <tr>
+
+                                            <th>Id Sucursal</th>
+                                            <th>Nombre de la Sucursal</th>
+                                            <th>Empresa</th>
+                                            <th>Departamento</th>
+                                            <th>Municipio</th>
+                                            <th>Fecha de registro</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modalCRUD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style='overflow-y: auto; height:450px; '>
+                <div class="row">
+                    <input type="hidden" id="IdEmpresa" name="IdEmpresa" value="" />
+                    <div class="col-md-6" id="showfrm">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="idDepartamento">Departamento</label>
+                            <select class="form-control select2bs4" style="width: 100%;" id=idDepartamento name=idDepartamento onchange="getMunicipio(this.value,1)">
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="idMunicipio">Municipio</label>
+                            <select class="form-control select2bs4" style="width: 100%;" id=idMunicipio name=idMunicipio>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="tieneSucursal" name="tieneSucursal">
+                                <label class="form-check-label" for="tieneSucursal">Tiene Sucursal?</label>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-outline-primary col-12" id="btnGuardar">Guardar registro</button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalCRUDSucursal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" id="idSucursal" name="idSucursal" value="" />
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nombreSucursal">Nombre de la Sucursal </label>
+                            <input type="text" class="form-control" placeholder="Nombre de la Sucursal" id="nombreSucursal" name="nombreSucursal">
+                            <span class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="idEmpresaSucursal">Empresa</label>
+                            <select class="form-control select2bs4" style="width: 100%;" id=idEmpresaSucursal name=idEmpresaSucursal onchange="getMunicipio(this.value,2)">
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="idDepartamentoSucursal">Departamento</label>
+                            <select class="form-control select2bs4" style="width: 100%;" id=idDepartamentoSucursal name=idDepartamentoSucursal onchange="getMunicipio(this.value)">
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="idMunicipioSucursal">Municipio</label>
+                            <select class="form-control select2bs4" style="width: 100%;" id=idMunicipioSucursal name=idMunicipioSucursal>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-outline-primary col-12" id="btnGuardarSucursal">Guardar registro</button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var urlDepartamento = "@Url.Action("getDepartamento", "Empresa")";
+    var urlMunicipio = "@Url.Action("getMunicipio", "Empresa")";
+    var urlInsert = "@Url.Action("insert", "Empresa")";
+    var urlInsertSucursal = "@Url.Action("insert", "Sucursal")";
+    var urlForm = "@Url.Action("Form", "Empresa")";
+    var urlLoad = "@Url.Action("cargarEmpresas", "Empresa")";
+    var urlLoadSucursal = "@Url.Action("cargarSucursales", "Sucursal")";
+    var urlGetEmpresa = "@Url.Action("GetEmpresa", "Empresa")";
+    var urlGetSucursal = "@Url.Action("GetSucursal", "Sucursal")";
+    var urlUpdate = "@Url.Action("UpdateEmpresa", "Empresa")";
+    var urlUpdateSucursal = "@Url.Action("UpdateSucursal", "Sucursal")";
+</script>
+
+<script src="~/adminlte/js/load_select.js"></script>
+<script src="~/adminlte/js/Empresas.js"></script>

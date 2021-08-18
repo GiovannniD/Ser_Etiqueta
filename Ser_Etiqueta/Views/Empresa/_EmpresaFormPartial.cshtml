@@ -1,0 +1,36 @@
+﻿@model Ser_Etiqueta.Models.DB.Empresa;
+
+
+        <div class="form-group">
+            <label for="IdSersa">Codigo Sersa</label>
+            <input type="text" class="form-control" id="IdSersa" name="IdSersa" placeholder="Codigo Sersa" asp-for="IdSersa">
+            <span asp-validation-for="IdSersa" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="NombreEmpresa">Nombre de la empresa</label>
+            <input type="text" class="form-control" id="NombreEmpresa" name="NombreEmpresa" placeholder="Nombre de la empresa" asp-for="NombreEmpresa">
+            <span asp-validation-for="NombreEmpresa" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="NombreComercial">Nombre Comercial</label>
+            <input type="text" class="form-control" id="NombreComercial" name="NombreComercial" placeholder="Nombre Comercial" asp-for="NombreComercial">
+            <span asp-validation-for="NombreComercial" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-group">
+            <label for="codigoEtiqueta">Prefijo de etiqueta</label>
+            <input type="text" class="form-control" id="codigoEtiqueta" placeholder="Prefijo de etiqueta" asp-for="SerieCodigoEtiqueta">
+            <span asp-validation-for="SerieCodigoEtiqueta" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="codigoEtiqueta">Ultimo consecutivo</label>
+            <input type="text" class="form-control" id="consecutivo" name="consecutivo" placeholder="Ultimo consecutivo" asp-for="UltimoConsecutivo">
+            <span asp-validation-for="UltimoConsecutivo" class="text-danger"></span>
+        </div>
+        
+ 
+    
+
+
