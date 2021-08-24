@@ -45,7 +45,7 @@ namespace Ser_Etiqueta.Controllers
         }
 
         [Authorize]
-        [Authorize(Roles = "SuperAdmin,Moderator,Admin,Basic")]
+        [Authorize(Roles = "SuperAdmin,Etiqueta,Facturacion")]
         public IActionResult Index()
         {
             var users = _userManager.Users.Where(p => p.Id== _userManager.GetUserId(User)).ToList();

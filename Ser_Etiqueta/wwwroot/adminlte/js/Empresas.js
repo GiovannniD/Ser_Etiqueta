@@ -170,7 +170,7 @@ function Form() {
              //   console.log(result)
                 $("#showfrm").html(result)
                 $("#btnGuardar").prop("disabled", false);
-
+                
                 // Mostramos un mensaje de éxito.
                 //   $("#ExitoAlert").show("slow").delay(2000).hide("slow");
             }
@@ -267,6 +267,7 @@ $("#btnGuardar").click(function () {
                         $("#consecutivo").val("")
                         $("#codigoEtiqueta").val("")
                         loadTable();
+                        loadIdEmpresas()
                     } else {
                         $("#showfrm").html(result)
                     }

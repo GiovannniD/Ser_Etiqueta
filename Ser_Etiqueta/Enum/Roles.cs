@@ -8,8 +8,8 @@ namespace Ser_Etiqueta.Enum
     public enum Roles
     {
         SuperAdmin,
-        Admin,
-        Moderator,
-        Basic
+        Facturacion,
+        Etiqueta
+        
     }
 }

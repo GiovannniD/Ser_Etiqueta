@@ -115,14 +115,16 @@ namespace Ser_Etiqueta.Areas.Identity.Pages.Account
                     UserName = userName,
                     Email = Input.Email,
                     FirstName = Input.FirstName,
-                    LastName = Input.LastName
+                    LastName = Input.LastName,
+                    idEmpresa=Input.idEmpresa,
+                    idSucursal=Input.idSucursal
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
 
                     _logger.LogInformation("User created a new account with password.");
-                    await _userManager.AddToRoleAsync(user, Enum.Roles.Basic.ToString());
+                    await _userManager.AddToRoleAsync(user, Enum.Roles.Etiqueta.ToString());
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -140,7 +142,7 @@ namespace Ser_Etiqueta.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                     //   await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }

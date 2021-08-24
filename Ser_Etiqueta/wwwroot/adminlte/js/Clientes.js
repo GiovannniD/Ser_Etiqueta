@@ -218,7 +218,7 @@ function Form() {
                 $("#Contacto").inputmask("9999-9999");
                 $("#Telefono").inputmask("9999-9999");
                 $("#Movil").inputmask("9999-9999");
-
+                selectRefresh();
                 // Mostramos un mensaje de éxito.
                 //   $("#ExitoAlert").show("slow").delay(2000).hide("slow");
             }
