@@ -527,7 +527,7 @@ cantidad.addEventListener("keyup", function (event) {
 
         var html = ""
         for (var i = 0; i < cantidad; i++) {
-            html = "<div class='form-group row'> <label for= 'nombreCliente' class= 'col-sm-3 col-form-label'> Tipo de paquete #" + Math.floor(i + 1) + "</label >  <div class='col-sm-9'> <select class='form-control select2bs4' style='width: 100%;' id='tipoPaquete" + Math.floor(i + 1) + "'> </select></div> </div > <div class='form-group row'><label class= 'col-sm-3 col-form-label'> Peso " + Math.floor(i + 1) + "(kg) *</label> <div class='col-sm-9'>   <input type='text' class='form-control' placeholder='Peso(KG)' id='peso" + Math.floor(i + 1) + "' name='peso'></div></div>"
+            html = "<div class='form-group row'> <label for= 'nombreCliente' class= 'col-sm-3 col-form-label'> Tipo de paquete #" + Math.floor(i + 1) + "</label >  <div class='col-sm-9'> <select class='form-control select2bs4' style='width: 100%;' id='tipoPaquete" + Math.floor(i + 1) + "'> </select></div> </div > <div class='form-group row'><label class= 'col-sm-3 col-form-label'> Peso " + Math.floor(i + 1) + "(kg) </label> <div class='col-sm-9'>   <input type='text' class='form-control' placeholder='Peso(KG)' id='peso" + Math.floor(i + 1) + "' name='peso'></div></div>"
             $("#detalle").append(html);
             selectRefresh()
             loadTipoPaquete(Math.floor(i + 1))
@@ -584,14 +584,18 @@ function addNewEnvio() {
         return false;
     }
     for (var i = 0; i < cantidad; i++) {
-        if ($("#peso" + Math.floor(i + 1)).val() == "" || $("#peso" + Math.floor(i + 1)).val() == 0) {
+        peso += $("#peso" + Math.floor(i + 1)).val() + ",";
+        tipo += $("#tipoPaquete" + Math.floor(i + 1)).val() + ",";
+
+        //este metodo hace obligatorio los campos de peso y tipo de paquete
+       /* if ($("#peso" + Math.floor(i + 1)).val() == "" || $("#peso" + Math.floor(i + 1)).val() == 0) {
             alertify.alert("informacion", "Rellene todos los campos obligatorios (*)")
             $("#agregar").prop("disabled", false);
             return false;
         } else {
             peso += $("#peso" + Math.floor(i + 1)).val() + ",";
             tipo += $("#tipoPaquete" + Math.floor(i + 1)).val() + ",";
-        }
+        }*/
     }
     
 

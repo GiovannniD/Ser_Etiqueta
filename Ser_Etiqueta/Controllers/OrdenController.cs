@@ -178,7 +178,10 @@ namespace Ser_Etiqueta.Controllers
                 _context.OrdenTrabajoDetalles.Add(saveDetalle);
                 _context.SaveChanges();
                 UltimoConsecutivo = UltimoConsecutivo + 1;
-                etiqueta = SerieCodigoEtiqueta + "-" + prefijo + UltimoConsecutivo.ToString();
+                UltimoConsecutivo.ToString().PadLeft(8, '0');
+                UltimoConsecutivo.ToString("00000000");
+                UltimoConsecutivo.ToString("D4");
+                etiqueta = SerieCodigoEtiqueta + "-" + $"{UltimoConsecutivo:00000000}";
                 QRCodeGenerator _qrCode = new QRCodeGenerator();
                 QRCodeData _qrCodeData = _qrCode.CreateQrCode(etiqueta, QRCodeGenerator.ECCLevel.Q);
                 QRCode qrCode = new QRCode(_qrCodeData);

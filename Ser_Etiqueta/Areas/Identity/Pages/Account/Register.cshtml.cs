@@ -68,6 +68,7 @@ namespace Ser_Etiqueta.Areas.Identity.Pages.Account
             
             public int idEmpresa { get; set; }
 
+            [Required]
             public int idSucursal { get; set; }
 
             [Required]
