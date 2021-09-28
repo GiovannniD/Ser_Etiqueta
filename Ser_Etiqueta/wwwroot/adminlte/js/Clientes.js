@@ -2,11 +2,89 @@
 
 $(function () {
     loadTable();
-
+    loadEmpresa()
         bsCustomFileInput.init();
        $("#cargando").hide()
 });
 
+function loadEmpresa() {
+    // $('#tipoPaquete').html("");
+
+    $.ajax({
+        url: urlCargarEmpresas, // Url
+        data: "",
+        type: "post"  // Verbo HTTP
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+            console.log(result)
+            if (result != null) {
+
+                var outObjA = JSON.parse(JSON.stringify(result));
+
+                for (var i = 0; i < outObjA.length; i++) {
+                    var jsonData = outObjA[i];
+
+                    $('#Empresa').append($("<option />").val(jsonData.idEmpresa).text(jsonData.nombreComercial));
+
+                    //   console.log(jsonData.descripcionDep)
+                    //$('#cargo_2').append($("<option />").val(jsonData.cargo).text(jsonData.cargo));
+                    // console.log(jsonData.id);
+                }
+                getSucursal($('#Empresa').val())
+            }
+        })
+        // Se ejecuta si se produjo un error.
+        .fail(function (xhr, status, error) {
+            // Mostramos un mensaje de error.
+            //    $("#ErrorAlert").show("slow").delay(2000).hide("slow");
+
+            // Escondemos el Ajax Loader
+            //  $("#AjaxLoader").hide("slow");
+
+            // Habilitamos el botón de Submit
+            //  $("#SubmitBtn").prop("disabled", false);
+        })
+        // Hacer algo siempre, haya sido exitosa o no.
+        .always(function () {
+
+        });
+
+}
+
+function getSucursal(idEmpresa) {
+    //  alert(idEmpresa)
+    $("#idSucursal").html("")
+    $.ajax({
+        url: urlSucursal, // Url
+        data: { idEmpresa: idEmpresa },
+        type: "post",
+        //  contentType: "application/json; charset=utf-8",// Verbo HTTP
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+            console.log(result)
+          //  $('#idSucursal').append($("<option />").val("0").text("No tiene"));
+            if (result != null) {
+                //  console.log(result)
+                var outObjA = JSON.parse(JSON.stringify(result));
+                for (var i = 0; i < outObjA.length; i++) {
+                    var jsonData = outObjA[i];
+                    $('#Sucursal').append($("<option />").val(jsonData.idSucursal).text(jsonData.nombreSucursal));
+
+                }
+
+            }
+        })
+        // Se ejecuta si se produjo un error.
+        .fail(function (xhr, status, error) {
+
+        })
+        // Hacer algo siempre, haya sido exitosa o no.
+        .always(function () {
+
+        });
+}
 $("#frmupload").submit(function (event) {
    
     event.preventDefault();
@@ -36,9 +114,13 @@ $("#frmupload").submit(function (event) {
             return false;
         }
         var fdata = new FormData();
+       // fdata = $(this).serialize();
         var fileUpload = $("#excel").get(0);
         var files = fileUpload.files;
         fdata.append(files[0].name, files[0]);
+        console.log(files[0].name)
+        fdata.append("Empresa", $("#Empresa").val());
+        fdata.append("Sucursal", $("#Sucursal").val());
         $.ajax({
             url: urlUpload, // Url
             data: fdata,

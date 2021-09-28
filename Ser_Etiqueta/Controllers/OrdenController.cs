@@ -155,8 +155,10 @@ namespace Ser_Etiqueta.Controllers
            
             string prefijo = "0000";
             string etiqueta = "";
-            string[] peso = detalle.Peso.ToString().Split(",", StringSplitOptions.RemoveEmptyEntries);
-            string[] tipo = detalle.IdTipoPaquete.ToString().Split(",", StringSplitOptions.RemoveEmptyEntries);
+            /*  string[] peso = detalle.Peso.ToString().Split(",", StringSplitOptions.RemoveEmptyEntries);
+              string[] tipo = detalle.IdTipoPaquete.ToString().Split(",", StringSplitOptions.RemoveEmptyEntries);*/
+            string peso = detalle.Peso.ToString();
+            string tipo = detalle.IdTipoPaquete.ToString();
             int idOtd = 0;
             getInfo();
            
@@ -170,10 +172,12 @@ namespace Ser_Etiqueta.Controllers
                     Codigo=detalle.Codigo,
                     Factura=detalle.Factura,
                     idMunicipio=detalle.idMunicipio,
-                    IdTipoPaquete= Convert.ToInt16(tipo[i-1]),
-                    direccion=detalle.direccion,
+                    IdTipoPaquete = Convert.ToInt16(tipo),
+                    // IdTipoPaquete= Convert.ToInt16(tipo[i-1]),
+                    direccion =detalle.direccion,
                     CantidadBulto=1,
-                    Peso=Convert.ToInt16(peso[i-1])
+                    Peso = Convert.ToInt16(peso)
+                    //  Peso=Convert.ToInt16(peso[i-1])
                 };
                 _context.OrdenTrabajoDetalles.Add(saveDetalle);
                 _context.SaveChanges();

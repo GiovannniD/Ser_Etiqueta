@@ -35,8 +35,7 @@
             {
                 <div class="form-group">
                     <label>Empresa </label>
-                    <select class="form-control select2bs4" style="width: 100%;" id=idEmpresa asp-for="Input.idEmpresa" onchange="getSucursal(this.value)">
-                        <option value="0" selected>No tiene</option>
+                    <select class="form-control select2bs4" style="width: 100%;" id=idEmpresa asp-for="Input.idEmpresa" onchange="getSucursal(this.value)">              
                         @foreach (var Empresa in Model.p)
                         {
                             <option value="@Empresa.IdEmpresa">@Empresa.NombreComercial</option>
@@ -50,7 +49,6 @@
                 <div class="form-group">
                     <label>Empresa </label>
                     <select class="form-control select2bs4" style="width: 100%;" id=idEmpresa asp-for="Input.idEmpresa" onchange="getSucursal(this.value)" disabled>
-                        <option value="0" selected>No tiene</option>
                         @foreach (var Empresa in Model.p)
                         {
                             <option value="@Empresa.IdEmpresa">@Empresa.NombreComercial</option>

@@ -58,9 +58,24 @@
                             </div>
 
                             <div class="col-md-6">
-                                <form id="frmupload" method="post" enctype="multipart/form-data">
-                                    <div class="input-group mb-3">
-                                    
+                                @if (User.IsInRole("SuperAdmin"))
+                                {
+                                    <div class="form-group">
+                                        <label>Empresa </label>
+                                        <select class="form-control select2bs4" style="width: 100%;" id=Empresa onchange="getSucursal(this.value)">
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label >Sucursal</label>
+                                        <select class="form-control select2bs4" style="width: 100%;" id=Sucursal value="">
+                                            @*<option value="0" selected>No tiene</option>*@
+                                        </select>
+                                    </div>
+
+                                    <form id="frmupload" method="post" enctype="multipart/form-data">
+                                        <div class="input-group mb-3">
+
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="excel" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                                                 <label class="custom-file-label" for="customFile"></label>
@@ -72,9 +87,11 @@
                                                     <span class="sr-only">Loading...</span>
                                                 </button>
                                             </div>
-                                     
-                                    </div>
-                                </form>
+
+                                        </div>
+
+                                    </form>
+                                }
                             </div>
                         </div>
                         <div class="row">
@@ -176,7 +193,8 @@
     var urlUpdate = "@Url.Action("UpdateCliente", "Cliente")";
     var urlUpdateSucursal = "@Url.Action("UpdateSucursal", "Sucursal")";
     var urlUpload = "@Url.Action("cargarExcel", "Cliente")";
-
+    var urlCargarEmpresas = "@Url.Action("cargarEmpresas","Empresa")";
+     var urlSucursal = "@Url.Action("getSucursales", "Sucursal")";;
 </script>
 
 <script src="~/adminlte/js/load_select.js"></script>

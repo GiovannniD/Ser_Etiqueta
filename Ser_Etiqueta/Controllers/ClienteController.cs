@@ -204,7 +204,7 @@ namespace Ser_Etiqueta.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> cargarExcel()
+        public async Task<IActionResult> cargarExcel(int Empresa,int Sucursal)
         {
             getInfo();
             IFormFile file = Request.Form.Files[0];
@@ -249,8 +249,8 @@ namespace Ser_Etiqueta.Controllers
                         }
                         Cliente cli =new Cliente 
                         {
-                            IdEmpresa=IdEmpresa,
-                            IdSucursal=IdSucursal,
+                            IdEmpresa=Empresa,
+                            IdSucursal=Sucursal,
                             Codigo = (hoja.Cells[row, 1].Value ?? string.Empty).ToString().Trim(),
                             NombreCliente= (hoja.Cells[row, 2].Value ?? string.Empty).ToString().Trim(),
                             NombreComercial = (hoja.Cells[row, 3].Value ?? string.Empty).ToString().Trim(),

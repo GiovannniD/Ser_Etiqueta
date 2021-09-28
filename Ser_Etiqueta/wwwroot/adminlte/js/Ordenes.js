@@ -2,6 +2,7 @@
 
 $(function () {
     loadTable();
+    loadTipoPaquete(1)
     alertify.defaults.theme.ok = "btn btn-primary";
     alertify.defaults.theme.cancel = "btn btn-danger";
         bsCustomFileInput.init();
@@ -522,7 +523,7 @@ cantidad.addEventListener("keyup", function (event) {
    // if (event.keyCode === 13) {
         // Cancel the default action, if needed
      //  event.preventDefault();
-    if (cantidad > 0) {
+    /*if (cantidad > 0) {
         $("#detalle").html("")
 
         var html = ""
@@ -538,10 +539,15 @@ cantidad.addEventListener("keyup", function (event) {
                 max: 999.99
             });
         }
-    } else { $("#detalle").html("")}
+    } else { $("#detalle").html("")}*/
    // }
 });
-
+$("#peso1").inputmask({
+    alias: 'numeric',
+    allowMinus: false,
+    digits: 2,
+    max: 999.99
+});
 var input = document.getElementById("Codigo");
 input.addEventListener("keyup", function (event) {
     // Number 13 is the "Enter" key on the keyboard
@@ -578,14 +584,14 @@ function addNewEnvio() {
         return false;
     }
     if ($("#Codigo").val() == "" || $("#Factura").val() == "" || $("#cantidad").val() == ""
-        || $("#peso").val() == ""    ) {
+          ) {
         alertify.alert("informacion", "Rellene todos los campos obligatorios (*)")
         $("#agregar").prop("disabled", false);
         return false;
     }
-    for (var i = 0; i < cantidad; i++) {
-        peso += $("#peso" + Math.floor(i + 1)).val() + ",";
-        tipo += $("#tipoPaquete" + Math.floor(i + 1)).val() + ",";
+    //for (var i = 0; i < cantidad; i++) {
+       // peso += $("#peso" + Math.floor(i + 1)).val() + ",";
+      //  tipo += $("#tipoPaquete" + Math.floor(i + 1)).val() + ",";
 
         //este metodo hace obligatorio los campos de peso y tipo de paquete
        /* if ($("#peso" + Math.floor(i + 1)).val() == "" || $("#peso" + Math.floor(i + 1)).val() == 0) {
@@ -596,10 +602,11 @@ function addNewEnvio() {
             peso += $("#peso" + Math.floor(i + 1)).val() + ",";
             tipo += $("#tipoPaquete" + Math.floor(i + 1)).val() + ",";
         }*/
-    }
+    //}
     
 
-
+    peso = $("#peso1").val();
+    tipo = $("#tipoPaquete1" ).val();
     $.ajax({
         url: urlInsert, // Url
         data: {
