@@ -461,28 +461,29 @@ namespace Ser_Etiqueta.Models.DB
                     .HasColumnType("datetime")
                     .HasColumnName("fechaCreacion").HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Generada).HasColumnName("generada").HasDefaultValueSql("(1)"); ;
+                entity.Property(e => e.Generada).HasColumnName("generada").HasDefaultValueSql("(1)");
+                entity.Property(e => e.IdSucursal).HasColumnName("idSucursal");
 
-              /*  entity.Property(e => e.IdCliente).HasColumnName("idCliente");
+                /*  entity.Property(e => e.IdCliente).HasColumnName("idCliente");
 
-                entity.Property(e => e.IdDireccionCliente).HasColumnName("idDireccionCliente");
+                  entity.Property(e => e.IdDireccionCliente).HasColumnName("idDireccionCliente");
 
-                entity.Property(e => e.IdOrdenes).HasColumnName("idOrdenes");
+                  entity.Property(e => e.IdOrdenes).HasColumnName("idOrdenes");
 
-                entity.HasOne(d => d.IdClienteNavigation)
-                    .WithMany(p => p.OrdenTrabajos)
-                    .HasForeignKey(d => d.IdCliente)
-                    .HasConstraintName("FK__OrdenTrab__idCli__2645B050");
+                  entity.HasOne(d => d.IdClienteNavigation)
+                      .WithMany(p => p.OrdenTrabajos)
+                      .HasForeignKey(d => d.IdCliente)
+                      .HasConstraintName("FK__OrdenTrab__idCli__2645B050");
 
-                entity.HasOne(d => d.IdDireccionClienteNavigation)
-                    .WithMany(p => p.OrdenTrabajos)
-                    .HasForeignKey(d => d.IdDireccionCliente)
-                    .HasConstraintName("FK__OrdenTrab__idDir__2739D489");
+                  entity.HasOne(d => d.IdDireccionClienteNavigation)
+                      .WithMany(p => p.OrdenTrabajos)
+                      .HasForeignKey(d => d.IdDireccionCliente)
+                      .HasConstraintName("FK__OrdenTrab__idDir__2739D489");
 
-                entity.HasOne(d => d.IdOrdenesNavigation)
-                    .WithMany(p => p.OrdenTrabajos)
-                    .HasForeignKey(d => d.IdOrdenes)
-                    .HasConstraintName("FK__OrdenTrab__idOrd__25518C17");*/
+                  entity.HasOne(d => d.IdOrdenesNavigation)
+                      .WithMany(p => p.OrdenTrabajos)
+                      .HasForeignKey(d => d.IdOrdenes)
+                      .HasConstraintName("FK__OrdenTrab__idOrd__25518C17");*/
             });
 
             modelBuilder.Entity<OrdenTrabajoCodigo>(entity =>

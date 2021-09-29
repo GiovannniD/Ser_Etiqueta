@@ -132,6 +132,28 @@ namespace Ser_Etiqueta.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult UpdateEstado(OrdenTrabajo orden)
+        {
+
+            if (ModelState.IsValid)
+            {
+                _context.Attach(orden);
+                _context.Entry(orden).Property(p => p.estado).IsModified = true;
+                _context.SaveChanges();
+                return Json("1");
+                //   TempData["Mensaje"] = "El libro se ha editado correctamente";
+                //  return Json(ModelState);
+            }
+            else
+            {
+                return Json(orden);
+
+            }
+            //  return PartialView("_clienteFormPartial", cliente);
+
+        }
+
         public class Detalle
         {
 
@@ -247,13 +269,32 @@ namespace Ser_Etiqueta.Controllers
           
             if (User.IsInRole("SuperAdmin"))
             {
-                var p = _context.SP_CRUD_Ordenes.FromSqlInterpolated($"exec [etiquetas].[SP_CRUD_OrdenTrabajo] null,null,null,null,null,null,null,'S',''");
+                var p = _context.SP_CRUD_Ordenes.FromSqlInterpolated($"exec [etiquetas].[SP_CRUD_OrdenTrabajo] null,null,null,null,null,null,null,null,null,'S',''");
                 return Json(p);
             }
             else
             {
                 getInfo();
-                var p = _context.SP_CRUD_Ordenes.FromSqlInterpolated($"exec [etiquetas].[SP_CRUD_OrdenTrabajo] {IdEmpresa},null,null,null,null,null,null,'S1',''");
+                var p = _context.SP_CRUD_Ordenes.FromSqlInterpolated($"exec [etiquetas].[SP_CRUD_OrdenTrabajo] {IdEmpresa},null,null,null,null,null,null,null,null,'S1',''");
+                return Json(p);
+            }
+
+
+        }
+
+        [HttpPost]
+        public IActionResult Filtro(string fechaInicio,string fechaFinal)
+        {
+
+            if (User.IsInRole("SuperAdmin"))
+            {
+                var p = _context.SP_CRUD_Ordenes.FromSqlInterpolated($"exec [etiquetas].[SP_CRUD_OrdenTrabajo] null,null,null,null,null,null,null,{fechaInicio},{fechaFinal},'S2',''");
+                return Json(p);
+            }
+            else
+            {
+                getInfo();
+                var p = _context.SP_CRUD_Ordenes.FromSqlInterpolated($"exec [etiquetas].[SP_CRUD_OrdenTrabajo] {IdEmpresa},null,null,null,null,null,null,{fechaInicio},{fechaFinal},'S3',''");
                 return Json(p);
             }
 
@@ -391,7 +432,7 @@ namespace Ser_Etiqueta.Controllers
             var count = _context.OrdenTrabajoDetalles
              .Where(o => o.IdOrdenTrabajo == id)
              .Count();
-            int i = 0;
+            int i = 1;
             int idep = 0;
             PdfDocument document = new PdfDocument();
             XFont font = new XFont("Arial", 10);
@@ -411,8 +452,7 @@ namespace Ser_Etiqueta.Controllers
             byte[] Imagen = null;
             foreach (var item in codigo)
             {
-
-
+               
                 XImage xfoto = XImage.FromFile(_env.WebRootPath + @"\logo_SER.jpg");
                 gfx.DrawImage(xfoto, 5, 0, 120, 50);
                 //     idOtDetalle = Convert.ToInt16(item.IdOtcodigo);
@@ -467,6 +507,7 @@ namespace Ser_Etiqueta.Controllers
                 page.Height = XUnit.FromMillimeter(101.6);
                 gfx = XGraphics.FromPdfPage(page);
                 }
+              
             }
           
             // MemoryStream strm = new MemoryStream(jpegdata);

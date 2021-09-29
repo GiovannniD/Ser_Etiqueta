@@ -184,7 +184,7 @@ function addNew() {
         $.ajax({
             url: urlInsert, // Url
             data: {
-                IdEmpresa: idEmpresa
+                IdEmpresa: idEmpresa, idSucursal: idSucursal
             },
             type: "post"  // Verbo HTTP
         })
@@ -222,6 +222,48 @@ function addNew() {
 
 }
 
+function updateEstado(idOrdenTrabajo) {
+    alertify.confirm('Confirmar Accion', 'Esta seguro que desea cerrar esta orden?', function () {
+        $.ajax({
+            url: urlUpdate, // Url
+            data: {
+                idOrdenTrabajo: idOrdenTrabajo, estado:2
+            },
+            type: "post"  // Verbo HTTP
+        })
+            // Se ejecuta si todo fue bien.
+            .done(function (result) {
+                if (result != null) {
+                    //    console.log(result)
+                    if (result == "1") {
+                        alertify.alert("Informacion", "Operacion exitosa")
+
+                        loadTable();
+                    } else {
+
+
+                    }
+
+
+
+                }
+            })
+            // Se ejecuta si se produjo un error.
+            .fail(function (xhr, status, error) {
+
+            })
+            // Hacer algo siempre, haya sido exitosa o no.
+            .always(function () {
+
+            });
+    }
+        , function () {
+            alertify.error('Cancelado')
+
+
+        });
+
+}
 
 function loadTable()
 {
@@ -249,7 +291,7 @@ function loadTable()
                 "className":'dt-body-left',
                 "render": function (data, type, full, meta) {
                     if (full.estado == 1) {
-                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></div></div>";
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm btn-warning' style=' color: white'  onclick =updateEstado('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Cerrar Orden</i><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></div></div>";
                     } else if (full.estado) {
                         var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
                     }
@@ -310,7 +352,46 @@ function loadTable()
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 }
 
+function filtro() {
+    $("#example").DataTable({
+        "bDeferRender": true,
 
+
+
+        "keys": {
+            "clipboard": false
+        },
+        "ajax": {
+            "url": urlFiltro,
+            "method": 'POST', //usamos el metodo POST
+            "data": { fechaInicio: $("#DateInicio").val(), fechaFinal: $("#DateFinal").val() }, //enviamos opcion 4 para que haga un SELECT
+            "dataSrc": ""
+        },
+        "columns": [
+            { "data": "idOrdenTrabajo" },
+            { "data": "nombreComercial" },
+            { "data": "fechaCreacion" },
+            { "data": "estadoDes" },
+            {
+                "data": null,
+                "className": 'dt-body-left',
+                "render": function (data, type, full, meta) {
+                    if (full.estado == 1) {
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></div></div>";
+                    } else if (full.estado) {
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
+                    }
+                    return opciones
+                }
+            }
+        ],
+        "destroy": true, "scrollX": "200%",
+        "scrollY": "350px",
+        "lengthMenu": [[10, 20, 50, 100, 1000, -1], [10, 20, 50, 100, 1000, "All"]],
+        "responsive": false, "lengthChange": true, "autoWidth": true, "searching": true
+        //"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+}
 
 
 function Form() {

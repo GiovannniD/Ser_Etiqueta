@@ -19,9 +19,11 @@ namespace Ser_Etiqueta.Models.DB
         public int? estado { get; set; }
         public bool? Generada { get; set; }
 
-      // public virtual Cliente IdClienteNavigation { get; set; }
-       // public virtual ClientesDireccion IdDireccionClienteNavigation { get; set; }
+        public int? IdSucursal { get; set; }
+
+        // public virtual Cliente IdClienteNavigation { get; set; }
+        // public virtual ClientesDireccion IdDireccionClienteNavigation { get; set; }
         //public virtual Ordene IdOrdenesNavigation { get; set; }
-       //public virtual ICollection<OrdenTrabajoDetalle> OrdenTrabajoDetalles { get; set; }
+        //public virtual ICollection<OrdenTrabajoDetalle> OrdenTrabajoDetalles { get; set; }
     }
 }
