@@ -1,5 +1,44 @@
 ﻿var TieneSucursal = true;
 
+function importarOrdenes() {
+    alertify.confirm('Confirmar Accion', 'Esta seguro?', function () {
+        $.ajax({
+            url: urlimport, // Url
+            data: "",
+            type: "post"  // Verbo HTTP
+        })
+            // Se ejecuta si todo fue bien.
+            .done(function (result) {
+                if (result != null) {
+                    //    console.log(result)
+                    if (result == "1") {
+                        alertify.success("Registros importados!")
+
+                        loadTable();
+                    } else {
+
+
+                    }
+
+
+
+                }
+            })
+            // Se ejecuta si se produjo un error.
+            .fail(function (xhr, status, error) {
+
+            })
+            // Hacer algo siempre, haya sido exitosa o no.
+            .always(function () {
+
+            });
+    }
+        , function () {
+            //  alertify.error('Cancelado')
+
+
+        });
+}
 $(function () {
     loadTable();
     loadTipoPaquete(1)
@@ -597,6 +636,37 @@ function cliente(Codigo) {
         });
 }
 
+function clienteNombre(Nombre) {
+    $.ajax({
+        url: urlGetClienteNombre, // Url
+        data: {
+            Nombre: Nombre
+        },
+        type: "post"  // Verbo HTTP
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+            if (result != null) {
+                var outObjA = JSON.parse(JSON.stringify(result));
+                $("#idCliente").val(outObjA[0].idCliente)
+                $("#nombreCliente").val(outObjA[0].nombreCliente)
+                $("#nombreComercial").val(outObjA[0].nombreComercial)
+                $('#idMunicipio').val(outObjA[0].keyMunicipio);
+                $('#idMunicipio').trigger('change');
+                $("#direccion").val(outObjA[0].direccion)
+                //  console.log(outObjA.direccion)
+
+            }
+        })
+        // Se ejecuta si se produjo un error.
+        .fail(function (xhr, status, error) {
+
+        })
+        // Hacer algo siempre, haya sido exitosa o no.
+        .always(function () {
+
+        });
+}
 var cantidad = document.getElementById("cantidad");
 cantidad.addEventListener("keyup", function (event) {
     var cantidad = $("#cantidad").val()
@@ -653,6 +723,30 @@ input.addEventListener("keyup", function (event) {
     }
 });
 
+
+var input2 = document.getElementById("nombreCliente");
+input2.addEventListener("keyup", function (event) {
+    // Number 13 is the "Enter" key on the keyboard
+    if (event.keyCode === 13) {
+        // Cancel the default action, if needed
+        event.preventDefault();
+
+        if ($("#nombreCliente").val() != "") {
+            //  descuento=parseFloat($("#descuento").val()/100)
+            //  descuento = parseFloat($("#total").val().replace("$", "")) * parseFloat($("#descuento").val() / 100)
+            //  alertify.alert($("#Codigo").val())
+            clienteNombre($("#nombreCliente").val());
+        } else {
+            // descuento = 0;
+        }
+        //   calcularMontos();
+        // Trigger the button element with a click
+        // document.getElementById("myBtn").click();
+        //console.log(descuento)
+        // $("#total").val(parseFloat($("#total").val().replace("$","")-descuento))
+        //    $('#descuento').prop('readonly', true);
+    }
+});
 function addNewEnvio() {
     $("#agregar").prop("disabled", true);
     var peso = "";
@@ -770,3 +864,4 @@ function Eliminar(idDetalle)
         });
 
 }
+

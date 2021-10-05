@@ -104,11 +104,13 @@ namespace Ser_Etiqueta.Controllers
             {
 
                 SerieCodigoEtiqueta = emp.SerieCodigoEtiqueta;
-                UltimoConsecutivo = Convert.ToInt16(emp.UltimoConsecutivo);
+                UltimoConsecutivo = Convert.ToInt32(emp.UltimoConsecutivo);
 
 
 
             }
+
+         
         }
 
         [HttpPost]
@@ -322,6 +324,19 @@ namespace Ser_Etiqueta.Controllers
 
 
         [HttpPost]
+        public IActionResult Importar()
+        {
+
+            if (User.IsInRole("SuperAdmin"))
+            {
+                var p = _context.SP_CRUD_OrdenDetalle.FromSqlInterpolated($"exec [etiquetas].[importarEtiquetas] ").AsNoTracking().ToList();
+               
+            }
+
+            return Json("1");
+
+        }
+        [HttpPost]
         public IActionResult eliminarOrden(OrdenTrabajoDetalle detalle)
         {
 
@@ -532,6 +547,15 @@ namespace Ser_Etiqueta.Controllers
                 return NotFound();
             }
             getInfo();
+
+            var estado = _context.OrdenTrabajos.Where(p => p.IdOrdenTrabajo == id).AsNoTracking().ToList();
+
+            foreach (var item in estado)
+            {
+
+                ViewData["estado"] = item.estado;
+
+            }
             UsuariosInfo rec = new UsuariosInfo
             {
                 idEmpresa = IdEmpresa,

@@ -59,12 +59,15 @@
                                 </div>
                             </div>
                                 <div class="col-md-6">
+                                @if (User.IsInRole("SuperAdmin"))
+                                {
                                     <div class="form-group">
-                                        <button type="button" class="btn col-12 btn-outline-info  onclick="importarOrdenes()">
+                                        <button type="button" class="btn col-12 btn-outline-info"  onclick="importarOrdenes()" >
                                             <i class="fa fa-upload "></i>
                                             Importar Ordenes
                                         </button>
                                     </div>
+                                    }
                                 </div>
                         
 
@@ -198,6 +201,7 @@
     var urlUpdateSucursal = "@Url.Action("UpdateSucursal", "Sucursal")";
     var urlUpload = "@Url.Action("cargarExcel", "Cliente")";
     var urlFiltro = "@Url.Action("Filtro", "Orden")";
+    var urlimport="@Url.Action("Importar", "Orden")";
 
 </script>
 

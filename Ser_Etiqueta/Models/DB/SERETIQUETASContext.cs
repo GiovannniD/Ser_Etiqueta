@@ -45,6 +45,8 @@ namespace Ser_Etiqueta.Models.DB
         public virtual DbSet<SP_CRUD_Ordenes> SP_CRUD_Ordenes { get; set; }
         public virtual DbSet<SP_CRUD_OrdenDetalle> SP_CRUD_OrdenDetalle { get; set; }
 
+        public virtual DbSet<SP_CRUD_Importar> SP_CRUD_Importar { get; set; }
+
         /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
          {
              if (!optionsBuilder.IsConfigured)
@@ -812,6 +814,12 @@ namespace Ser_Etiqueta.Models.DB
             modelBuilder.Entity<SP_CRUD_OrdenDetalle>(entity =>
             {
                 entity.HasKey(e => e.IdOtdetalle);
+
+            });
+
+            modelBuilder.Entity<SP_CRUD_Importar>(entity =>
+            {
+                entity.HasKey(e => e.IdOrden);
 
             });
             OnModelCreatingPartial(modelBuilder);

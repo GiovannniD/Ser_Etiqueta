@@ -5,7 +5,7 @@
 }
 @{
     var idEmpresa = Model.idEmpresa;
-
+    var estado = ViewData["estado"];
 }
 <h1 style="  color: #014377">Remision #@ViewData["orden"]</h1>
 <!-- Content Header (Page header) -->
@@ -28,6 +28,7 @@
 <!-- /.content-header -->
 <div class="container-fluid">
     <div class="row">
+        @if (Convert.ToInt16(estado)==1) { 
         <div class="col-md-6 col-md-offset-2">
             <section>
                 <h4></h4>
@@ -45,7 +46,7 @@
                     <div class="form-group row">
                         <label for="nombreCliente" class="col-sm-3 col-form-label">Nombre del cliente</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="" id="nombreCliente" readonly>
+                            <input type="text" class="form-control" placeholder="" id="nombreCliente" >
                         </div>
                     </div>
 
@@ -68,7 +69,10 @@
 
             </section>
         </div>
-        <div class="col-md-6 col-md-offset-2">
+        }
+    <div class="col-md-6 col-md-offset-2">
+        @if (Convert.ToInt16(estado) == 1)
+        {
             <section>
                 <h4></h4>
                 <hr />
@@ -94,14 +98,16 @@
                             <input type="text" class="form-control" placeholder="Cantidad" id="cantidad" name="cantidad">
                         </div>
                     </div>
-                    <div class='form-group row'> <label for='nombreCliente' class='col-sm-3 col-form-label'> Tipo de paquete #</label> 
-                    <div class='col-sm-9'>
-                        <select class='form-control select2bs4' style='width: 100%;' id='tipoPaquete1'> </select>
-                    </div> 
-                    </div> 
-                    <div class='form-group row'><label class='col-sm-3 col-form-label'> Peso (kg) </label>
-                    <div class='col-sm-9'>  
-                        <input type='text' class='form-control' placeholder='Peso(KG)' id='peso1' name='peso'>
+                    <div class='form-group row'>
+                        <label for='nombreCliente' class='col-sm-3 col-form-label'> Tipo de paquete #</label>
+                        <div class='col-sm-9'>
+                            <select class='form-control select2bs4' style='width: 100%;' id='tipoPaquete1'> </select>
+                        </div>
+                    </div>
+                    <div class='form-group row'>
+                        <label class='col-sm-3 col-form-label'> Peso (kg) </label>
+                        <div class='col-sm-9'>
+                            <input type='text' class='form-control' placeholder='Peso(KG)' id='peso1' name='peso'>
                         </div>
                     </div>
                     <div id="detalle">
@@ -112,24 +118,23 @@
                     <div class="form-group">
                         <button type="button" id="agregar" class="btn col-12" style=" background: #014377; color:white" onclick="addNewEnvio()">Agregar envio</button>
                     </div>
-                    <div class="form-group">
-                        <button type="button" class="btn col-12" style=" background: #014377; color:white" onclick="imprimirAllEnvio()">Imprimir Todas las etiquetas</button>
-                    </div>
+                   
+                  
                 </div>
             </section>
+        }
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <button type="button" class="btn col-6 " style=" background: #014377; color:white; float: right;" onclick="imprimirAllEnvio()">Imprimir Todas las etiquetas</button>
+            <br />
+            </div>
 
 
         </div>
-        <div class="col-sm-4">
-
-        </div>
-        <div class="col-sm-5">
-
-        </div>
+       
     </div>
 </div>
     <div class="row">
@@ -189,7 +194,8 @@
     var urlForm = "@Url.Action("Form", "Cliente")";
     var urlLoad = "@Url.Action("cargarOrdenDetalle", "Orden")";
     var urlLoadSucursal = "@Url.Action("cargarSucursales", "Sucursal")";
-    var urlGetCliente = "@Url.Action("GetClienteCodigo", "Cliente")";
+        var urlGetCliente = "@Url.Action("GetClienteCodigo", "Cliente")";
+        var urlGetClienteNombre = "@Url.Action("GetClienteNombre", "Cliente")";
     var urlGetSucursal = "@Url.Action("GetSucursal", "Sucursal")";
         var urlUpdate = "@Url.Action("UpdateCliente", "Cliente")";
         var urlDelete = "@Url.Action("eliminarOrden", "Orden")";

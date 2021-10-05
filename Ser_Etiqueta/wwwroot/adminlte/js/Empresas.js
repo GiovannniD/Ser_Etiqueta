@@ -378,7 +378,7 @@ $("#btnGuardarSucursal").click(function () {
                         alertify.alert("Informacion", "Ocurrio un error")
                     }
 
-                    $("#btnGuardar").prop("disabled", false);
+                    $("#btnGuardarSucursal").prop("disabled", false);
                     // loadDepartamento();
                     //   getMunicipio(1)
 
