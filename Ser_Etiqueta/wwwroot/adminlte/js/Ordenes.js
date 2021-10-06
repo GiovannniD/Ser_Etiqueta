@@ -378,7 +378,9 @@ function loadTable()
                 "render": function (data, type, full, meta) {
                   
                     var opciones = " <div class='text-left'><div class='btn-group'><button type='submit' class='btn  btn-sm' style='background: #014377; color: white' onclick =ImprimirEnvio('" + full.idOtCodigo + "'); > <i class='material-icons'>Ver Etiqueta</i></button ><button class='btn  btn-sm' style='background: #BB0423; color: white' onclick =Eliminar('" + full.idOtdetalle + "');> <i class='material-icons'>Eliminar</i></button ></div></div>";
-                   
+                    if (Estado > 1) {
+                        opciones = " <div class='text-left'><div class='btn-group'><button type='submit' class='btn  btn-sm' style='background: #014377; color: white' onclick =ImprimirEnvio('" + full.idOtCodigo + "'); > <i class='material-icons'>Ver Etiqueta</i></button ></div></div>";
+                    }  
                     return opciones
                 }
             }
@@ -750,19 +752,21 @@ input2.addEventListener("keyup", function (event) {
 function addNewEnvio() {
     $("#agregar").prop("disabled", true);
     var peso = "";
-    var tipo="";
+    var tipo = "";
     var cantidad = $("#cantidad").val()
-    if ($("#idCliente").val() == "" || $("#idCliente").val() == 0)
-    {
+    if ($("#idCliente").val() == "" || $("#idCliente").val() == 0) {
         alertify.alert("informacion", "seleccione un cliente")
         $("#agregar").prop("disabled", false);
         return false;
     }
     if ($("#Codigo").val() == "" || $("#Factura").val() == "" || $("#cantidad").val() == ""
-          ) {
+    ) {
         alertify.alert("informacion", "Rellene todos los campos obligatorios (*)")
         $("#agregar").prop("disabled", false);
         return false;
+    }
+    if ($("#peso1").val() == "") {
+        $("#peso1").val("0")
     }
     //for (var i = 0; i < cantidad; i++) {
        // peso += $("#peso" + Math.floor(i + 1)).val() + ",";
@@ -799,7 +803,7 @@ function addNewEnvio() {
                     $("#agregar").prop("disabled", false);
                     $("#cantidad").val("0")
                     $("#detalle").html("")
-                    $("#Factura").val("")
+                  //  $("#Factura").val("")
                 }
             }
         })

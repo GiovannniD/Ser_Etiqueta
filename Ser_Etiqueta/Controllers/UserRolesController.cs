@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ser_Etiqueta.Areas.Identity.Data;
 using Ser_Etiqueta.Models;
+using Ser_Etiqueta.Models.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,12 @@ namespace Ser_Etiqueta.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public UserRolesController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly SERETIQUETASContext _context;
+        public UserRolesController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, SERETIQUETASContext context)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            this._context = context;
         }
 
         public IActionResult EditUser()
@@ -38,6 +41,8 @@ namespace Ser_Etiqueta.Controllers
                 thisViewModel.Email = user.Email;
                 thisViewModel.FirstName = user.FirstName;
                 thisViewModel.LastName = user.LastName;
+                thisViewModel.Empresa = Empresa(user.idEmpresa);
+                thisViewModel.Sucursal = Sucursal(user.idSucursal);
                 thisViewModel.Roles = await GetUserRoles(user);
                 userRolesViewModel.Add(thisViewModel);
             }
@@ -47,6 +52,27 @@ namespace Ser_Etiqueta.Controllers
         {
           
             return new List<string>(await _userManager.GetRolesAsync(user));
+        }
+
+        private  string Empresa(int idEmpresa)
+        {
+            string NombreEmpresa = "";
+            var item = _context.Empresas.Where(p => p.IdEmpresa == idEmpresa).AsNoTracking();
+            foreach (var emp in item) {
+                NombreEmpresa = emp.NombreEmpresa;
+            };
+            return NombreEmpresa;
+        }
+
+        private string Sucursal(int idSucursal)
+        {
+            string NombreSucursal = "";
+            var item = _context.Sucursales.Where(p => p.IdSucursal == idSucursal).AsNoTracking();
+            foreach (var emp in item)
+            {
+                NombreSucursal = emp.NombreSucursal;
+            };
+            return NombreSucursal;
         }
 
         [Authorize(Roles = "SuperAdmin")]

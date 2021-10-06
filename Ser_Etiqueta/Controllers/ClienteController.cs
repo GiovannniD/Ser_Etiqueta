@@ -57,15 +57,7 @@ namespace Ser_Etiqueta.Controllers
                 IdEmpresa = user.idEmpresa;
                 IdSucursal = user.idSucursal;
 
-                //  IdSucursal = user.idSucursal;
-
-                /*  var thisViewModel = new UserRolesViewModel();
-                  thisViewModel.UserId = user.Id;
-                  thisViewModel.Email = user.Email;
-                  thisViewModel.FirstName = user.FirstName;
-                  thisViewModel.LastName = user.LastName;
-                  thisViewModel.Roles = await GetUserRoles(user);
-                  userRolesViewModel.Add(thisViewModel);*/
+              
             }
            
             UsuariosInfo rec = new UsuariosInfo

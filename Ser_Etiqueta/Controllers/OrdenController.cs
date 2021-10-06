@@ -447,7 +447,7 @@ namespace Ser_Etiqueta.Controllers
             var count = _context.OrdenTrabajoDetalles
              .Where(o => o.IdOrdenTrabajo == id)
              .Count();
-            int i = 1;
+            int i = 0;
             int idep = 0;
             PdfDocument document = new PdfDocument();
             XFont font = new XFont("Arial", 10);
