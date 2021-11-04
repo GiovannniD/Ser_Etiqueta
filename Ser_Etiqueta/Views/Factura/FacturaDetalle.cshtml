@@ -1,0 +1,242 @@
+﻿@using Ser_Etiqueta.Models
+@model Ser_Etiqueta.Models.DB.UsuariosInfo
+@{
+    ViewData["Title"] = "Detalle de Factura";
+}
+@{
+    var idEmpresa = Model.idEmpresa;
+    var estado = 1;
+    var estadoOT = ViewData["estadoOT"];
+}
+<h1 style="  color: #014377">Factura No. @ViewData["NoFactura"]</h1>
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <p class="m-0" style="   color: #014377">Los campos marcados con * son obligatorios</p>
+            </div><!-- /.col -->
+            <!--<div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home </a></li>
+                    <li class="breadcrumb-item active">Ordenes</li>
+                </ol>
+            </div>-->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<div class="container-fluid">
+    <div class="row">
+        @if (Convert.ToInt16(estado) == 1)
+        {
+            <div class="col-md-6 col-md-offset-2">
+                <section>
+                    <h4></h4>
+                    <hr />
+                    <input type="hidden" id="ordenTrabajo" value="@ViewData["orden"]" />
+                    <input type="hidden" id="idCliente" value="" />
+                    <div class="col-sm-12">
+                        <div class="form-group row">
+                            @*<label for="nombreCliente" class="col-sm-3 col-form-label">Codigo*</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="Codigo del cliente" id="Codigo" name="Codigo" >
+                                </div>*@
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="nombreCliente" class="col-sm-3 col-form-label">Fecha de elaboracion</label>
+                            <div class="col-sm-9">
+                                <input type="date" class="form-control" placeholder="" id="nombreCliente" readonly value="@ViewData["fecha"]">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="nombreCliente" class="col-sm-3 col-form-label">Nombre Comercial</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="" id="nombreComercial" readonly value="@ViewData["cliente"]">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="nombreCliente" class="col-sm-3 col-form-label">Direccion*</label>
+                            <div class="col-sm-9">
+                                <textarea type="text" class="form-control" placeholder="" id="direccion"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </section>
+            </div>
+        }
+        <div class="col-md-6 col-md-offset-2">
+
+            <section>
+                <h4></h4>
+                <hr />
+                <div class="col-sm-12">
+
+
+                    <div class="form-group row">
+                        <label for="nombreCliente" class="col-sm-3 col-form-label">Origen</label>
+                        <div class="col-sm-9">
+                            <select class="form-control select2bs4" style="width: 100%;" id=Origen name=Origen>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="nombreCliente" class="col-sm-3 col-form-label">Destino</label>
+                        <div class="col-sm-9">
+                            <select class="form-control select2bs4" style="width: 100%;" id=Destino name="Destino">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class='form-group row'>
+                        <label for='nombreCliente' class='col-sm-3 col-form-label'> Tipo de paquete</label>
+                        <div class='col-sm-9'>
+                            <select class='form-control select2bs4' style='width: 100%;' id='tipoPaquete'> </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nombreCliente" class="col-sm-3 col-form-label">Cantidad*</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Cantidad" id="cantidad" name="cantidad">
+                        </div>
+                    </div>
+                    <div class='form-group row'>
+                        <label class='col-sm-3 col-form-label'> Precio* </label>
+                        <div class='col-sm-9'>
+                            <input type='text' class='form-control' placeholder='Precio' id='precio' name='precio'>
+                        </div>
+                    </div>
+                    <div id="detalle">
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <button type="button" id="agregar" class="btn col-12" style=" background: #014377; color:white" onclick="addNewEnvio()">Agregar envio</button>
+                    </div>
+
+
+                </div>
+            </section>
+
+        </div>
+    </div>
+    @if (Convert.ToInt16(estado) == 1 && Convert.ToInt16(estadoOT)==0)
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <button type="button" class="btn col-6 " style=" background: #014377; color:white; float: right;" onclick="GenerarOrden()">Generar Orden de trabajo</button>
+                    <br />
+                </div>
+
+
+            </div>
+
+        </div>
+    }
+</div>
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <table id=detalle class="table" style="width:100%">
+            <thead class="thead-dark">
+                <tr>
+
+
+                    <th scope="col">#</th>
+                    <th scope="col">Paquete</th>
+                    <th scope="col">Origen</th>
+                    <th scope="col">Destino</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Precio Unitario</th>
+                    <th scope="col">Subtotal</th>
+                    <th scope="col"></th>
+
+
+                </tr>
+            </thead>
+            <tbody id=row>
+                <tr>
+                </tr>
+            </tbody>
+            <tfoot>
+
+            </tfoot>
+        </table>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-lg-8">
+        <label style="float: right; margin-top: 0;">Sub-Total:</label>
+    </div>
+    <div class="col-lg-4">
+        <input type="text" class="form-control" id="subtotal" name=subtotal value="0.00" required autocomplete="off" readonly style="float: right; margin-top: 0;">
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-8">
+        <label style="float: right; margin-top: 0;">IVA (15%):</label>
+    </div>
+    <div class="col-lg-4">
+        <input type="text" class="form-control" id="iva" name=iva value="0.15" required autocomplete="off" readonly style="float: right; margin-top: 0;">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <label style="float: right; margin-top: 0;">Total:</label>
+    </div>
+    <div class="col-lg-4">
+        <input type="text" class="form-control" id="total" name=total value="0.00" required autocomplete="off" readonly style="float: right; margin-top: 0;">
+    </div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+    var urlDepartamento = "@Url.Action("getDepartamento", "Departamento")";
+    var urlMunicipios = "@Url.Action("getAllMunicipio", "Departamento")";
+    var idEmpresa = "@Model.idEmpresa";
+    var idSucursal = "@Model.idSucursal";
+        var idFactura = "@ViewData["NoFactura"]";
+        var SerieCodigoEtiqueta = "@ViewData["serieCodigo"]";
+        var Estado= "@estado";
+    var urlInsert = "@Url.Action("generarOrden", "Factura")";
+    var urlInsertDetalle = "@Url.Action("insertFacturaDetalle", "Factura")";
+    var urlDeleteDetalle = "@Url.Action("deleteFacturaDetalle", "Factura")";
+    var urlLoadDetalle  = "@Url.Action("loadFacturaDetalle", "Factura")";
+    var urlTipoPaquetes = "@Url.Action("TipoPaquetes", "Tipo")";
+    var urlForm = "@Url.Action("Form", "Cliente")";
+    var urlLoad = "@Url.Action("cargarOrdenDetalle", "Orden")";
+    var urlLoadSucursal = "@Url.Action("cargarSucursales", "Sucursal")";
+        var urlGetCliente = "@Url.Action("GetClienteCodigo", "Cliente")";
+        var urlGetClienteNombre = "@Url.Action("GetClienteNombre", "Cliente")";
+    var urlGetSucursal = "@Url.Action("GetSucursal", "Sucursal")";
+        var urlUpdate = "@Url.Action("UpdateCliente", "Cliente")";
+        var urlDelete = "@Url.Action("eliminarOrden", "Orden")";
+    var urlUpdateDetalle = "@Url.Action("updateFacturaDetalle", "Factura")";
+    var urlUpload = "@Url.Action("cargarExcel", "Cliente")";
+    var admin = "@User.IsInRole("SuperAdmin")";
+    $(function () {
+
+            loadTipoPaquete();
+        });
+
+</script>
+
+<script src="~/adminlte/js/load_select.js"></script>
+<script src="~/adminlte/js/Factura.js"></script>

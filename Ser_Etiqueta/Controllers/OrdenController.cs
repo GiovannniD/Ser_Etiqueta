@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using OfficeOpenXml;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using QRCoder;
@@ -179,6 +180,7 @@ namespace Ser_Etiqueta.Controllers
            
             string prefijo = "0000";
             string etiqueta = "";
+          
             /*  string[] peso = detalle.Peso.ToString().Split(",", StringSplitOptions.RemoveEmptyEntries);
               string[] tipo = detalle.IdTipoPaquete.ToString().Split(",", StringSplitOptions.RemoveEmptyEntries);*/
             string peso = detalle.Peso.ToString();
@@ -322,7 +324,42 @@ namespace Ser_Etiqueta.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult DownloadExcelRemision(DateTime fecha1, DateTime fecha2)
+        {
+            if (User.IsInRole("SuperAdmin"))
+            {
+                var dep = _context.vw_vistaExportOrden.Where(p => p.fechaCreacion >= fecha1 && p.fechaCreacion <= fecha2).ToList();
+                var stream = new MemoryStream();
+                using (var package = new ExcelPackage(stream))
+                {
+                    var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+                    workSheet.Cells.LoadFromCollection(dep, true);
+                    package.Save();
+                }
+                stream.Position = 0;
+                string ExcelName = $"Etiquetas-{DateTime.Now.ToString("yyyymmddHmmssfff")}.xls";
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ExcelName);
+            }
+            else
+            {
+                getInfo();
+                var dep = _context.vw_vistaExportOrden.Where(p => p.fechaCreacion >= fecha1 && p.fechaCreacion <= fecha2 && p.IdEmpresa==IdEmpresa).ToList();
+                var stream = new MemoryStream();
+                using (var package = new ExcelPackage(stream))
+                {
+                    var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+                    workSheet.Cells.LoadFromCollection(dep, true);
+                    package.Save();
+                }
+                stream.Position = 0;
+                string ExcelName = $"Etiquetas-{DateTime.Now.ToString("yyyymmddHmmssfff")}.xls";
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ExcelName);
+            }
 
+          
+              
+        }
         [HttpPost]
         public IActionResult Importar()
         {
@@ -341,8 +378,10 @@ namespace Ser_Etiqueta.Controllers
         {
 
 
-            var p = _context.OrdenTrabajoDetalles.Remove(detalle);
-            _context.SaveChanges();
+           /* var p = _context.OrdenTrabajoDetalles.Remove(detalle);
+            _context.SaveChanges();*/
+
+            var update = _context.updateSerie.FromSqlInterpolated($"exec [etiquetas].[updateSerie] {detalle.IdOtdetalle},''").AsNoTracking().ToList();
             return Json("1");
    
 

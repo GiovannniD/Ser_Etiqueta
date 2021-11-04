@@ -206,6 +206,7 @@ function modalModificarSucursal(idSucursal) {
             if (result != null) {
                 var outObjA = JSON.parse(JSON.stringify(result));
                 $("#nombreSucursal").val(outObjA.nombreSucursal)
+                $("#codigoFactura").val(outObjA.codigoFactura)
 
                 $('#idEmpresaSucursal').val(outObjA.idEmpresa);
                 $('#idEmpresaSucursal').trigger('change');
@@ -302,8 +303,9 @@ $("#btnGuardar").click(function () {
         //var data = $("#AjaxForm").serialize()
         $.ajax({
             url: urlUpdate, // Url
-            data: { IdEmpresa:$("#IdEmpresa").val(),
-                IdSucursal: $("#IdSersa").val(), NombreEmpresa: $("#NombreEmpresa").val(),
+            data: {
+                IdEmpresa: $("#IdEmpresa").val(), IdSersa: $("#IdSersa").val(),
+                 NombreEmpresa: $("#NombreEmpresa").val(),
                 NombreComercial: $("#NombreComercial").val(), TieneSucursal: TieneSucursal, IdDepartamento: $("#idDepartamento").val(),
                 IdMunicipio: $("#idMunicipio").val(), SerieCodigoEtiqueta: $("#codigoEtiqueta").val(), UltimoConsecutivo: $("#consecutivo").val()
             },
@@ -361,7 +363,7 @@ $("#btnGuardarSucursal").click(function () {
             url: urlInsertSucursal, // Url
             data: {
                 IdEmpresa: $("#idEmpresaSucursal").val(), NombreSucursal: $("#nombreSucursal").val(), IdDepartamento: $("#idDepartamentoSucursal").val(),
-                IdMunicipio: $("#idMunicipioSucursal").val()
+                IdMunicipio: $("#idMunicipioSucursal").val(), codigoFactura: $("#codigoFactura").val()
             },
             type: "post"  // Verbo HTTP
         })
@@ -410,7 +412,7 @@ $("#btnGuardarSucursal").click(function () {
             url: urlUpdateSucursal, // Url
             data: {
                 IdSucursal:$("#idSucursal").val(),IdEmpresa: $("#idEmpresaSucursal").val(), NombreSucursal: $("#nombreSucursal").val(), IdDepartamento: $("#idDepartamentoSucursal").val(),
-                IdMunicipio: $("#idMunicipioSucursal").val()
+                IdMunicipio: $("#idMunicipioSucursal").val(), codigoFactura: $("#codigoFactura").val()
             },
             type: "post"  // Verbo HTTP
         })

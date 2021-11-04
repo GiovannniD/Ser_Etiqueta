@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -23,6 +24,7 @@ namespace Ser_Etiqueta.Controllers
         private readonly SERETIQUETASContext _context;
         private readonly ILogger<ClienteController> _logger;
         private readonly IEmailSender _emailSender;
+        IWebHostEnvironment _env;
         public int IdSucursal { get; set; }
         public int IdEmpresa { get; set; }
         public int? UltimoConsecutivo { get; set; }
@@ -33,7 +35,8 @@ namespace Ser_Etiqueta.Controllers
             SignInManager<ApplicationUser> signInManager,
             ILogger<ClienteController> logger,
             IEmailSender emailSender,
-            SERETIQUETASContext context
+            SERETIQUETASContext context,
+            IWebHostEnvironment env
             )
         {
             _userManager = userManager;
@@ -42,6 +45,7 @@ namespace Ser_Etiqueta.Controllers
             _emailSender = emailSender;
            // this._usuarios = usuarios;
             this._context = context;
+            _env = env;
         }
 
         [Authorize]
@@ -212,9 +216,13 @@ namespace Ser_Etiqueta.Controllers
             //  return PartialView("_clienteFormPartial", cliente);
         }
 
-        [HttpPost]
+       
+
+            [HttpPost]
         public async Task<IActionResult> cargarExcel(int Empresa,int Sucursal)
         {
+
+
             getInfo();
             IFormFile file = Request.Form.Files[0];
             var list = new List<Cliente>();

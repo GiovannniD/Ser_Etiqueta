@@ -1,0 +1,224 @@
+﻿@using Ser_Etiqueta.Models
+@model Ser_Etiqueta.Models.DB.UsuariosInfo
+@using Microsoft.AspNetCore.Identity
+@using Ser_Etiqueta.Areas.Identity.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Registro de Facturas";
+}
+@{
+    var idEmpresa = Model.idEmpresa;
+
+}
+<h1 style="  color: #014377">@ViewData["Title"] </h1>
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0" style="   color: #014377">Historial de facturas</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home </a></li>
+                    <li class="breadcrumb-item active">Ordenes</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header ui-sortable-handle" style="cursor: move;">
+                <h3 class="card-title" style=" color: #014377;">
+                    <i class="fas fa-dot-circle mr-1"></i>
+                    Registros
+                </h3>
+                <div class="card-tools">
+                    <ul class="nav nav-pills ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#revenue-chart" data-toggle="tab" style="  background: #BB0423;">Registro de facturas</a>
+                        </li>
+                        @*<li class="nav-item">
+                                <a class="nav-link" href="#sales-chart" data-toggle="tab">Sucursales</a>
+                            </li>*@
+                    </ul>
+                </div>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+                <div class="tab-content p-0">
+                    <!-- Morris chart - Sales -->
+                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; ">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <button type="button" class="btn col-12" style=" background: #014377; color:white" id="modalCrear">Crear nueva Factura</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                @*@if (User.IsInRole("SuperAdmin"))
+                                    {
+                                        <div class="form-group">
+                                            <button type="button" class="btn col-12 btn-outline-info" onclick="importarOrdenes()">
+                                                <i class="fa fa-upload "></i>
+                                                Importar Ordenes
+                                            </button>
+                                        </div>
+                                    }*@
+                            </div>
+
+
+                        </div><br />
+                        <div class="row">
+                            <div class="input-group col-sm-3">
+                                <label>&nbsp Desde:  &nbsp  &nbsp</label>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                <input type="date" class="form-control " id="DateInicio" name=DateInicio>
+                            </div>
+
+                            <div class="input-group col-sm-3">
+                                <label>Hasta:  &nbsp  &nbsp </label>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+
+                                </div>
+                                <input type="date" class="form-control" id="DateFinal" name="DateFinal">
+                            </div>
+                            <div class="input-group col-sm-3">
+                                <button class="btn btn-block " style=" background: #014377; color:white" id="filtro" name="filtro" type=button onclick="filtro()">
+                                    <i class="fa fa-filter "></i> Filtrar
+                                </button>
+                            </div>
+                            <div class="input-group col-sm-3">
+                                <button class="btn btn-block btn-outline-dark " id="limpiar" name="limpiar" type=button onclick="loadTable()">
+                                    <i class="fa fa-eraser "></i> Limpiar Filtro
+                                </button>
+                            </div>
+                        </div><br />
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+
+                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+
+                                            <th>#ID</th>
+                                            <th>No.Factura</th>
+                                            <th>Cliente</th>
+                                            <th>Fecha de Elaboracion</th>
+                                            <th>Estado</th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+
+                                    <tfoot>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>No.Factura</th>
+                                            <th>Cliente</th>
+                                            <th>Fecha de Elaboracion</th>
+                                            <th>Estado</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div><!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modalFactura" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Seleccione un cliente para crear la factura</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="idMunicipioSucursal">Cliente</label>
+                            <select class="form-control select2bs4" style="width: 100%;" id=Cliente name=Cliente>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="date" class="form-control" id="fechaElaboracion" name="fechaElaboracion">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-12">
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-outline-primary col-12" id="btnCrear">Crear factura</button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    var urlDepartamento = "@Url.Action("getDepartamento", "Departamento")";
+    var urlMunicipios = "@Url.Action("getMunicipio", "Departamento")";
+    var idEmpresa = "@Model.idEmpresa";
+    var idSucursal = "@Model.idSucursal";
+    var Username="@UserManager.GetUserName(User)"
+    var urlInsert  = "@Url.Action("insert", "Orden")";
+    var urlInsertFactura = "@Url.Action("insertFactura", "Factura")";
+    var urlForm = "@Url.Action("Form", "Cliente")";
+    var urlLoad = "@Url.Action("getFacturas", "Factura")";
+    var urlLoadSucursal = "@Url.Action("cargarSucursales", "Sucursal")";
+    var urlGetCliente = "@Url.Action("cargarClientes", "Cliente")";
+    var urlGetEstado = "@Url.Action("GetEstado", "Factura")";
+    var urlUpdate = "@Url.Action("UpdateEstado", "Orden")";
+    var urlUpdateSucursal = "@Url.Action("UpdateSucursal", "Sucursal")";
+    var urlUpload = "@Url.Action("cargarExcel", "Cliente")";
+    var urlFiltro = "@Url.Action("Filtro", "Orden")";
+    var urlimport="@Url.Action("Importar", "Orden")";
+
+</script>
+
+<script src="~/adminlte/js/load_select.js"></script>
+<script src="~/adminlte/js/Factura.js"></script>

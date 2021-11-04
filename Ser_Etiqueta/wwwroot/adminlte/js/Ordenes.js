@@ -330,9 +330,9 @@ function loadTable()
                 "className":'dt-body-left',
                 "render": function (data, type, full, meta) {
                     if (full.estado == 1) {
-                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm btn-warning' style=' color: white'  onclick =updateEstado('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Cerrar Orden</i><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></div></div>";
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verRemision('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Remision</i></button ><button class='btn  btn-sm btn-warning' style=' color: white'  onclick =updateEstado('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Cerrar Orden</i></button><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
                     } else if (full.estado) {
-                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verRemision('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Remision</i></button ><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
                     }
                     return opciones
                 }
@@ -418,9 +418,9 @@ function filtro() {
                 "className": 'dt-body-left',
                 "render": function (data, type, full, meta) {
                     if (full.estado == 1) {
-                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></div></div>";
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verRemision('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Remision</i></button ><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
                     } else if (full.estado) {
-                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verRemision('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Remision</i></button ><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
                     }
                     return opciones
                 }
@@ -823,6 +823,16 @@ function ImprimirEnvio(id) {
 }
 function imprimirAllEnvio() {
     window.open('/Orden/imprimirAllEnvio/' + idOrdenTrabajo, '_blank');
+}
+function verRemision(id) {
+    window.open('/Remision/Remision/' + id, '_blank');
+}
+
+function descargarExcel() {
+    const d = new Date($("#DateInicio").val())
+    const d2 = new Date($("#DateFinal").val())
+    console.log(d.toISOString().split('T')[0])
+    window.open('/Orden/DownloadExcelRemision?fecha1=' + d.toISOString().split('T')[0] + '&fecha2=' + d2.toISOString().split('T')[0], '_blank');
 }
 function Eliminar(idDetalle)
 {

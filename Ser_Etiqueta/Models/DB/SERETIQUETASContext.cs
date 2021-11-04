@@ -9,7 +9,7 @@ namespace Ser_Etiqueta.Models.DB
     public partial class SERETIQUETASContext : DbContext
     {
         public SERETIQUETASContext()
-        {
+        {   
         }
 
         public SERETIQUETASContext(DbContextOptions<SERETIQUETASContext> options)
@@ -46,6 +46,19 @@ namespace Ser_Etiqueta.Models.DB
         public virtual DbSet<SP_CRUD_OrdenDetalle> SP_CRUD_OrdenDetalle { get; set; }
 
         public virtual DbSet<SP_CRUD_Importar> SP_CRUD_Importar { get; set; }
+
+        public virtual DbSet<vw_vistaExportOrden> vw_vistaExportOrden { get; set; }
+
+        public virtual DbSet<vw_Facturas> vw_Facturas { get; set; }
+
+        public virtual DbSet<Factura> Factura { get; set; }
+        public virtual DbSet<FacturaDetalle> FacturaDetalle { get; set; }
+        public virtual DbSet<FacturaEstatus> FacturaEstatus { get; set; }
+
+        public virtual DbSet<vw_FacturaDetalleVista> vw_FacturaDetalleVista { get; set; }
+        public virtual DbSet<SP_FacturaTotal> SP_FacturaTotal { get; set; }
+
+        public virtual DbSet<updateSerie> updateSerie { get; set; }
 
         /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
          {
@@ -680,7 +693,7 @@ namespace Ser_Etiqueta.Models.DB
 
                 entity.Property(e => e.IdEmpresa).HasColumnName("idEmpresa");
 
-                entity.Property(e => e.IdMunicipio).HasColumnName("idMunicipio");
+                entity.Property(e => e.codigoFactura).HasColumnName("codigoFactura");
 
                 entity.Property(e => e.NombreSucursal)
                     .IsRequired()
@@ -689,10 +702,14 @@ namespace Ser_Etiqueta.Models.DB
                     .HasColumnName("nombreSucursal")
                     .HasDefaultValueSql("('')");
 
+
+                entity.Property(e => e.IdMunicipio).HasColumnName("idMunicipio");
                 entity.HasOne(d => d.IdEmpresaNavigation)
                     .WithMany(p => p.Sucursales)
                     .HasForeignKey(d => d.IdEmpresa)
                     .HasConstraintName("FK__Sucursale__idEmp__571DF1D5");
+
+
             });
 
             modelBuilder.Entity<TipoPaquete>(entity =>
@@ -820,6 +837,76 @@ namespace Ser_Etiqueta.Models.DB
             modelBuilder.Entity<SP_CRUD_Importar>(entity =>
             {
                 entity.HasKey(e => e.IdOrden);
+
+            });
+
+            modelBuilder.Entity<vw_vistaExportOrden>(entity =>
+            {
+                entity.HasKey(e => e.n_registro);
+
+            });
+
+
+            modelBuilder.Entity<vw_Facturas>(entity =>
+            {
+                entity.HasKey(e => e.KeyFactura);
+
+            });
+
+            modelBuilder.Entity<vw_FacturaDetalleVista>(entity =>
+            {
+                entity.HasKey(e => e.KeyFacturaDetalle);
+
+            });
+
+            modelBuilder.Entity<SP_FacturaTotal>(entity =>
+            {
+                entity.HasKey(e => e.KeyFacturaDetalle);
+
+            });
+            modelBuilder.Entity<updateSerie>(entity =>
+            {
+                entity.HasKey(e => e.id);
+
+            });
+
+            modelBuilder.Entity<FacturaEstatus>(entity =>
+            {
+                entity.HasKey(e => e.KeyFacturaEstatus);
+                entity.ToTable("FacturaEstatus", "etiquetas");
+
+            });
+
+            modelBuilder.Entity<Factura>(entity =>
+            {
+
+                entity.HasKey(e => e.KeyFactura).HasName("PK__Factura__A082D29E6A945746");
+                entity.ToTable("Factura", "etiquetas");
+                entity.Property(e => e.CreateDate)
+    .HasColumnType("datetime")
+    .HasColumnName("CreateDate")
+    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.KeyFacturaEstatus)
+                   .IsRequired()
+                   .HasColumnName("KeyFacturaEstatus")
+                   .HasDefaultValueSql("((1))");
+
+            });
+
+            modelBuilder.Entity<FacturaDetalle>(entity =>
+            {
+
+                entity.HasKey(e => e.KeyFacturaDetalle).HasName("PK_FacturaDetalle");
+                entity.ToTable("FacturaDetalle", "etiquetas");
+                entity.Property(e => e.CreateDate)
+    .HasColumnType("datetime")
+    .HasColumnName("CreateDate")
+    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Destinatario)
+                   .HasColumnName("Destinatario")
+                   .HasDefaultValueSql("((null))");
 
             });
             OnModelCreatingPartial(modelBuilder);

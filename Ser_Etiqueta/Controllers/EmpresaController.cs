@@ -81,6 +81,7 @@ namespace Ser_Etiqueta.Controllers
             {
 
                 _context.Attach(empresa);
+               
                 _context.Entry(empresa).Property(p => p.NombreComercial).IsModified = true;
                 _context.Entry(empresa).Property(p => p.NombreEmpresa).IsModified = true;
                 _context.Entry(empresa).Property(p => p.SerieCodigoEtiqueta).IsModified = true;

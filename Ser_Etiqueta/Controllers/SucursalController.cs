@@ -58,6 +58,7 @@ namespace Ser_Etiqueta.Controllers
             {
                 _context.Attach(sucursal);
                 _context.Entry(sucursal).Property(p => p.NombreSucursal).IsModified = true;
+                _context.Entry(sucursal).Property(p => p.codigoFactura).IsModified = true;
                 _context.Entry(sucursal).Property(p => p.IdEmpresa).IsModified = true;
                 _context.Entry(sucursal).Property(p => p.IdDepartamento).IsModified = true;
                 _context.Entry(sucursal).Property(p => p.IdMunicipio).IsModified = true;

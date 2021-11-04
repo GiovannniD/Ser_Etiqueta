@@ -121,6 +121,8 @@ namespace Ser_Etiqueta.Controllers
 
             graph.DrawLine(lineRed, 100, 100, 50, 50);*/
             foreach (var item in ordenes)
+
+
                 {
                   //  model.Codigo = item.Codigo;
                     i++;

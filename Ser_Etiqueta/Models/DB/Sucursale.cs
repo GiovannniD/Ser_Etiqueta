@@ -24,7 +24,7 @@ namespace Ser_Etiqueta.Models.DB
         public int? IdMunicipio { get; set; }
         public DateTime FechaIngreso { get; set; }
         public bool? Activo { get; set; }
-
+        public string codigoFactura { get; set; }
         public virtual Empresa IdEmpresaNavigation { get; set; }
         public virtual ICollection<Cliente> Clientes { get; set; }
         public virtual ICollection<Impresora> Impresoras { get; set; }
