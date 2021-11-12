@@ -153,12 +153,13 @@ namespace Ser_Etiqueta.Controllers
         [HttpPost]
         public IActionResult GetClienteCodigo(string? Codigo)
         {
+            getInfo();
             if (Codigo == null || Codigo == "")
             {
                 return NotFound();
             }
             //obtener libro
-            var cliente = _context.Clientes.Where(p=>p.Codigo==Codigo).ToList();
+            var cliente = _context.Clientes.Where(p=>p.Codigo==Codigo && p.IdEmpresa == IdEmpresa && p.IdSucursal == IdSucursal).ToList();
             if (cliente == null)
             {
                 return NotFound();

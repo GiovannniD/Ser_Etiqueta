@@ -202,7 +202,7 @@ namespace Ser_Etiqueta.Controllers
                     // IdTipoPaquete= Convert.ToInt16(tipo[i-1]),
                     direccion =detalle.direccion,
                     CantidadBulto=1,
-                    Peso = Convert.ToInt16(peso)
+                    Peso = Convert.ToDouble(peso)
                     //  Peso=Convert.ToInt16(peso[i-1])
                 };
                 _context.OrdenTrabajoDetalles.Add(saveDetalle);
@@ -434,7 +434,7 @@ namespace Ser_Etiqueta.Controllers
                 gfx.DrawString("Direccion:", font2, XBrushes.Black, new XPoint(5, 110));
                 gfx.DrawString(item.direccion, font, XBrushes.Black, new XPoint(60, 110));
                 gfx.DrawString("Telefono:", font2, XBrushes.Black, new XPoint(5, 135));
-                gfx.DrawString(item.Telefono, font, XBrushes.Black, new XPoint(60, 135));
+                gfx.DrawString(""+item.Telefono, font, XBrushes.Black, new XPoint(60, 135));
                 gfx.DrawString("Movil:", font2, XBrushes.Black, new XPoint(160, 135));
                 gfx.DrawString(item.Movil, font, XBrushes.Black, new XPoint(205, 135));
                 var mun = _context.Municipios.Where(p => p.KeyMunicipio == item.idMunicipio).AsNoTracking();
@@ -526,7 +526,7 @@ namespace Ser_Etiqueta.Controllers
                 gfx.DrawString("Direccion:", font2, XBrushes.Black, new XPoint(5, 110));
                 gfx.DrawString(item.direccion, font, XBrushes.Black, new XPoint(60, 110));
                 gfx.DrawString("Telefono:", font2, XBrushes.Black, new XPoint(5, 135));
-                gfx.DrawString(item.Telefono, font, XBrushes.Black, new XPoint(60, 135));
+                gfx.DrawString(""+item.Telefono, font, XBrushes.Black, new XPoint(60, 135));
                 gfx.DrawString("Movil:", font2, XBrushes.Black, new XPoint(160, 135));
                 gfx.DrawString(item.Movil, font, XBrushes.Black, new XPoint(205, 135));
                 var mun = _context.Municipios.Where(p => p.KeyMunicipio == item.idMunicipio).AsNoTracking();

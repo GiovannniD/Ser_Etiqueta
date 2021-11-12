@@ -31,9 +31,9 @@ namespace Ser_Etiqueta.Models.DB
         [DataType(DataType.EmailAddress, ErrorMessage = "El email no es valido.")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "El Telefono es obligatorio")]
+
         public string Telefono { get; set; }
-        [Required(ErrorMessage = "el Movil es obligatorio")]
+     
         public string Movil { get; set; }
         [Required(ErrorMessage = "La direccion es obligatoria")]
         public string Direccion { get; set; }

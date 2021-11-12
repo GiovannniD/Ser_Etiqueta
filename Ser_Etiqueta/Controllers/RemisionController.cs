@@ -225,7 +225,7 @@ a.ToString("D4");
                     foreach (var paquete in tipoPaquete)
                     {
                         graph.DrawRectangle(rect_style1, marginLeft + offSetX_5 + interLine_X_5 - 11.5, dist_Y2 + marginTop, el5_width, rect_height + 10);
-                        tf.DrawString(
+                        tf.DrawString("" +
                            paquete.DesTipoPaquete,
                             fontParagraph,
                             XBrushes.Black,
@@ -233,7 +233,7 @@ a.ToString("D4");
                             format);
                     }
                     graph.DrawRectangle(rect_style1, marginLeft + offSetX_6 + interLine_X_6 - 115, dist_Y2 + marginTop, el6_width + 49 ,rect_height + 10);
-                    tf.DrawString(
+                    tf.DrawString(""+
                        item.direccion,
                         fontParagraph,
                         XBrushes.Black,
@@ -255,14 +255,14 @@ a.ToString("D4");
                     foreach (var destino in mun)
                     {
                         graph.DrawRectangle(rect_style1, marginLeft, dist_Y2 + marginTop, el1_width + 5, rect_height + 10);
-                        tf.DrawString(destino.DescripcionMun, fontParagraph, XBrushes.Black,
+                        tf.DrawString("" + destino.DescripcionMun, fontParagraph, XBrushes.Black,
                                       new XRect(marginLeft, dist_Y + marginTop, el1_width, el_height + 10), format);
                     }
 
                     //ELEMENT 2 - BIG 380
                     graph.DrawRectangle(rect_style1, marginLeft + offSetX_1 + interLine_X_1, dist_Y2 + marginTop, el1_width + 5, rect_height + 10);
                     tf.DrawString(
-                      item.Codigo,
+                     "" + item.Codigo,
                         fontParagraph,
                         XBrushes.Black,
                         new XRect(marginLeft + offSetX_1 + interLine_X_1, dist_Y + marginTop, el1_width, el_height + 10),
@@ -275,7 +275,7 @@ a.ToString("D4");
                     {
                         graph.DrawRectangle(rect_style1, marginLeft + offSetX_2 + interLine_X_2, dist_Y2 + marginTop, el3_width + 10, rect_height + 10);
                         tf.DrawString(
-                           cliente.NombreComercial,
+                        "" + cliente.NombreComercial,
                             fontParagraph,
                             XBrushes.Black,
                             new XRect(marginLeft + offSetX_2 + 2 * interLine_X_2, dist_Y + marginTop, el3_width, el_height + 10),
@@ -283,7 +283,7 @@ a.ToString("D4");
 
                         graph.DrawRectangle(rect_style1, marginLeft + offSetX_3 + interLine_X_3, dist_Y2 + marginTop, el4_width + 10, rect_height + 10);
                         tf.DrawString(
-                             cliente.NombreCliente,
+                       "" + cliente.NombreCliente,
                             fontParagraph,
                             XBrushes.Black,
                             new XRect(marginLeft + offSetX_3 + 2 * interLine_X_3, dist_Y + marginTop, el4_width, el_height + 10),
@@ -307,7 +307,7 @@ a.ToString("D4");
                     {
                         graph.DrawRectangle(rect_style1, marginLeft + offSetX_5 + interLine_X_5 - 11.5, dist_Y2 + marginTop, el5_width, rect_height + 10);
                         tf.DrawString(
-                           paquete.DesTipoPaquete,
+                       "" + paquete.DesTipoPaquete,
                             fontParagraph,
                             XBrushes.Black,
                             new XRect(marginLeft + offSetX_5 + 1 * interLine_X_5, dist_Y + marginTop, el5_width, el_height),
@@ -315,7 +315,7 @@ a.ToString("D4");
                     }
                     graph.DrawRectangle(rect_style1, marginLeft + offSetX_6 + interLine_X_6 - 115, dist_Y2 + marginTop, el6_width + 49, rect_height + 10);
                     tf.DrawString(
-                       item.direccion,
+                      "" + item.direccion,
                         fontParagraph,
                         XBrushes.Black,
                         new XRect(marginLeft + offSetX_6 + 2 * interLine_X_6 - 175, dist_Y + marginTop, el6_width, el_height),
