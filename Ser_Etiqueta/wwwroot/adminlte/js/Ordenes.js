@@ -40,6 +40,9 @@ function importarOrdenes() {
         });
 }
 $(function () {
+
+
+  
     loadTable();
     loadTipoPaquete(1)
     alertify.defaults.theme.ok = "btn btn-primary";
@@ -80,6 +83,52 @@ function loadTipoPaquete(id) {
                     //$('#cargo_2').append($("<option />").val(jsonData.cargo).text(jsonData.cargo));
                     // console.log(jsonData.id);
                 }
+            }
+        })
+        // Se ejecuta si se produjo un error.
+        .fail(function (xhr, status, error) {
+            // Mostramos un mensaje de error.
+            //    $("#ErrorAlert").show("slow").delay(2000).hide("slow");
+
+            // Escondemos el Ajax Loader
+            //  $("#AjaxLoader").hide("slow");
+
+            // Habilitamos el botón de Submit
+            //  $("#SubmitBtn").prop("disabled", false);
+        })
+        // Hacer algo siempre, haya sido exitosa o no.
+        .always(function () {
+
+        });
+
+}
+
+
+function loadTags() {
+    // $('#tipoPaquete').html("");
+    $.ajax({
+        url: urlClientes, // Url
+        data: "",
+        type: "post"  // Verbo HTTP
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+            console.log(result)
+            if (result != null) {
+
+                var outObjA = JSON.parse(JSON.stringify(result));
+
+                for (var i = 0; i < outObjA.length; i++) {
+                    var jsonData = outObjA[i];
+
+                   //$('#tipoPaquete' + id).append($("<option />").val(jsonData.idTipoPaquete).text(jsonData.desTipoPaquete));
+                    Tags.push(jsonData.nombreCliente);
+                    TagsComercial.push(jsonData.nombreComercial)
+                    //   console.log(jsonData.descripcionDep)
+                    //$('#cargo_2').append($("<option />").val(jsonData.cargo).text(jsonData.cargo));
+                    // 
+                }
+                AutoComplete();
             }
         })
         // Se ejecuta si se produjo un error.
@@ -330,7 +379,7 @@ function loadTable()
                 "className":'dt-body-left',
                 "render": function (data, type, full, meta) {
                     if (full.estado == 1) {
-                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verRemision('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Remision</i></button ><button class='btn  btn-sm btn-warning' style=' color: white'  onclick =updateEstado('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Cerrar Orden</i></button><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verRemision('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Remision</i></button ><button class='btn  btn-sm btn-warning' style=' color: white'  onclick =updateEstado('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Cerrar Orden</i></button><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ><button type='submit' class='btn  btn-sm' style='background: #BB0423; color: white' onclick =eliminarOt('" + full.idOrdenTrabajo + "'); > <i class='material-icons'>Eliminar</i></button ></div></div>";
                     } else if (full.estado) {
                         var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verRemision('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Remision</i></button ><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
                     }
@@ -371,6 +420,7 @@ function loadTable()
             { "data": "descripcionMun" },
             { "data": "direccion" },
             { "data": "desTipoPaquete" },
+            { "data": "peso" },
             { "data": "serie" },
             {
                 "data": null,
@@ -418,7 +468,7 @@ function filtro() {
                 "className": 'dt-body-left',
                 "render": function (data, type, full, meta) {
                     if (full.estado == 1) {
-                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verRemision('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Remision</i></button ><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verRemision('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Remision</i></button ><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ><button type='submit' class='btn  btn-sm' style='background: #BB0423; color: white' onclick =eliminarOt('" + full.idOrdenTrabajo + "'); > <i class='material-icons'>Eliminar</i></button ></div></div>";
                     } else if (full.estado) {
                         var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verRemision('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Remision</i></button ><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
                     }
@@ -650,6 +700,7 @@ function clienteNombre(Nombre) {
         .done(function (result) {
             if (result != null) {
                 var outObjA = JSON.parse(JSON.stringify(result));
+                $("#Codigo").val(outObjA[0].idCliente)
                 $("#idCliente").val(outObjA[0].idCliente)
                 $("#nombreCliente").val(outObjA[0].nombreCliente)
                 $("#nombreComercial").val(outObjA[0].nombreComercial)
@@ -669,32 +720,39 @@ function clienteNombre(Nombre) {
 
         });
 }
-var cantidad = document.getElementById("cantidad");
-cantidad.addEventListener("keyup", function (event) {
-    var cantidad = $("#cantidad").val()
-    // Number 13 is the "Enter" key on the keyboard
-   // if (event.keyCode === 13) {
-        // Cancel the default action, if needed
-     //  event.preventDefault();
-    /*if (cantidad > 0) {
-        $("#detalle").html("")
 
-        var html = ""
-        for (var i = 0; i < cantidad; i++) {
-            html = "<div class='form-group row'> <label for= 'nombreCliente' class= 'col-sm-3 col-form-label'> Tipo de paquete #" + Math.floor(i + 1) + "</label >  <div class='col-sm-9'> <select class='form-control select2bs4' style='width: 100%;' id='tipoPaquete" + Math.floor(i + 1) + "'> </select></div> </div > <div class='form-group row'><label class= 'col-sm-3 col-form-label'> Peso " + Math.floor(i + 1) + "(kg) </label> <div class='col-sm-9'>   <input type='text' class='form-control' placeholder='Peso(KG)' id='peso" + Math.floor(i + 1) + "' name='peso'></div></div>"
-            $("#detalle").append(html);
-            selectRefresh()
-            loadTipoPaquete(Math.floor(i + 1))
-            $("#peso" + Math.floor(i + 1)).inputmask({
-                alias: 'numeric',
-                allowMinus: false,
-                digits: 2,
-                max: 999.99
-            });
-        }
-    } else { $("#detalle").html("")}*/
-   // }
-});
+function clienteNombreComercial(Nombre) {
+    $.ajax({
+        url: urlGetClienteNombreComercial, // Url
+        data: {
+            Nombre: Nombre
+        },
+        type: "post"  // Verbo HTTP
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+            if (result != null) {
+                var outObjA = JSON.parse(JSON.stringify(result));
+                $("#Codigo").val(outObjA[0].idCliente)
+                $("#idCliente").val(outObjA[0].idCliente)
+                $("#nombreCliente").val(outObjA[0].nombreCliente)
+                $("#nombreComercial").val(outObjA[0].nombreComercial)
+                $('#idMunicipio').val(outObjA[0].keyMunicipio);
+                $('#idMunicipio').trigger('change');
+                $("#direccion").val(outObjA[0].direccion)
+                //  console.log(outObjA.direccion)
+
+            }
+        })
+        // Se ejecuta si se produjo un error.
+        .fail(function (xhr, status, error) {
+
+        })
+        // Hacer algo siempre, haya sido exitosa o no.
+        .always(function () {
+
+        });
+}
 $("#peso1").inputmask({
     alias: 'numeric',
     allowMinus: false,
@@ -737,7 +795,7 @@ input2.addEventListener("keyup", function (event) {
             //  descuento=parseFloat($("#descuento").val()/100)
             //  descuento = parseFloat($("#total").val().replace("$", "")) * parseFloat($("#descuento").val() / 100)
             //  alertify.alert($("#Codigo").val())
-            clienteNombre($("#nombreCliente").val());
+          //  clienteNombre($("#nombreCliente").val());
         } else {
             // descuento = 0;
         }
@@ -749,6 +807,25 @@ input2.addEventListener("keyup", function (event) {
         //    $('#descuento').prop('readonly', true);
     }
 });
+
+
+function AutoComplete() {
+    $("#nombreCliente").autocomplete({
+        source: Tags,
+            select: function(event, ui) {
+              //  alert();
+                clienteNombre(ui.item.label)
+            }
+    });
+
+    $("#nombreComercial").autocomplete({
+        source: TagsComercial,
+        select: function (event, ui) {
+            //  alert();
+            clienteNombreComercial(ui.item.label)
+        }
+    });
+}
 function addNewEnvio() {
     $("#agregar").prop("disabled", true);
     var peso = "";
@@ -879,3 +956,46 @@ function Eliminar(idDetalle)
 
 }
 
+function eliminarOt(idOt) {
+
+    alertify.confirm('Confirmar Accion', 'Esta seguro?', function () {
+        $.ajax({
+            url: urlDeleteOt, // Url
+            data: {
+                IdOrdenTrabajo: idOt
+            },
+            type: "post"  // Verbo HTTP
+        })
+            // Se ejecuta si todo fue bien.
+            .done(function (result) {
+                if (result != null) {
+                    //    console.log(result)
+                    if (result == "1") {
+                        alertify.success("Eliminado")
+
+                        loadTable();
+                    } else {
+
+
+                    }
+
+
+
+                }
+            })
+            // Se ejecuta si se produjo un error.
+            .fail(function (xhr, status, error) {
+
+            })
+            // Hacer algo siempre, haya sido exitosa o no.
+            .always(function () {
+
+            });
+    }
+        , function () {
+            //  alertify.error('Cancelado')
+
+
+        });
+
+}

@@ -378,12 +378,25 @@ namespace Ser_Etiqueta.Controllers
         {
 
 
-           /* var p = _context.OrdenTrabajoDetalles.Remove(detalle);
-            _context.SaveChanges();*/
+           var p = _context.OrdenTrabajoDetalles.Remove(detalle);
+            _context.SaveChanges();
 
             var update = _context.updateSerie.FromSqlInterpolated($"exec [etiquetas].[updateSerie] {detalle.IdOtdetalle},''").AsNoTracking().ToList();
             return Json("1");
    
+
+        }
+
+        [HttpPost]
+        public IActionResult eliminarOT(OrdenTrabajo Ot)
+        {
+
+
+            var p = _context.OrdenTrabajos.Remove(Ot);
+            _context.SaveChanges();
+
+            return Json("1");
+
 
         }
         public IActionResult imprimirEnvio(int id)
@@ -528,7 +541,7 @@ namespace Ser_Etiqueta.Controllers
                 gfx.DrawString("Telefono:", font2, XBrushes.Black, new XPoint(5, 135));
                 gfx.DrawString(""+item.Telefono, font, XBrushes.Black, new XPoint(60, 135));
                 gfx.DrawString("Movil:", font2, XBrushes.Black, new XPoint(160, 135));
-                gfx.DrawString(item.Movil, font, XBrushes.Black, new XPoint(205, 135));
+                gfx.DrawString(""+item.Movil, font, XBrushes.Black, new XPoint(205, 135));
                 var mun = _context.Municipios.Where(p => p.KeyMunicipio == item.idMunicipio).AsNoTracking();
                 foreach (var municipios in mun)
                 {

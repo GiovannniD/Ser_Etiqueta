@@ -151,6 +151,23 @@ namespace Ser_Etiqueta.Controllers
         }
 
         [HttpPost]
+        public IActionResult GetClienteNombreComercial(string Nombre)
+        {
+            if (Nombre == null || Nombre == "")
+            {
+                return NotFound();
+            }
+            //obtener libro
+            var cliente = _context.Clientes.Where(p => p.NombreComercial == Nombre).ToList();
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            return Json(cliente);
+        }
+
+        [HttpPost]
         public IActionResult GetClienteCodigo(string? Codigo)
         {
             getInfo();

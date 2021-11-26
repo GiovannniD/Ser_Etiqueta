@@ -7,6 +7,36 @@
     var idEmpresa = Model.idEmpresa;
     var estado = ViewData["estado"];
 }
+<style>
+    .ui-autocomplete {
+        position: absolute;
+        z-index: 1000;
+        cursor: default;
+        padding: 0;
+        margin-top: 2px;
+        list-style: none;
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+
+        .ui-autocomplete > li {
+            padding: 3px 20px;
+        }
+
+            .ui-autocomplete > li.ui-state-focus {
+                background-color: #DDD;
+            }
+
+    .ui-helper-hidden-accessible {
+        display: none;
+    }
+</style>
 <h1 style="  color: #014377">Remision #@ViewData["orden"]</h1>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -46,14 +76,14 @@
                     <div class="form-group row">
                         <label for="nombreCliente" class="col-sm-3 col-form-label">Nombre del cliente</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="" id="nombreCliente" >
+                            <input type="text" class="form-control autocomplete" placeholder="Nombre del cliente" id="nombreCliente" >
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label for="nombreCliente" class="col-sm-3 col-form-label">Nombre Comercial</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="" id="nombreComercial" readonly>
+                            <input type="text" class="form-control" placeholder="Nombre Comercial" id="nombreComercial" >
                         </div>
                     </div>
 
@@ -153,6 +183,7 @@
                         <th>Municipio</th>
                         <th>Direccion</th>
                         <th>tipo</th>
+                        <th>peso(Kg)</th>
                         <th>serie</th>
                         <th></th>
 
@@ -169,6 +200,7 @@
                         <th>Municipio</th>
                         <th>Direccion</th>
                         <th>tipo</th>
+                        <th>peso(Kg)</th>
                         <th>serie</th>
                         <th></th>
                     </tr>
@@ -197,13 +229,18 @@
     var urlLoadSucursal = "@Url.Action("cargarSucursales", "Sucursal")";
         var urlGetCliente = "@Url.Action("GetClienteCodigo", "Cliente")";
         var urlGetClienteNombre = "@Url.Action("GetClienteNombre", "Cliente")";
+        var urlGetClienteNombreComercial = "@Url.Action("GetClienteNombreComercial", "Cliente")";
     var urlGetSucursal = "@Url.Action("GetSucursal", "Sucursal")";
         var urlUpdate = "@Url.Action("UpdateCliente", "Cliente")";
         var urlDelete = "@Url.Action("eliminarOrden", "Orden")";
     var urlUpdateSucursal = "@Url.Action("UpdateSucursal", "Sucursal")";
-    var urlUpload = "@Url.Action("cargarExcel", "Cliente")";
-        $(function () {
+        var urlUpload = "@Url.Action("cargarExcel", "Cliente")";
 
+        var urlClientes = "@Url.Action("cargarClientes", "Cliente")";
+        var Tags = [];
+        var TagsComercial = [];
+        $(function () {
+            loadTags();
             loadTipoPaquete();
         });
 
