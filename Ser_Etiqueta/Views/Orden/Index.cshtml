@@ -59,94 +59,138 @@
                                     <button type="button" class="btn col-12" style=" background: #014377; color:white" onclick="addNew()">Crear nueva Orden</button>
                                 </div>
                             </div>
-                                <div class="col-md-6">
+                            <div class="col-md-6">
                                 @if (User.IsInRole("SuperAdmin"))
                                 {
                                     <div class="form-group">
-                                        <button type="button" class="btn col-12 btn-outline-info"  onclick="importarOrdenes()" >
+                                        <button type="button" class="btn col-12 btn-outline-info" onclick="importarOrdenes()">
                                             <i class="fa fa-upload "></i>
                                             Importar Ordenes
                                         </button>
                                     </div>
-                                    }
-                                </div>
-                        
+                                }
+                            </div>
+
 
                         </div><br />
-                              <div class="row">
-                                  <div class="input-group col-sm-3">
-                                      <label>&nbsp Desde:  &nbsp  &nbsp</label>
-                                      <div class="input-group-prepend">
-                                          <span class="input-group-text">
-                                              <i class="far fa-calendar-alt"></i>
-                                          </span>
-                                      </div>
-                                      <input type="date" class="form-control " id="DateInicio" name=DateInicio>
-                                  </div>
+                        <div class="row">
+                            <div class="input-group col-sm-3">
+                                <label>&nbsp Desde:  &nbsp  &nbsp</label>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                <input type="date" class="form-control " id="DateInicio" name=DateInicio>
+                            </div>
 
-                                  <div class="input-group col-sm-3">
-                                      <label>Hasta:  &nbsp  &nbsp </label>
-                                      <div class="input-group-prepend">
-                                          <span class="input-group-text">
-                                              <i class="far fa-calendar-alt"></i>
-                                          </span>
+                            <div class="input-group col-sm-3">
+                                <label>Hasta:  &nbsp  &nbsp </label>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
 
-                                      </div>
-                                      <input type="date" class="form-control" id="DateFinal" name="DateFinal">
-                                  </div>
-                                  <div class='text-left'>
-                                      <div class='btn-group'>
-                                          <div class="input-group col-sm-6">
-                                              <button class="btn btn-block " style=" background: #014377; color:white" id="filtro" name="filtro" type=button onclick="filtro()">
-                                                  <i class="fa fa-filter "></i> Filtrar
-                                              </button>
-                                          </div>
-                                          <div class="input-group col-sm-6">
-                                              <button class="btn btn-block " style=" background: #014377; color:white" id="filtro" name="filtro" type=button onclick="descargarExcel()">
-                                                  <i class="fa fa-download "></i> Descargar
-                                              </button>
-                                          </div>
-                                          <div class="input-group col-sm-6">
-                                              <button class="btn btn-block btn-outline-dark " id="limpiar" name="limpiar" type=button onclick="loadTable()">
-                                                  <i class="fa fa-eraser "></i> Limpiar Filtro
-                                              </button>
-                                          </div>
-                                      </div>
-                                  </div>
-                                      </div><br />
+                                </div>
+                                <input type="date" class="form-control" id="DateFinal" name="DateFinal">
+                            </div>
+                            <div class='text-left'>
+                                <div class='btn-group'>
+                                    <div class="input-group col-sm-6">
+                                        <button class="btn btn-block " style=" background: #014377; color:white" id="filtro" name="filtro" type=button onclick="filtro()">
+                                            <i class="fa fa-filter "></i> Filtrar
+                                        </button>
+                                    </div>
+                                    <div class="input-group col-sm-6">
+                                        <button class="btn btn-block " style=" background: #014377; color:white" id="filtro" name="filtro" type=button onclick="descargarExcel()">
+                                            <i class="fa fa-download "></i> Descargar
+                                        </button>
+                                    </div>
+                                    <div class="input-group col-sm-6">
+                                        <button class="btn btn-block btn-outline-dark " id="limpiar" name="limpiar" type=button onclick="loadTable()">
+                                            <i class="fa fa-eraser "></i> Limpiar Filtro
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><br />
 
-                                      <div class="row">
+                        <div class="row">
 
-                                          <div class="col-md-12">
+                            <div class="col-md-12">
 
-                                              <table id="example" class="table table-striped table-bordered" style="width:100%">
-                                                  <thead>
-                                                      <tr>
+                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
 
 
-                                                          <th>Id Orden</th>
-                                                          <th>Empresa</th>
-                                                          <th>Fecha de Creacion</th>
-                                                          <th>Estado</th>
-                                                          <th></th>
+                                            <th>Id Orden</th>
+                                            <th>Empresa</th>
+                                            <th>Fecha de Creacion</th>
+                                            <th>Estado</th>
+                                            <th></th>
 
-                                                      </tr>
-                                                  </thead>
+                                        </tr>
+                                    </thead>
 
-                                                  <tfoot>
-                                                      <tr>
+                                    <tfoot>
+                                        <tr>
 
-                                                          <th>Id Orden</th>
-                                                          <th>Empresa</th>
-                                                          <th>Fecha de Creacion</th>
-                                                          <th>Estado</th>
-                                                          <th></th>
-                                                      </tr>
-                                                  </tfoot>
-                                              </table>
-                                          </div>
-                                      </div>
-                                  </div>
+                                            <th>Id Orden</th>
+                                            <th>Empresa</th>
+                                            <th>Fecha de Creacion</th>
+                                            <th>Estado</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-12">
+
+                                <table id="example3" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+
+
+                                            <th>#</th>
+                                            <th>Codigo</th>
+                                            <th>Factura</th>
+                                            <th>Tipo</th>
+                                            <th>Codigo Cliente</th>
+                                            <th>Nombre Comercial</th>
+                                            <th>Direccion</th>
+                                            <th>Contacto</th>
+                                            <th>Municipio</th>
+                                            <th>peso</th>
+                                            <th>Cantidad</th>
+                                            <th>Fecha</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tfoot>
+                                        <tr>
+
+                                            <th>#</th>
+                                            <th>Codigo</th>
+                                            <th>Factura</th>
+                                            <th>Tipo</th>
+                                            <th>Codigo Cliente</th>
+                                            <th>Nombre Comercial</th>
+                                            <th>Direccion</th>
+                                            <th>Contacto</th>
+                                            <th>Municipio</th>
+                                            <th>peso</th>
+                                            <th>Cantidad</th>
+                                            <th>Fecha</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
                               </div>
             </div><!-- /.card-body -->
@@ -212,7 +256,8 @@
     var urlUpload = "@Url.Action("cargarExcel", "Cliente")";
     var urlFiltro = "@Url.Action("Filtro", "Orden")";
     var urlimport = "@Url.Action("Importar", "Orden")";
-    var urlDeleteOt="@Url.Action("eliminarOt", "Orden")";
+    var urlDeleteOt = "@Url.Action("eliminarOt", "Orden")";
+    var urlEnvios="@Url.Action("vw_Envios", "Orden")";
 
 </script>
 

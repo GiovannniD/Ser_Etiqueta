@@ -441,6 +441,9 @@ function loadTable()
         "responsive": true, "lengthChange": false, "autoWidth": true, "searching": true
         //"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+  
 }
 
 function filtro() {
@@ -481,6 +484,60 @@ function filtro() {
         "lengthMenu": [[10, 20, 50, 100, 1000, -1], [10, 20, 50, 100, 1000, "All"]],
         "responsive": false, "lengthChange": true, "autoWidth": true, "searching": true
         //"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+    $('#example3 tfoot th').each(function () {
+        var title = $('#example thead th').eq($(this).index()).text();
+        $(this).html('<input type="text" placeholder="Buscar..' + title + '" class="form-control"/>');
+    });
+    $("#example3").DataTable({
+        "bDeferRender": true,
+
+
+
+        "keys": {
+            "clipboard": false
+        },
+        "ajax": {
+            "url": urlEnvios,
+            "method": 'POST', //usamos el metodo POST
+            "data": { fecha1: $("#DateInicio").val(), fecha2: $("#DateFinal").val() }, //enviamos opcion 4 para que haga un SELECT
+            "dataSrc": ""
+        }, initComplete: function () {
+            // Apply the search
+            this.api().columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change clear', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        },
+        "columns": [
+            { "data": "n_registro" },
+            { "data": "codigo" },
+            { "data": "factura" },
+            { "data": "paquete" },
+            { "data": "codigoCliente" },
+            { "data": "nombreComercial" },
+            { "data": "direccion" },
+            { "data": "contacto" },
+            { "data": "municipio" },
+            { "data": "peso" },
+            { "data": "cantidadBulto" },
+            { "data": "fechaCreacion" }
+
+        ],
+        "destroy": true, "scrollX": "200%", "dom": 'Blfrtip', "select": true,
+        "scrollY": "350px",
+        "lengthMenu": [[10, 20, 50, 100, 1000, -1], [10, 20, 50, 100, 1000, "All"]],
+        "responsive": false, "lengthChange": true, "autoWidth": true, "searching": true,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 }
 
@@ -700,7 +757,7 @@ function clienteNombre(Nombre) {
         .done(function (result) {
             if (result != null) {
                 var outObjA = JSON.parse(JSON.stringify(result));
-                $("#Codigo").val(outObjA[0].idCliente)
+                $("#Codigo").val(outObjA[0].codigo)
                 $("#idCliente").val(outObjA[0].idCliente)
                 $("#nombreCliente").val(outObjA[0].nombreCliente)
                 $("#nombreComercial").val(outObjA[0].nombreComercial)
@@ -733,7 +790,7 @@ function clienteNombreComercial(Nombre) {
         .done(function (result) {
             if (result != null) {
                 var outObjA = JSON.parse(JSON.stringify(result));
-                $("#Codigo").val(outObjA[0].idCliente)
+                $("#Codigo").val(outObjA[0].codigo)
                 $("#idCliente").val(outObjA[0].idCliente)
                 $("#nombreCliente").val(outObjA[0].nombreCliente)
                 $("#nombreComercial").val(outObjA[0].nombreComercial)

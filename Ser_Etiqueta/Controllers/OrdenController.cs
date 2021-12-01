@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using PdfSharp.Drawing;
+using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using QRCoder;
 using Ser_Etiqueta.Areas.Identity.Data;
@@ -360,6 +361,27 @@ namespace Ser_Etiqueta.Controllers
           
               
         }
+
+        [HttpPost]
+        public IActionResult vw_Envios(DateTime fecha1, DateTime fecha2)
+        {
+            if (User.IsInRole("SuperAdmin"))
+            {
+                var dep = _context.vw_envios.Where(p => p.fechaCreacion >= fecha1 && p.fechaCreacion <= fecha2).ToList();
+                return Json(dep);
+               
+            }
+            else
+            {
+                getInfo();
+                var dep = _context.vw_envios.Where(p => p.fechaCreacion >= fecha1 && p.fechaCreacion <= fecha2 && p.idEmpresa== IdEmpresa).ToList();
+         
+                return Json(dep);
+            }
+
+
+
+        }
         [HttpPost]
         public IActionResult Importar()
         {
@@ -405,8 +427,8 @@ namespace Ser_Etiqueta.Controllers
             var codigo = _context.OrdenTrabajoCodigos.Where(p=>p.IdOtcodigo==id);
             int idep = 0;
             PdfDocument document = new PdfDocument();
-            XFont font = new XFont("Arial", 10);
-            XFont font2 = new XFont("Arial", 10,XFontStyle.Bold);
+            XFont font = new XFont("Arial", 8);
+            XFont font2 = new XFont("Arial", 8,XFontStyle.Bold);
             XFont font3= new XFont("Arial", 7,XFontStyle.Bold);
             XFont font4 = new XFont("Arial", 8);
             XFont font5 = new XFont("Arial", 8, XFontStyle.Bold);
@@ -416,7 +438,12 @@ namespace Ser_Etiqueta.Controllers
             page.Width = XUnit.FromMillimeter(101.6);
             page.Height = XUnit.FromMillimeter(101.6);
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            // Text format
+            XStringFormat format = new XStringFormat();
+            format.LineAlignment = XLineAlignment.Near;
+            format.Alignment = XStringAlignment.Near;
             XGraphics gfx = XGraphics.FromPdfPage(page);
+            var tf = new XTextFormatter(gfx);
             XImage xfoto = XImage.FromFile(_env.WebRootPath + @"\logo_SER.jpg");
             gfx.DrawImage(xfoto, 5, 0, 120, 50);
             
@@ -428,28 +455,37 @@ namespace Ser_Etiqueta.Controllers
                 idOtDetalle = Convert.ToInt16(item.IdOtcodigo);
                 Stream stream2 = new System.IO.MemoryStream(item.Imagen);
             XImage xfoto2 = XImage.FromStream(stream2);
+               
 
-           
 
-            gfx.DrawImage(xfoto2, 130, 165, 130, 130);
+                gfx.DrawImage(xfoto2, 130, 165, 130, 130);
                 gfx.DrawString(item.CodigoSerie, font3, XBrushes.Black, new XPoint(180, 285));
 
             }
             var detalle = _context.SP_CRUD_OrdenDetalle.FromSqlInterpolated($"exec [etiquetas].[SP_CRUD_OrdenTrabajoDetalle] {idOtDetalle},null,null,null,null,'S2',''").AsNoTracking().ToList();
             foreach (var item in detalle)
             {
-               // DateTime date = DateTime.ParseExact("", "dd/MM/yyyy", CultureInfo.InvariantCulture);
-               //string formattedDate = date.ToString("dd/MM/yyyy");
+                XSolidBrush rect_style1 = new XSolidBrush(XColors.LightGray);
+                // DateTime date = DateTime.ParseExact("", "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                //string formattedDate = date.ToString("dd/MM/yyyy");
                 gfx.DrawString("Factura:    "+item.Factura, font2, XBrushes.Black, new XPoint(5, 70));
                 gfx.DrawString("Fecha: " + item.fechaRegistro.ToShortDateString(), font2, XBrushes.Black, new XPoint(200, 70));
                 gfx.DrawString("Cliente:" , font2, XBrushes.Black, new XPoint(5, 90));
-                gfx.DrawString(item.nombreCliente+"//"+item.nombreComercial, font, XBrushes.Black, new XPoint(60, 90));
-                gfx.DrawString("Direccion:", font2, XBrushes.Black, new XPoint(5, 110));
-                gfx.DrawString(item.direccion, font, XBrushes.Black, new XPoint(60, 110));
+                gfx.DrawString(""+item.nombreComercial, font, XBrushes.Black, new XPoint(50, 90));
+                   gfx.DrawString("Direccion:", font2, XBrushes.Black, new XPoint(5, 110));
+
+
+                XRect rect = new XRect(50, 100, 230, 50);
+                gfx.DrawRectangle(XBrushes.White, rect);
+                tf.DrawString(""+item.direccion,
+                font,
+               XBrushes.Black,
+                new XRect(rect.X + 5, rect.Y, rect.Width - 5, 34), format);
+                //gfx.DrawString(item.direccion, font, XBrushes.Black, new XPoint(60, 110));
                 gfx.DrawString("Telefono:", font2, XBrushes.Black, new XPoint(5, 135));
                 gfx.DrawString(""+item.Telefono, font, XBrushes.Black, new XPoint(60, 135));
                 gfx.DrawString("Movil:", font2, XBrushes.Black, new XPoint(160, 135));
-                gfx.DrawString(item.Movil, font, XBrushes.Black, new XPoint(205, 135));
+                gfx.DrawString(""+item.Movil, font, XBrushes.Black, new XPoint(205, 135));
                 var mun = _context.Municipios.Where(p => p.KeyMunicipio == item.idMunicipio).AsNoTracking();
                 foreach (var municipios in mun)
                 {
@@ -502,24 +538,26 @@ namespace Ser_Etiqueta.Controllers
             int i = 0;
             int idep = 0;
             PdfDocument document = new PdfDocument();
-            XFont font = new XFont("Arial", 10);
-            XFont font2 = new XFont("Arial", 10, XFontStyle.Bold);
+            XFont font = new XFont("Arial", 8);
+            XFont font2 = new XFont("Arial", 8, XFontStyle.Bold);
             XFont font3 = new XFont("Arial", 7, XFontStyle.Bold);
             XFont font4 = new XFont("Arial", 8);
             XFont font5 = new XFont("Arial", 8, XFontStyle.Bold);
 
-
+            XRect rect = new XRect(50, 100, 230, 50);
+            XStringFormat format = new XStringFormat();
             PdfPage page = document.AddPage();
             page.Width = XUnit.FromMillimeter(101.6);
             page.Height = XUnit.FromMillimeter(101.6);
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            
             XGraphics gfx = XGraphics.FromPdfPage(page);
-           
+
 
             byte[] Imagen = null;
             foreach (var item in codigo)
             {
-               
+                var tf = new XTextFormatter(gfx);
                 XImage xfoto = XImage.FromFile(_env.WebRootPath + @"\logo_SER.jpg");
                 gfx.DrawImage(xfoto, 5, 0, 120, 50);
                 //     idOtDetalle = Convert.ToInt16(item.IdOtcodigo);
@@ -535,9 +573,15 @@ namespace Ser_Etiqueta.Controllers
                 gfx.DrawString("Factura:    " + item.Factura, font2, XBrushes.Black, new XPoint(5, 70));
                 gfx.DrawString("Fecha: " + item.fechaRegistro.ToShortDateString(), font2, XBrushes.Black, new XPoint(200, 70));
                 gfx.DrawString("Cliente:", font2, XBrushes.Black, new XPoint(5, 90));
-                gfx.DrawString(item.nombreCliente + "//" + item.nombreComercial, font, XBrushes.Black, new XPoint(60, 90));
+                gfx.DrawString(""+ item.nombreComercial, font, XBrushes.Black, new XPoint(60, 90));
                 gfx.DrawString("Direccion:", font2, XBrushes.Black, new XPoint(5, 110));
-                gfx.DrawString(item.direccion, font, XBrushes.Black, new XPoint(60, 110));
+               
+                gfx.DrawRectangle(XBrushes.White, rect);
+              /*  tf.DrawString("" + item.direccion,
+                font,
+               XBrushes.Black,
+                rect, format);*/
+                tf.DrawString(""+item.direccion, font, XBrushes.Black, rect,format);
                 gfx.DrawString("Telefono:", font2, XBrushes.Black, new XPoint(5, 135));
                 gfx.DrawString(""+item.Telefono, font, XBrushes.Black, new XPoint(60, 135));
                 gfx.DrawString("Movil:", font2, XBrushes.Black, new XPoint(160, 135));

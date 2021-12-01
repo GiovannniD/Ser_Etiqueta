@@ -58,6 +58,7 @@ namespace Ser_Etiqueta.Models.DB
         public virtual DbSet<vw_FacturaDetalleVista> vw_FacturaDetalleVista { get; set; }
         public virtual DbSet<SP_FacturaTotal> SP_FacturaTotal { get; set; }
 
+        public virtual DbSet<vw_envios> vw_envios { get; set; }
         public virtual DbSet<updateSerie> updateSerie { get; set; }
 
         /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -856,6 +857,12 @@ namespace Ser_Etiqueta.Models.DB
             modelBuilder.Entity<vw_FacturaDetalleVista>(entity =>
             {
                 entity.HasKey(e => e.KeyFacturaDetalle);
+
+            });
+
+            modelBuilder.Entity<vw_envios>(entity =>
+            {
+                entity.HasKey(e => e.n_registro);
 
             });
 
