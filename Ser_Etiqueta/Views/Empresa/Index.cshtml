@@ -1,4 +1,5 @@
-﻿@*
+﻿@page
+@*
     @*
         For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -36,7 +37,7 @@
                 <div class="card-tools">
                     <ul class="nav nav-pills ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#revenue-chart" data-toggle="tab" >Registro de empresas</a>
+                            <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Registro de empresas</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#sales-chart" data-toggle="tab">Sucursales</a>
@@ -139,130 +140,175 @@
     </div>
 </div>
 
-
-
-<div class="modal fade" id="modalCRUD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body" style='overflow-y: auto; height:450px; '>
-                <div class="row">
-                    <input type="hidden" id="IdEmpresa" name="IdEmpresa" value="" />
-                    <div class="col-md-6" id="showfrm">
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header ui-sortable-handle" style="cursor: move;">
+                <h3 class="card-title" style="color: #014377;">
+                    <i class="fas fa-image mr-1"></i>
+                 Logo
+                </h3>
+                <div class="card-tools">
+                    <ul class="nav nav-pills ml-auto">
+                        <li class="nav-item">
+                            @*<a class="nav-link active" href="#revenue-chart" data-toggle="tab">Registro de empresas</a>*@
+                        </li>
+                        <li class="nav-item">
+                            @*<a class="nav-link" href="#sales-chart" data-toggle="tab">Sucursales</a>*@
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="hidden"  id="idLogo"  value="0"/>
+                        <label>Empresa </label>
+                        <select class="form-control select2bs4" style="width: 100%;" id=Empresa>
+                        </select>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="idDepartamento">Departamento</label>
-                            <select class="form-control select2bs4" style="width: 100%;" id=idDepartamento name=idDepartamento onchange="getMunicipio(this.value,1)">
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <img id="profilePicture" style="width:350px;height:350px; object-fit:cover" src="">
 
-                        <div class="form-group">
-                            <label for="idMunicipio">Municipio</label>
-                            <select class="form-control select2bs4" style="width: 100%;" id=idMunicipio name=idMunicipio>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="tieneSucursal" name="tieneSucursal">
-                                <label class="form-check-label" for="tieneSucursal">Tiene Sucursal?</label>
+                        <input type="file"
+                               accept=".png,.jpg,.jpeg,.gif,.tif"
+                               class="form-control"
+                               style="border:0px!important;padding: 0px;padding-top: 10px;padding-bottom: 30px;"
+                               onchange="document.getElementById('profilePicture').src = window.URL.createObjectURL(this.files[0])"
+                               id="uploadFile"/>
 
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn col-12" style="background:#014377; color:white;"  id="upload">Guardar</button>
+                    </div>
+                </div>
+            </div><!-- /.card-body -->
+        </div>
+
+
+
+        <div class="modal fade" id="modalCRUD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body" style='overflow-y: auto; height:450px; '>
+                        <div class="row">
+                            <input type="hidden" id="IdEmpresa" name="IdEmpresa" value="" />
+                            <div class="col-md-6" id="showfrm">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="idDepartamento">Departamento</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" id=idDepartamento name=idDepartamento onchange="getMunicipio(this.value,1)">
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="idMunicipio">Municipio</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" id=idMunicipio name=idMunicipio>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="tieneSucursal" name="tieneSucursal">
+                                        <label class="form-check-label" for="tieneSucursal">Tiene Sucursal?</label>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <button type="button" class="btn btn-outline-primary col-12" id="btnGuardar">Guardar registro</button>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-outline-primary col-12" id="btnGuardar">Guardar registro</button>
+                                </div>
+                            </div>
+
+
                         </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Cerrar</button>
                     </div>
 
-
                 </div>
-
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-dismiss="modal">Cerrar</button>
-            </div>
-
         </div>
-    </div>
-</div>
 
 
-<div class="modal fade" id="modalCRUDSucursal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+        <div class="modal fade" id="modalCRUDSucursal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
 
-            <div class="modal-body">
-                <div class="row">
-                    <input type="hidden" id="idSucursal" name="idSucursal" value="" />
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="nombreSucursal">Nombre de la Sucursal </label>
-                            <input type="text" class="form-control" placeholder="Nombre de la Sucursal" id="nombreSucursal" name="nombreSucursal">
-                            <span class="text-danger"></span>
+                    <div class="modal-body">
+                        <div class="row">
+                            <input type="hidden" id="idSucursal" name="idSucursal" value="" />
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nombreSucursal">Nombre de la Sucursal </label>
+                                    <input type="text" class="form-control" placeholder="Nombre de la Sucursal" id="nombreSucursal" name="nombreSucursal">
+                                    <span class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="nombreSucursal">Codigo de factura </label>
+                                    <input type="text" class="form-control" placeholder="Codigo de Factura" id="codigoFactura" name="codigoFactura" maxlength="3">
+                                    <span class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="idEmpresaSucursal">Empresa</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" id=idEmpresaSucursal name=idEmpresaSucursal onchange="getMunicipio(this.value,2)">
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="idDepartamentoSucursal">Departamento</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" id=idDepartamentoSucursal name=idDepartamentoSucursal onchange="getMunicipio(this.value)">
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="idMunicipioSucursal">Municipio</label>
+                                    <select class="form-control select2bs4" style="width: 100%;" id=idMunicipioSucursal name=idMunicipioSucursal>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-outline-primary col-12" id="btnGuardarSucursal">Guardar registro</button>
+                                </div>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="nombreSucursal">Codigo de factura </label>
-                            <input type="text" class="form-control" placeholder="Codigo de Factura" id="codigoFactura" name="codigoFactura" maxlength="3">
-                            <span class="text-danger"></span>
-                        </div>
 
-                        <div class="form-group">
-                            <label for="idEmpresaSucursal">Empresa</label>
-                            <select class="form-control select2bs4" style="width: 100%;" id=idEmpresaSucursal name=idEmpresaSucursal onchange="getMunicipio(this.value,2)">
-                            </select>
                         </div>
 
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="idDepartamentoSucursal">Departamento</label>
-                            <select class="form-control select2bs4" style="width: 100%;" id=idDepartamentoSucursal name=idDepartamentoSucursal onchange="getMunicipio(this.value)">
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="idMunicipioSucursal">Municipio</label>
-                            <select class="form-control select2bs4" style="width: 100%;" id=idMunicipioSucursal name=idMunicipioSucursal>
-                            </select>
-                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Cerrar</button>
                     </div>
+
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <button type="button" class="btn btn-outline-primary col-12" id="btnGuardarSucursal">Guardar registro</button>
-                        </div>
-                    </div>
-
-
-                </div>
-
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-dismiss="modal">Cerrar</button>
-            </div>
-
         </div>
-    </div>
-</div>
-<script type="text/javascript">
+        <script type="text/javascript">
     var urlDepartamento = "@Url.Action("getDepartamento", "Empresa")";
     var urlMunicipio = "@Url.Action("getMunicipio", "Empresa")";
     var urlInsert = "@Url.Action("insert", "Empresa")";
@@ -273,8 +319,11 @@
     var urlGetEmpresa = "@Url.Action("GetEmpresa", "Empresa")";
     var urlGetSucursal = "@Url.Action("GetSucursal", "Sucursal")";
     var urlUpdate = "@Url.Action("UpdateEmpresa", "Empresa")";
-    var urlUpdateSucursal = "@Url.Action("UpdateSucursal", "Sucursal")";
-</script>
+            var urlUpdateSucursal = "@Url.Action("UpdateSucursal", "Sucursal")";
+            var urlCargarEmpresas = "@Url.Action("cargarEmpresas","Empresa")";
+            var urluploadLogo = "@Url.Action("uploadLogo","Empresa")";
+            var urlgetLogo = "@Url.Action("getLogo","Empresa")";
+        </script>
 
-<script src="~/adminlte/js/load_select.js"></script>
-<script src="~/adminlte/js/Empresas.js"></script>
+        <script src="~/adminlte/js/load_select.js"></script>
+        <script src="~/adminlte/js/Empresas.js"></script>

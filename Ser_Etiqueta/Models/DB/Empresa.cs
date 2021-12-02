@@ -8,7 +8,7 @@ namespace Ser_Etiqueta.Models.DB
 {
     public partial class Empresa
     {
-        public Empresa()
+    /*    public Empresa()
         {
             Clientes = new HashSet<Cliente>();
             Impresoras = new HashSet<Impresora>();
@@ -17,7 +17,7 @@ namespace Ser_Etiqueta.Models.DB
             Ordenes = new HashSet<Ordene>();
             Sucursales = new HashSet<Sucursale>();
             UsuariosEmpresas = new HashSet<UsuariosEmpresa>();
-        }
+        }*/
 
 
         public int IdEmpresa { get; set; }
@@ -44,7 +44,7 @@ namespace Ser_Etiqueta.Models.DB
 
         public virtual ICollection<Cliente> Clientes { get; set; }
         public virtual ICollection<Impresora> Impresoras { get; set; }
-        public virtual ICollection<LogoEmpresa> LogoEmpresas { get; set; }
+     //  public virtual ICollection<LogoEmpresa> LogoEmpresas { get; set; }
         public virtual ICollection<ModulosEmpresa> ModulosEmpresas { get; set; }
         public virtual ICollection<Ordene> Ordenes { get; set; }
         public virtual ICollection<Sucursale> Sucursales { get; set; }

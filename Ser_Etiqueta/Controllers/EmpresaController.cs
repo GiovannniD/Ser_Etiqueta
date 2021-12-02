@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Ser_Etiqueta.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Ser_Etiqueta.Controllers
 {
@@ -19,7 +21,17 @@ namespace Ser_Etiqueta.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly SERETIQUETASContext _context;
 
+        [BindProperty]
+        public InputModel Input { get; set; }
 
+        public class InputModel
+        {
+
+            public int idLogo { get; set; }
+            public string logoEmpresa { get; set; }
+
+
+        }
         public EmpresaController(SERETIQUETASContext context)
         {
             this._context = context;
@@ -72,6 +84,81 @@ namespace Ser_Etiqueta.Controllers
                 return PartialView("_EmpresaFormPartial", empresa);
             }
           //  return PartialView("_EmpresaFormPartial", empresa);
+        }
+
+        [HttpPost]
+        public IActionResult getLogo( int IdEmpresa)
+        {
+            InputModel send = new InputModel();
+            var logo = _context.LogoEmpresas.Where(p => p.IdEmpresa == IdEmpresa).AsNoTracking();
+            foreach (var item in logo) {
+               send.idLogo = item.IdLogo;
+               send.logoEmpresa = Convert.ToBase64String(item.logoEmpresa);
+              //  Input.logoEmpresa = item.logoEmpresa;
+            }
+            return Json(send);
+        }
+
+            [HttpPost]
+        public IActionResult uploadLogo(ICollection<IFormFile> file, int IdEmpresa,int idLogo)
+        {
+            LogoEmpresa logo = new LogoEmpresa();
+            var checkLogo = _context.LogoEmpresas.Where(p => p.IdLogo == idLogo).AsNoTracking();
+            if (checkLogo != null)
+            {
+                foreach (var files in file)
+                {
+                    if (files.Length > 0)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+
+                            files.CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            logo.IdLogo = idLogo;
+                            logo.IdEmpresa = IdEmpresa;
+                            logo.logoEmpresa = fileBytes;
+                            // string s = Convert.ToBase64String(fileBytes);
+                            // act on the Base64 data
+                            _context.Attach(logo);
+                            _context.Entry(logo).Property(p => p.logoEmpresa).IsModified = true;
+
+                            _context.SaveChanges();
+                            return Json("1");
+                        }
+                    }
+                }
+
+
+            }
+            else {
+                foreach (var files in file)
+                {
+                    if (files.Length > 0)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+
+                            files.CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            logo.IdEmpresa = IdEmpresa;
+                            logo.logoEmpresa = fileBytes;
+                            // string s = Convert.ToBase64String(fileBytes);
+                            // act on the Base64 data
+                            var save = _context.LogoEmpresas.Add(logo);
+                            _context.SaveChanges();
+                            return Json("1");
+                        }
+                    }
+                }
+            }
+           
+
+         
+
+
+            return Json("");
+            
         }
         [HttpPost]
         public IActionResult UpdateEmpresa(Empresa empresa)

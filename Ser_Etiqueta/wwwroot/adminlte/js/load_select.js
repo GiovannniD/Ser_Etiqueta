@@ -33,7 +33,7 @@ function loadDepartamento() {
     })
         // Se ejecuta si todo fue bien.
         .done(function (result) {
-            console.log(result)
+          //  console.log(result)
             if (result != null) {
 
                 var outObjA = JSON.parse(JSON.stringify(result));
@@ -86,7 +86,7 @@ function getMunicipio(keyDepartamento,caso) {
     })
         // Se ejecuta si todo fue bien.
         .done(function (result) {
-            console.log(result)
+          //  console.log(result)
             if (result != null) {
                 var outObjA = JSON.parse(JSON.stringify(result));
 
@@ -135,7 +135,7 @@ $.ajax({
 })
     // Se ejecuta si todo fue bien.
     .done(function (result) {
-        console.log(result)
+       // console.log(result)
         if (result != null) {
             var outObjA = JSON.parse(JSON.stringify(result));
 

@@ -364,21 +364,15 @@ namespace Ser_Etiqueta.Models.DB
 
                 entity.Property(e => e.IdEmpresa).HasColumnName("idEmpresa");
 
-                entity.Property(e => e.IdSucursal).HasColumnName("idSucursal");
-
-                entity.Property(e => e.LogoEmpresa1)
-                    .IsUnicode(false)
+                entity.Property(e => e.logoEmpresa)
                     .HasColumnName("logoEmpresa");
 
-                entity.HasOne(d => d.IdEmpresaNavigation)
+            /*    entity.HasOne(d => d.IdEmpresaNavigation)
                     .WithMany(p => p.LogoEmpresas)
                     .HasForeignKey(d => d.IdEmpresa)
-                    .HasConstraintName("FK__LogoEmpre__idEmp__00200768");
+                    .HasConstraintName("FK__LogoEmpre__idEmp__00200768");*/
 
-                entity.HasOne(d => d.IdSucursalNavigation)
-                    .WithMany(p => p.LogoEmpresas)
-                    .HasForeignKey(d => d.IdSucursal)
-                    .HasConstraintName("FK__LogoEmpre__idSuc__01142BA1");
+                
             });
 
             modelBuilder.Entity<Modulo>(entity =>

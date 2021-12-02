@@ -1,7 +1,7 @@
 ﻿var TieneSucursal = true;
 
 $(function () {
-
+    loadEmpresa();
     loadTable();
 });
 function modalModificar(IdEmpresa) {
@@ -75,6 +75,52 @@ function addNewSucursal() {
     $("#codigoEtiqueta").val("")
     $("#IdEmpresa").val("")*/
 
+}
+
+function loadEmpresa() {
+    // $('#tipoPaquete').html("");
+
+    $.ajax({
+        url: urlCargarEmpresas, // Url
+        data: "",
+        type: "post"  // Verbo HTTP
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+           // console.log(result)
+            if (result != null) {
+
+                var outObjA = JSON.parse(JSON.stringify(result));
+
+                for (var i = 0; i < outObjA.length; i++) {
+                    var jsonData = outObjA[i];
+
+                    $('#Empresa').append($("<option />").val(jsonData.idEmpresa).text(jsonData.nombreComercial));
+
+                    //   console.log(jsonData.descripcionDep)
+                    //$('#cargo_2').append($("<option />").val(jsonData.cargo).text(jsonData.cargo));
+                    // console.log(jsonData.id);
+                }
+               
+                $('#Empresa').trigger('change');
+
+            }
+        })
+        // Se ejecuta si se produjo un error.
+        .fail(function (xhr, status, error) {
+            // Mostramos un mensaje de error.
+            //    $("#ErrorAlert").show("slow").delay(2000).hide("slow");
+
+            // Escondemos el Ajax Loader
+            //  $("#AjaxLoader").hide("slow");
+
+            // Habilitamos el botón de Submit
+            //  $("#SubmitBtn").prop("disabled", false);
+        })
+        // Hacer algo siempre, haya sido exitosa o no.
+        .always(function () {
+
+        });
 }
 function loadTable()
 {
@@ -269,6 +315,7 @@ $("#btnGuardar").click(function () {
                         $("#codigoEtiqueta").val("")
                         loadTable();
                         loadIdEmpresas()
+                        loadEmpresa()
                     } else {
                         $("#showfrm").html(result)
                     }
@@ -350,8 +397,83 @@ $("#btnGuardar").click(function () {
 
     }
 });
+$("#Empresa").change(function () {
+   
+    getLogo(this.value);
+})
+$("#upload").click(function () {
 
+    //$("#upload").prop("disabled", true);
 
+  
+    var file = $('#uploadFile').prop("files");      
+    var formData = new FormData();
+
+    formData.append("file", file[0]);
+    formData.append("IdEmpresa", $("#Empresa").val());
+    formData.append("idLogo", $("#idLogo").val());
+    $.ajax({
+        url: urluploadLogo, // Url
+        data: formData,
+        type: "post", // Verbo HTTP
+        processData: false,
+        contentType: false
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+            if (result != null) {
+                //    console.log(result)
+                if (result == "1") {
+                    alertify.alert("Informacion", "Operacion exitosa")
+
+                } else {
+                    alertify.alert("Informacion", "Ocurrio un error")
+                }
+
+                $("#upload").prop("disabled", false);
+
+            }
+        })
+        // Se ejecuta si se produjo un error.
+        .fail(function (xhr, status, error) {
+
+        })
+        // Hacer algo siempre, haya sido exitosa o no.
+        .always(function () {
+
+        });
+})
+
+function getLogo(idEmpresa) {
+    var input = document.getElementById("profilePicture");
+    $.ajax({
+        url: urlgetLogo, // Url
+        data: {IdEmpresa: idEmpresa},
+        type: "post", // Verbo HTTP
+       
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+            if (result != null) {
+                var outObjA = JSON.parse(JSON.stringify(result));
+                $("#idLogo").val(outObjA.idLogo)
+                input.src = "data:image/png;base64," + outObjA.logoEmpresa;
+
+               // console.log(outObjA[0].logoEmpresa)
+               
+
+            }
+        })
+        // Se ejecuta si se produjo un error.
+        .fail(function (xhr, status, error) {
+
+        })
+        // Hacer algo siempre, haya sido exitosa o no.
+        .always(function () {
+
+        });
+
+}
 $("#btnGuardarSucursal").click(function () {
     // Mostramos el Ajax Loader
     //  $("#AjaxLoader").show("fast");

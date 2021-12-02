@@ -424,7 +424,12 @@ namespace Ser_Etiqueta.Controllers
         public IActionResult imprimirEnvio(int id)
         {
             int idOtDetalle = 0;
+          //  int idOT = 0;
+           // getInfo();
+            
+           
             var codigo = _context.OrdenTrabajoCodigos.Where(p=>p.IdOtcodigo==id);
+          
             int idep = 0;
             PdfDocument document = new PdfDocument();
             XFont font = new XFont("Arial", 8);
@@ -444,6 +449,8 @@ namespace Ser_Etiqueta.Controllers
             format.Alignment = XStringAlignment.Near;
             XGraphics gfx = XGraphics.FromPdfPage(page);
             var tf = new XTextFormatter(gfx);
+
+           
             XImage xfoto = XImage.FromFile(_env.WebRootPath + @"\logo_SER.jpg");
             gfx.DrawImage(xfoto, 5, 0, 120, 50);
             
@@ -465,6 +472,20 @@ namespace Ser_Etiqueta.Controllers
             var detalle = _context.SP_CRUD_OrdenDetalle.FromSqlInterpolated($"exec [etiquetas].[SP_CRUD_OrdenTrabajoDetalle] {idOtDetalle},null,null,null,null,'S2',''").AsNoTracking().ToList();
             foreach (var item in detalle)
             {
+                var OT = _context.OrdenTrabajos.Where(p => p.IdOrdenTrabajo == item.IdOrdenTrabajo).AsNoTracking(); 
+                foreach(var Orden in OT)
+                {
+                    var logo = _context.LogoEmpresas.Where(p => p.IdEmpresa == Orden.IdEmpresa).AsNoTracking();
+                    if (logo != null) { 
+                    foreach (var logos in logo)
+                    {
+                        Stream stream2 = new System.IO.MemoryStream(logos.logoEmpresa);
+                        XImage xfoto2 = XImage.FromStream(stream2);
+                        gfx.DrawImage(xfoto2, 140, 0, 120, 50);
+                    }
+                    }
+                }
+                
                 XSolidBrush rect_style1 = new XSolidBrush(XColors.LightGray);
                 // DateTime date = DateTime.ParseExact("", "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 //string formattedDate = date.ToString("dd/MM/yyyy");
