@@ -135,7 +135,7 @@ namespace Ser_Etiqueta.Controllers
                         direccion = direccion,
                         CantidadBulto = 1,
                         Peso = 0,
-                        Factura=noFactura,
+                        Factura=noFactura.ToString(),
                         Codigo= codigoCliente
                     };
                     _context.OrdenTrabajoDetalles.Add(o);

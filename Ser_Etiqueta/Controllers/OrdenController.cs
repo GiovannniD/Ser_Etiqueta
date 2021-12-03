@@ -197,13 +197,13 @@ namespace Ser_Etiqueta.Controllers
                     IdOrdenTrabajo=detalle.IdOrdenTrabajo,
                     idCliente=detalle.idCliente,
                     Codigo=detalle.Codigo,
-                    Factura=detalle.Factura,
+                    Factura=detalle.Factura.ToString(),
                     idMunicipio=detalle.idMunicipio,
                     IdTipoPaquete = Convert.ToInt16(tipo),
                     // IdTipoPaquete= Convert.ToInt16(tipo[i-1]),
                     direccion =detalle.direccion,
                     CantidadBulto=1,
-                    Peso = Convert.ToDouble(peso)
+                    Peso = Convert.ToDecimal(peso)
                     //  Peso=Convert.ToInt16(peso[i-1])
                 };
                 _context.OrdenTrabajoDetalles.Add(saveDetalle);
@@ -481,7 +481,7 @@ namespace Ser_Etiqueta.Controllers
                     {
                         Stream stream2 = new System.IO.MemoryStream(logos.logoEmpresa);
                         XImage xfoto2 = XImage.FromStream(stream2);
-                        gfx.DrawImage(xfoto2, 140, 0, 120, 50);
+                        gfx.DrawImage(xfoto2, 145, 0, 120, 50);
                     }
                     }
                 }
@@ -585,7 +585,20 @@ namespace Ser_Etiqueta.Controllers
                 Stream stream2 = new System.IO.MemoryStream(item.Imagen);
                 XImage xfoto2 = XImage.FromStream(stream2);
 
-
+                var OT = _context.OrdenTrabajos.Where(p => p.IdOrdenTrabajo == item.IdOrdenTrabajo).AsNoTracking();
+                foreach (var Orden in OT)
+                {
+                    var logo = _context.LogoEmpresas.Where(p => p.IdEmpresa == Orden.IdEmpresa).AsNoTracking();
+                    if (logo != null)
+                    {
+                        foreach (var logos in logo)
+                        {
+                            Stream stream3 = new System.IO.MemoryStream(logos.logoEmpresa);
+                            XImage xfoto3 = XImage.FromStream(stream3);
+                            gfx.DrawImage(xfoto3, 145, 0, 120, 50);
+                        }
+                    }
+                }
 
                 gfx.DrawImage(xfoto2, 130, 165, 130, 130);
                 gfx.DrawString(item.CodigoSerie, font3, XBrushes.Black, new XPoint(180, 285));

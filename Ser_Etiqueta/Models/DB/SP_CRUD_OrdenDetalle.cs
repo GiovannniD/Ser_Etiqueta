@@ -16,7 +16,7 @@ namespace Ser_Etiqueta.Models.DB
 
         public string? nombreComercial { get; set; }
         public string? Codigo { get; set; }
-        public int? Factura { get; set; }
+        public string Factura { get; set; }
         public int? idMunicipio { get; set; }
         public int? IdTipoPaquete { get; set; }
         public string? desTipoPaquete { get; set; }
@@ -24,8 +24,8 @@ namespace Ser_Etiqueta.Models.DB
         public string? descripcionMun { get; set; }
         public string? direccion { get; set; }
         public int? CantidadBulto { get; set; }
-        public double? Peso { get; set; }
-        public double? PestoTotal { get; set; }
+        public decimal Peso { get; set; }
+        public decimal PestoTotal { get; set; }
 
         public string? serie { get; set; }
 

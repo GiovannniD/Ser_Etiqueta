@@ -50,7 +50,7 @@ $(function () {
         bsCustomFileInput.init();
     $("#cargando").hide()
     $("#cantidad").inputmask('integer', { min: 1, max: 1000000000 })
-    $("#Factura").inputmask('integer', { min: 1, max: 1000000000 })
+    //$("#Factura").inputmask('integer', { min: 1, max: 1000000000 })
     $("#peso").inputmask({
         alias: 'numeric',
         allowMinus: false,

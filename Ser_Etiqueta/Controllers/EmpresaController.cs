@@ -104,7 +104,7 @@ namespace Ser_Etiqueta.Controllers
         {
             LogoEmpresa logo = new LogoEmpresa();
             var checkLogo = _context.LogoEmpresas.Where(p => p.IdLogo == idLogo).AsNoTracking();
-            if (checkLogo != null)
+            if (idLogo != null && idLogo>0 )
             {
                 foreach (var files in file)
                 {
