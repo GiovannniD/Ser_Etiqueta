@@ -26,4 +26,6 @@
     <PackageReference Include="QRCoder" Version="1.4.1" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>

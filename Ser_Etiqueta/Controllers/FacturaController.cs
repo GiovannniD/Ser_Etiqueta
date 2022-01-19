@@ -138,7 +138,18 @@ namespace Ser_Etiqueta.Controllers
                         Factura=noFactura.ToString(),
                         Codigo= codigoCliente
                     };
+
                     _context.OrdenTrabajoDetalles.Add(o);
+                    _context.SaveChanges();
+
+
+                    Factura factura = new Factura
+                    {
+                        KeyFactura = noFactura,
+                        IsGeneraOT = 1
+
+                    };
+                    _context.Entry(factura).Property(p => p.IsGeneraOT).IsModified = true;
                     _context.SaveChanges();
                     UltimoConsecutivo = UltimoConsecutivo + 1;
                     UltimoConsecutivo.ToString().PadLeft(8, '0');
@@ -255,6 +266,22 @@ namespace Ser_Etiqueta.Controllers
             }
             return Json(ModelState);
         }
+
+        [HttpPost]
+        public IActionResult ChangeEstado(Factura factura)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                _context.Attach(factura);
+                _context.Entry(factura).Property(p => p.KeyFacturaEstatus).IsModified = true;
+                _context.SaveChanges();
+
+                return Json("1");
+            }
+            return Json(ModelState);
+        }
         [HttpPost]
         public IActionResult loadFacturaDetalle(FacturaDetalle factura)
         {
@@ -300,6 +327,8 @@ namespace Ser_Etiqueta.Controllers
             var estadoOT = _context.Factura.Where(p=>p.KeyFactura==id).AsNoTracking().ToList();
             foreach (var item in estadoOT) {
                 ViewData["estadoOT"] = item.IsGeneraOT;
+               
+
 
 
             }

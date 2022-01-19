@@ -9,7 +9,7 @@ var rowIndice = 0;
 $(function () {
 
     getMunicipio();
-    //loadCiente();
+    loadCiente();
     loadTable()
     loadTipoPaquete(1)
     $("#precio").inputmask({ alias: "currency", prefix: 'C$ ' })
@@ -511,7 +511,7 @@ function loadEstados(id,estado) {
                         $.ajax({
                             url: urlChangeEstado, // Url
                             data: {
-                                IdOtdetalle: idDetalle
+                                KeyFactura: id, KeyFacturaEstatus: $('#estado' + id).val()
                             },
                             type: "post"  // Verbo HTTP
                         })
@@ -520,7 +520,7 @@ function loadEstados(id,estado) {
                                 if (result != null) {
                                     //    console.log(result)
                                     if (result == "1") {
-                                        alertify.success("Eliminado")
+                                        alertify.alert("Estado de factura modificado")
 
                                         loadTable();
                                     } else {
@@ -606,9 +606,10 @@ function loadTable() {
                         let str = full.nombreComercial;
                         var name=str.replace('"','');
                         //console.log(full.nombreComercial)
-                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm btn-warning' style=' color: white'  onclick =updateEstado('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Cerrar Orden</i><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verDetalle('" + full.keyFactura + "','" + encodeURIComponent(full.nombreComercial) + "','" + full.fechaElaboracion + "','" + full.keyFacturaEstatus +"');> <i class='material-icons'>Ver Detalle</i></div></div>";
-                    } else if (full.keyFacturaEstatus) {
-                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verOrden('" + full.idOrdenTrabajo + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm btn-warning' style=' color: white'  onclick =updateEstado('" + full.keyFacturaEstatus+ "');> <i class='material-icons'>Cerrar Orden</i><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verDetalle('" + full.keyFactura + "','" + encodeURIComponent(full.nombreComercial) + "','" + full.fechaElaboracion + "','" + full.keyFacturaEstatus +"');> <i class='material-icons'>Ver Detalle</i></div></div>";
+                    } else if (full.keyFacturaEstatus>1) {
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verDetalle('" + full.keyFactura + "','" + encodeURIComponent(full.nombreComercial) + "','" + full.fechaElaboracion + "','" + full.keyFacturaEstatus +"');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
+                      
                     }
                     return opciones
                 }

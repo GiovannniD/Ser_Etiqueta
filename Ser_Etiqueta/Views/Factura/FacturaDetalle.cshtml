@@ -4,8 +4,9 @@
     ViewData["Title"] = "Detalle de Factura";
 }
 @{
+
     var idEmpresa = Model.idEmpresa;
-    var estado = 1;
+    var estado = ViewData["estado"];
     var estadoOT = ViewData["estadoOT"];
 }
 <h1 style="  color: #014377">Factura No. @ViewData["NoFactura"]</h1>
