@@ -1,5 +1,7 @@
 ﻿var TieneSucursal = true;
 
+
+
 function importarOrdenes() {
     alertify.confirm('Confirmar Accion', 'Esta seguro?', function () {
         $.ajax({
@@ -919,37 +921,42 @@ function addNewEnvio() {
     
 
     peso = $("#peso1").val();
-    tipo = $("#tipoPaquete1" ).val();
+    tipo = $("#tipoPaquete1").val();
+    var cadena = $("#keyDestino").val();
+    var arrayDeCadenas = cadena.split("-");
+
+   
     $.ajax({
         url: urlInsert, // Url
         data: {
-            IdOrdenTrabajo: idOrdenTrabajo, IdCliente: $("#idCliente").val(), Codigo: $("#Codigo").val(), Factura: $("#Factura").val(),
-            idMunicipio: $("#idMunicipio").val(), IdTipoPaquete: tipo, direccion: $.trim($("#direccion").val()),
-            CantidadBulto: cantidad, Peso:peso       },
-        type: "post"  // Verbo HTTP
+            IdOrdenTrabajo: idOrdenTrabajo, IdCliente: $("#idCliente").val(), Codigo: $("#Codigo").val(), Factura: $("#Factura").val(),idMunicipio:arrayDeCadenas[1],
+            keyOrigen: $("#keyOrigen").val(), keyDestino: arrayDeCadenas[0], IdTipoPaquete: tipo, direccion: $.trim($("#direccion").val()),
+            CantidadBulto: cantidad, Peso: peso
+        },
+        type: "post"  // Verbo HTTP 
     })
-        // Se ejecuta si todo fue bien.
-        .done(function (result) {
-            if (result != null) {
-                if (result == "1") {
-                    alertify.success("Envio agregado");
-                    loadTable()
-                    $("#agregar").prop("disabled", false);
-                    $("#cantidad").val("0")
-                    $("#detalle").html("")
-                  //  $("#Factura").val("")
+            // Se ejecuta si todo fue bien.
+            .done(function (result) {
+                if (result != null) {
+                    if (result == "1") {
+                        alertify.success("Envio agregado");
+                        loadTable()
+                        $("#agregar").prop("disabled", false);
+                        $("#cantidad").val("0")
+                        $("#detalle").html("")
+                        //  $("#Factura").val("")
+                    }
                 }
-            }
-        })
-        // Se ejecuta si se produjo un error.
-        .fail(function (xhr, status, error) {
-            $("#agregar").prop("disabled", false);
-            alertify.alert("informacion","Ocurrio un error revise su conexion")
-        })
-        .always(function () {
+            })
+            // Se ejecuta si se produjo un error.
+            .fail(function (xhr, status, error) {
+                $("#agregar").prop("disabled", false);
+                alertify.alert("informacion", "Ocurrio un error revise su conexion")
+            })
+            .always(function () {
 
-        });
-
+            });
+    
     
 }
 function ImprimirEnvio(id) {

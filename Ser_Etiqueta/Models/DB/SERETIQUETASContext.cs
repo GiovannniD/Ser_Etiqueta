@@ -61,6 +61,12 @@ namespace Ser_Etiqueta.Models.DB
         public virtual DbSet<vw_envios> vw_envios { get; set; }
         public virtual DbSet<updateSerie> updateSerie { get; set; }
 
+        public virtual DbSet<vw_Sersa_Clientes> vw_Sersa_Clientes { get; set; }
+
+        public virtual DbSet<vw_Sersa_Destinos> vw_Sersa_Destinos { get; set; }
+
+        public virtual DbSet<vw_vistaExportFactura> vw_vistaExportFactura { get; set; }
+
         /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
          {
              if (!optionsBuilder.IsConfigured)
@@ -559,15 +565,19 @@ namespace Ser_Etiqueta.Models.DB
                     .HasColumnName("fechaRegistro")
                     .HasComputedColumnSql("(getdate())", false);
 
-             /*   entity.HasOne(d => d.IdOrdenTrabajoNavigation)
-                    .WithMany(p => p.OrdenTrabajoDetalles)
-                    .HasForeignKey(d => d.IdOrdenTrabajo)
-                    .HasConstraintName("FK__OrdenTrab__idOrd__2B0A656D");*/
+                entity.Property(e => e.KeyOrigen).HasColumnName("keyOrigen").HasDefaultValueSql("((null))");
 
-               /* entity.HasOne(d => d.IdTipoPaqueteNavigation)
-                    .WithMany(p => p.OrdenTrabajoDetalles)
-                    .HasForeignKey(d => d.IdTipoPaquete)
-                    .HasConstraintName("FK__OrdenTrab__idTip__2BFE89A6");*/
+                entity.Property(e => e.keyDestino).HasColumnName("keyDestino").HasDefaultValueSql("((null))");
+
+                /*   entity.HasOne(d => d.IdOrdenTrabajoNavigation)
+                       .WithMany(p => p.OrdenTrabajoDetalles)
+                       .HasForeignKey(d => d.IdOrdenTrabajo)
+                       .HasConstraintName("FK__OrdenTrab__idOrd__2B0A656D");*/
+
+                /* entity.HasOne(d => d.IdTipoPaqueteNavigation)
+                     .WithMany(p => p.OrdenTrabajoDetalles)
+                     .HasForeignKey(d => d.IdTipoPaquete)
+                     .HasConstraintName("FK__OrdenTrab__idTip__2BFE89A6");*/
             });
 
             modelBuilder.Entity<Ordene>(entity =>
@@ -860,6 +870,23 @@ namespace Ser_Etiqueta.Models.DB
 
             });
 
+            modelBuilder.Entity<vw_Sersa_Clientes>(entity =>
+            {
+                entity.HasKey(e => e.KeyCliente);
+
+            });
+
+            modelBuilder.Entity<vw_Sersa_Destinos>(entity =>
+            {
+                entity.HasKey(e => e.KeyDestino);
+
+            });
+
+            modelBuilder.Entity<vw_vistaExportFactura>(entity =>
+            {
+                entity.HasKey(e => e.n_registro);
+
+            });
             modelBuilder.Entity<SP_FacturaTotal>(entity =>
             {
                 entity.HasKey(e => e.KeyFacturaDetalle);

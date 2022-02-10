@@ -11,6 +11,36 @@
     var idEmpresa = Model.idEmpresa;
 
 }
+<style>
+    .ui-autocomplete {
+        position: absolute;
+        z-index: 1000;
+        cursor: default;
+        padding: 0;
+        margin-top: 2px;
+        list-style: none;
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+
+        .ui-autocomplete > li {
+            padding: 3px 20px;
+        }
+
+            .ui-autocomplete > li.ui-state-focus {
+                background-color: #DDD;
+            }
+
+    .ui-helper-hidden-accessible {
+        display: none;
+    }
+</style>
 <h1 style="  color: #014377">@ViewData["Title"] </h1>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -55,13 +85,35 @@
                 <div class="tab-content p-0">
                     <!-- Morris chart - Sales -->
                     <div class="chart tab-pane active" id="revenue-chart" style="position: relative; ">
-                            
+                              <div class="row">
+                                   <div class="col-md-3">
+                                       <label >Cliente</label>
+                                       </div>
+                              <div class="col-md-3">
+                                       <label >Fecha de Elaboracion</label>
+                                       </div>
+                                  </div>
                         <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                
+                                    <input type="text" class="form-control autocomplete" id="Cliente"/>
+                                  <input id="keyCliente"  type="hidden" value="">
+                                </div>
+                                </div>
+                                      <div class="col-md-3">
+                                <div class="form-group">
+                                  
+                                   <input type="date" class="form-control" id="fechaElaboracion" name="fechaElaboracion">
+                                </div>
+                                </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <button type="button" class="btn col-12" style=" background: #014377; color:white" id="modalCrear">Crear nueva Factura</button>
+                               
+                                    <button type="button" class="btn col-6" style=" background: #014377; color:white" id="btnCrear">Crear nueva Factura</button>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 @*@if (User.IsInRole("SuperAdmin"))
                                     {
@@ -97,15 +149,24 @@
                                 </div>
                                 <input type="date" class="form-control" id="DateFinal" name="DateFinal">
                             </div>
-                            <div class="input-group col-sm-3">
-                                <button class="btn btn-block " style=" background: #014377; color:white" id="filtro" name="filtro" type=button onclick="filtro()">
-                                    <i class="fa fa-filter "></i> Filtrar
-                                </button>
-                            </div>
-                            <div class="input-group col-sm-3">
-                                <button class="btn btn-block btn-outline-dark " id="limpiar" name="limpiar" type=button onclick="loadTable()">
-                                    <i class="fa fa-eraser "></i> Limpiar Filtro
-                                </button>
+                            <div class='text-left'>
+                                <div class='btn-group'>
+                                    <div class="input-group col-sm-6">
+                                        <button class="btn btn-block " style=" background: #014377; color:white" id="filtro" name="filtro" type=button onclick="filtro()">
+                                            <i class="fa fa-filter "></i> Filtrar
+                                        </button>
+                                    </div>
+                                    <div class="input-group col-sm-6">
+                                        <button class="btn btn-block " style=" background: #014377; color:white" id="filtro" name="filtro" type=button onclick="descargarExcel()">
+                                            <i class="fa fa-download "></i> Descargar
+                                        </button>
+                                    </div>
+                                    <div class="input-group col-sm-6">
+                                        <button class="btn btn-block btn-outline-dark " id="limpiar" name="limpiar" type=button onclick="loadTable()">
+                                            <i class="fa fa-eraser "></i> Limpiar Filtro
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div><br />
 
@@ -167,11 +228,11 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label for="idMunicipioSucursal">Cliente</label>
-                            <select class="form-control select2bs4" style="width: 100%;" id=Cliente name=Cliente>
+                          @*  <select class="form-control select2bs4" style="width: 100%;" id=Cliente name=Cliente>*@
                             </select>
                         </div>
                         <div class="form-group">
-                            <input type="date" class="form-control" id="fechaElaboracion" name="fechaElaboracion">
+                            @*<input type="date" class="form-control" id="fechaElaboracion" name="fechaElaboracion">*@
                         </div>
 
                     </div>
@@ -181,7 +242,7 @@
                     <div class="col-12">
 
                         <div class="form-group">
-                            <button type="button" class="btn btn-outline-primary col-12" id="btnCrear">Crear factura</button>
+                            <button type="button" class="btn btn-outline-primary col-12" >Crear factura</button>
                         </div>
                     </div>
 
@@ -210,15 +271,16 @@
     var urlForm = "@Url.Action("Form", "Cliente")";
     var urlLoad = "@Url.Action("getFacturas", "Factura")";
     var urlLoadSucursal = "@Url.Action("cargarSucursales", "Sucursal")";
-    var urlGetCliente = "@Url.Action("cargarClientes", "Cliente")";
+    var urlGetCliente = "@Url.Action("cargarClientes_Sersa", "Cliente")";
     var urlGetEstado = "@Url.Action("GetEstado", "Factura")";
     var urlUpdate = "@Url.Action("UpdateEstado", "Orden")";
     var urlUpdateSucursal = "@Url.Action("UpdateSucursal", "Sucursal")";
     var urlUpload = "@Url.Action("cargarExcel", "Cliente")";
-    var urlFiltro = "@Url.Action("Filtro", "Orden")";
+    var urlFiltro = "@Url.Action("Filtro", "Factura")";
     var urlimport="@Url.Action("Importar", "Orden")";
     var urlChangeEstado="@Url.Action("ChangeEstado", "Factura")";
-
+     var urlClientes = "@Url.Action("cargarClientes", "Cliente")";
+     var urlGetClienteNombre = "@Url.Action("GetClienteNombre", "Cliente")";
 </script>
 
 <script src="~/adminlte/js/load_select.js"></script>

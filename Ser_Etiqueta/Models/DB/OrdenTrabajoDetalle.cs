@@ -25,18 +25,22 @@ namespace Ser_Etiqueta.Models.DB
 
         public string? direccion { get; set; }
         public int? CantidadBulto { get; set; }
-        public decimal Peso { get; set; }
+        public decimal? Peso { get; set; }
         public decimal PestoTotal { get; set; }
 
         public DateTime fechaRegistro { get; set; }
 
+        public int? KeyOrigen { get; set; }
 
-      // public virtual OrdenTrabajo IdOrdenTrabajoNavigation { get; set; }
+        public int? keyDestino { get; set; }
 
-    
-       // public virtual TipoPaquete IdTipoPaqueteNavigation { get; set; }
-   
-      //  public virtual ICollection<OrdenTrabajoCodigo> OrdenTrabajoCodigos { get; set; }
+
+        // public virtual OrdenTrabajo IdOrdenTrabajoNavigation { get; set; }
+
+
+        // public virtual TipoPaquete IdTipoPaqueteNavigation { get; set; }
+
+        //  public virtual ICollection<OrdenTrabajoCodigo> OrdenTrabajoCodigos { get; set; }
 
 
     }

@@ -1,4 +1,6 @@
 ﻿$("#tieneSucursal").prop('checked', true);
+var destino = [];
+let DestinoMap = new Map();
 $(function () {
     alertify.defaults.theme.ok = "btn btn-primary";
     alertify.defaults.theme.cancel = "btn btn-danger";
@@ -14,8 +16,45 @@ $(function () {
     loadDepartamento();
     getMunicipio(1,0);
     loadIdEmpresas()
+    
 })
 
+
+function getDestinos(keyCliente) {
+   
+
+    $.ajax({
+        url: urlDestinos, // Url
+        data: { keyCliente: keyCliente },
+        type: "post"  // Verbo HTTP
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+            //  console.log(result)
+            if (result != null) {
+                var outObjA = JSON.parse(JSON.stringify(result));
+
+                for (var i = 0; i < outObjA.length; i++) {
+                    var jsonData = outObjA[i];
+
+                    $('#keyOrigen').append($("<option />").val(jsonData.keyDestino).text(jsonData.descripcionDestino));
+                    $('#keyDestino').append($("<option />").val(jsonData.keyDestino + "-" + jsonData.keyMunicipio).text(jsonData.descripcionDestino));
+
+
+                   // destino.push(jsonData.descripcionDestino);
+                    DestinoMap.set(jsonData.keyDestino, jsonData.descripcionDestino);
+                }
+            }
+        })
+
+        .fail(function (xhr, status, error) {
+
+        })
+        .always(function () {
+
+        });
+
+}
 function selectRefresh() {
     $('.select2bs4').select2({
         //-^^^^^^^^--- update here
@@ -42,6 +81,7 @@ function loadDepartamento() {
                     var jsonData = outObjA[i];
                     $('#idDepartamento').append($("<option />").val(jsonData.keyDepartamento).text(jsonData.descripcionDep));
                     $('#idDepartamentoSucursal').append($("<option />").val(jsonData.keyDepartamento).text(jsonData.descripcionDep));
+                    $('#dDepartamento').append($("<option />").val(jsonData.keyDepartamento).text(jsonData.descripcionDep));
                  //   console.log(jsonData.descripcionDep)
                     //$('#cargo_2').append($("<option />").val(jsonData.cargo).text(jsonData.cargo));
                     // console.log(jsonData.id);
@@ -74,7 +114,7 @@ function getMunicipio(keyDepartamento,caso) {
     if (caso == 1) { $('#idMunicipio').html("");}
        
     else if (caso == 2) { $('#idMunicipioSucursal').html("");}
-       
+    else if (caso == 3) { $('#dMunicipio').html(""); }
     else {
         $('#idMunicipio').html("");
         $('#idMunicipioSucursal').html("");}
@@ -84,6 +124,7 @@ function getMunicipio(keyDepartamento,caso) {
         data: { keyDepto: keyDepartamento },
         type: "post"  // Verbo HTTP
     })
+
         // Se ejecuta si todo fue bien.
         .done(function (result) {
           //  console.log(result)
@@ -96,9 +137,12 @@ function getMunicipio(keyDepartamento,caso) {
                         $('#idMunicipio').append($("<option />").val(jsonData.keyMunicipio).text(jsonData.descripcionMun));
                     else if(caso==2)
                         $('#idMunicipioSucursal').append($("<option />").val(jsonData.keyMunicipio).text(jsonData.descripcionMun));
+                    else if (caso == 3)
+                        $('#dMunicipio').append($("<option />").val(jsonData.keyMunicipio).text(jsonData.descripcionMun));
                     else 
                         $('#idMunicipio').append($("<option />").val(jsonData.keyMunicipio).text(jsonData.descripcionMun));
                     $('#idMunicipioSucursal').append($("<option />").val(jsonData.keyMunicipio).text(jsonData.descripcionMun));
+                    $('#dMunicipio').append($("<option />").val(jsonData.keyMunicipio).text(jsonData.descripcionMun));
                    // console.log(jsonData.descripcionDep)
                     //$('#cargo_2').append($("<option />").val(jsonData.cargo).text(jsonData.cargo));
                     // console.log(jsonData.id);

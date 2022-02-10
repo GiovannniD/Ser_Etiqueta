@@ -63,7 +63,7 @@
                         <div class="form-group row">
                             <label for="nombreCliente" class="col-sm-3 col-form-label">Direccion*</label>
                             <div class="col-sm-9">
-                                <textarea type="text" class="form-control" placeholder="" id="direccion"></textarea>
+                                <textarea type="text" class="form-control" placeholder="" id="Destinatario"></textarea>
                             </div>
                         </div>
 
@@ -84,15 +84,15 @@
                     <div class="form-group row">
                         <label for="nombreCliente" class="col-sm-3 col-form-label">Origen</label>
                         <div class="col-sm-9">
-                            <select class="form-control select2bs4" style="width: 100%;" id=Origen name=Origen>
+                            <select class="form-control select2bs4" style="width: 100%;" id=keyOrigen name=keyOrigen>
                             </select>
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                          <div class="form-group row">
                         <label for="nombreCliente" class="col-sm-3 col-form-label">Destino</label>
                         <div class="col-sm-9">
-                            <select class="form-control select2bs4" style="width: 100%;" id=Destino name="Destino">
+                            <select class="form-control select2bs4" style="width: 100%;" id=keyDestino name=keyDestino>
                             </select>
                         </div>
                     </div>
@@ -134,7 +134,7 @@
     {
         <div class="row">
             <div class="col-sm-12">
-                <div class="form-group">
+                <div class="form-group" id="optOrden">
                     <button type="button" class="btn col-6 " style=" background: #014377; color:white; float: right;" onclick="GenerarOrden()">Generar Orden de trabajo</button>
                     <br />
                 </div>
@@ -143,6 +143,18 @@
             </div>
 
         </div>
+    }else if (Convert.ToInt16(estadoOT)==1){
+        <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group" id="optOrden">
+                        <button type="button" class="btn btn-block btn-outline-primary btn-flat col-6 " style=" background: white; color:#014377; float: right;" onclick="verOrden('@ViewData["idOrdenTrabajo"]')">Orden de trabajo: #@ViewData["idOrdenTrabajo"]</button>
+                        <br />
+                    </div>
+
+
+                </div>
+
+            </div>
     }
 </div>
 
@@ -216,6 +228,7 @@
         var idFactura = "@ViewData["NoFactura"]";
         var SerieCodigoEtiqueta = "@ViewData["serieCodigo"]";
         var Estado= "@estado";
+         var idSersa = "@ViewData["idSersa"]";
     var urlInsert = "@Url.Action("generarOrden", "Factura")";
     var urlInsertDetalle = "@Url.Action("insertFacturaDetalle", "Factura")";
     var urlDeleteDetalle = "@Url.Action("deleteFacturaDetalle", "Factura")";
@@ -231,10 +244,15 @@
         var urlDelete = "@Url.Action("eliminarOrden", "Orden")";
     var urlUpdateDetalle = "@Url.Action("updateFacturaDetalle", "Factura")";
     var urlUpload = "@Url.Action("cargarExcel", "Cliente")";
+    var urlDestinos = "@Url.Action("cargarDestinos_Sersa", "Cliente")";
     var admin = "@User.IsInRole("SuperAdmin")";
+     var urlClientes = "@Url.Action("cargarClientes", "Cliente")";
     $(function () {
 
             loadTipoPaquete();
+            getDestinos(idSersa);
+            
+           // console.log(destino);
         });
 
 </script>

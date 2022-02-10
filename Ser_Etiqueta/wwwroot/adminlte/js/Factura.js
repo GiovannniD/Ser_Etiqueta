@@ -6,10 +6,15 @@ var total = 0
 var subTotal = 0
 var iva = 0
 var rowIndice = 0;
+var date = new Date();
+var currentDate = date.toISOString().substring(0, 10);
+var Tags = [];
 $(function () {
-
+  $("#fechaElaboracion").val(currentDate);
+    loadTags();
+    bsCustomFileInput.init();
     getMunicipio();
-    loadCiente();
+   // loadCiente();
     loadTable()
     loadTipoPaquete(1)
     $("#precio").inputmask({ alias: "currency", prefix: 'C$ ' })
@@ -18,6 +23,7 @@ $(function () {
     $("#subtotal").inputmask({ alias: "currency", prefix: 'C$ ' })
     $("#iva").inputmask({ alias: "currency", prefix: '' })
     LoadDetalle();
+
 
 });
 
@@ -33,7 +39,9 @@ $("#agregar").click(function () {
         alertify.error("Asegurese de llenar todos los campos correctamente.")
         return false;
     }
-    
+    var cadena = $("#keyDestino").val()
+    var arreglo = cadena.split("-");
+
     $.ajax({
         url: urlInsertDetalle,
         type: 'POST',
@@ -42,7 +50,7 @@ $("#agregar").click(function () {
             KeyFactura: arrayDeCadenas[1], KeyTipoPaquete: $("#tipoPaquete").val(), Cantidad: $("#cantidad").val(),
             DescripcionDetalle: $("#Origen option:selected").text() + "-" + $("#Destino option:selected").text(),
             PrecioUnitario: precio_producto,
-            KeyOrigen: $("#Origen").val(), KeyDestino: $("#Destino").val(), Destinatario: ""},
+            KeyOrigen: $("#keyOrigen").val(), KeyDestino: arreglo[0], Destinatario: $("#Destinatario").val()},
         success: function (data, textStatus, xhr) {
             var outObjA = JSON.parse(JSON.stringify(data));
            // count++;
@@ -144,13 +152,14 @@ $('#detalle tbody').on('click', 'td.IdPaquete', function () {
 });
 
 
+
 function calcular() {
     subtotal = 0;
     var table = document.getElementById("detalle");
     for (var i = 1; i < table.rows.length; i++) {
         if (table.rows[i].cells.length) {
             subtotal = subtotal + parseFloat((table.rows[i].cells[3].textContent.trim())) * parseFloat((table.rows[i].cells[4].textContent.trim().replace("$", "")));
-            console.log(subtotal);
+          //  console.log(subtotal);
         }
 
     }
@@ -170,20 +179,16 @@ function GenerarOrden() {
         })
             // Se ejecuta si todo fue bien.
             .done(function (result) {
-                if (result != null) {
-                    //    console.log(result)
-                    if (result == "1") {
-                        alertify.alert("Informacion", "Operacion exitosa")
+              //  console.log(result)
+                    var outObjA = JSON.parse(JSON.stringify(result));
 
-                        loadTable();
-                    } else {
-
-
-                    }
+                $("#optOrden").html('<button type="button" class="btn btn-block btn-outline-primary btn-flat col-6 " style=" background: white; color:#014377; float: right;" onclick="verOrden(' + outObjA.idOrdenTrabajo+')">Orden de trabajo: #' + outObjA.idOrdenTrabajo+'</button>')
+                console.log(outObjA.idOrdenTrabajo)
+                 
 
 
 
-                }
+                
             })
             // Se ejecuta si se produjo un error.
             .fail(function (xhr, status, error) {
@@ -201,6 +206,7 @@ function GenerarOrden() {
         });
     
 }
+
 function LoadDetalle() {
     $("#row").html(" <tr>      </tr >")
     count = 0;
@@ -223,9 +229,9 @@ function LoadDetalle() {
                     var jsonData = outObjA[i];
                     count++;
                     if (admin == "True") {
-                        $("#row").append('<tr>  <td >' + count + '  <input type="hidden" id="keyFactura' + count + '" value="' + outObjA[i].keyFacturaDetalle + '"></td> <td class=IdPaquete><select class="form-control select2bs4" style="width: 100%;" id="paquete'+count+'" > </select ></td>  <td>' + destino[jsonData.keyOrigen - 1] + '</td><td>' + destino[jsonData.keyDestino - 1] + '</td><td class=IdCantidad><input type="text" class="form-control " placeholder="Cantidad" id="cantidad' + count + '" value="' + jsonData.cantidad + '"></td><td class=IdPrecio ><input type="text" class="form-control " placeholder="Precio" id="precio' + count + '" value="' + jsonData.precioUnitario + '"></td><td >' + 'C$' + Math.abs(jsonData.precioUnitario * jsonData.cantidad) + '</td><td class=details ><button type="button" class="btn btn-danger ">Eliminar  <i class="fas fa-cart-arrow-down" ></i></button></td> </tr>');
+                        $("#row").append('<tr>  <td >' + count + '  <input type="hidden" id="keyFactura' + count + '" value="' + outObjA[i].keyFacturaDetalle + '"></td> <td class=IdPaquete><select class="form-control select2bs4" style="width: 100%;" id="paquete' + count + '" > </select ></td>  <td>' + DestinoMap.get(jsonData.keyOrigen) + '</td><td>' + DestinoMap.get(jsonData.keyDestino) + '</td><td class=IdCantidad><input type="text" class="form-control " placeholder="Cantidad" id="cantidad' + count + '" value="' + jsonData.cantidad + '"></td><td class=IdPrecio ><input type="text" class="form-control " placeholder="Precio" id="precio' + count + '" value="' + jsonData.precioUnitario + '"></td><td >' + 'C$' + Math.abs(jsonData.precioUnitario * jsonData.cantidad) + '</td><td class=details ><button type="button" class="btn btn-danger ">Eliminar  <i class="fas fa-cart-arrow-down" ></i></button></td> </tr>');
                     } else {
-                        $("#row").append('<tr>  <td >' + count + '  <input type="hidden" id="keyFactura' + count + '" value="' + outObjA[i].keyFacturaDetalle + '"></td> <td class=IdPaquete><select class="form-control select2bs4" style="width: 100%;" id="paquete'+count+'"> </select ></td>  <td>' + destino[jsonData.keyOrigen - 1] + '</td><td>' + destino[jsonData.keyDestino - 1] + '</td><td class=IdCantidad ><input type="text" class="form-control " placeholder="Cantidad" id="cantidad' + count + '" value="' + jsonData.cantidad + '"></td><td class=IdPrecio><input type="text" class="form-control " placeholder="Precio" id="precio' + count + '" value="' + jsonData.precioUnitario + '"></td><td >' + 'C$' + Math.abs(jsonData.precioUnitario * jsonData.cantidad) + '</td><td></td> </tr>');
+                        $("#row").append('<tr>  <td >' + count + '  <input type="hidden" id="keyFactura' + count + '" value="' + outObjA[i].keyFacturaDetalle + '"></td> <td class=IdPaquete><select class="form-control select2bs4" style="width: 100%;" id="paquete' + count + '"> </select ></td>  <td>' + DestinoMap.get(jsonData.keyOrigen) + '</td><td>' + DestinoMap.get(jsonData.keyDestino) + '</td><td class=IdCantidad ><input type="text" class="form-control " placeholder="Cantidad" id="cantidad' + count + '" value="' + jsonData.cantidad + '"></td><td class=IdPrecio><input type="text" class="form-control " placeholder="Precio" id="precio' + count + '" value="' + jsonData.precioUnitario + '"></td><td >' + 'C$' + Math.abs(jsonData.precioUnitario * jsonData.cantidad) + '</td><td></td> </tr>');
                     }
                     
                     loadUpdatePaquete(count)
@@ -233,7 +239,7 @@ function LoadDetalle() {
                     var input2 = document.getElementById("cantidad" + count);
                     $('#paquete' + count).val(jsonData.keyTipoPaquete);
                     $('#paquete' + count).trigger('change');
-                    console.log(jsonData.keyTipoPaquete)
+                   // console.log(jsonData.keyTipoPaquete)
                     $('#paquete' + count).change(function () {
 
                         alertify.confirm('Confirmar Accion', 'Esta seguro?', function () {
@@ -373,7 +379,7 @@ function getMunicipio() {
     })
         // Se ejecuta si todo fue bien.
         .done(function (result) {
-            console.log(result)
+           // console.log(result)
             if (result != null) {
                 var outObjA = JSON.parse(JSON.stringify(result));
 
@@ -382,7 +388,7 @@ function getMunicipio() {
                    
                     $('#Origen').append($("<option />").val(jsonData.keyMunicipio).text(jsonData.descripcionMun));
                     $('#Destino').append($("<option />").val(jsonData.keyMunicipio).text(jsonData.descripcionMun));
-                    destino.push(jsonData.descripcionMun);
+                   // destino.push(jsonData.descripcionMun);
                 }
             }
         })
@@ -411,11 +417,11 @@ $("#modalCrear").click(function () {
 $("#btnCrear").click(function () {
 
     const d = new Date($("#fechaElaboracion").val())
-    console.log()
+   // console.log()
     $.ajax({
         url: urlInsertFactura, // Url
         data: {
-            KeyCliente: $("#Cliente").val(), IdEmpresa: idEmpresa, IdSucursal: idSucursal,
+            KeyCliente: $("#keyCliente").val(), IdEmpresa: idEmpresa, IdSucursal: idSucursal,
             FechaElaboracion: d.toISOString().split('T')[0], UserName: Username
         },
         type: "post" // Verbo HTTP
@@ -468,7 +474,8 @@ function loadCiente() {
 
                 for (var i = 0; i < outObjA.length; i++) {
                     var jsonData = outObjA[i];
-                    $('#Cliente').append($("<option />").val(jsonData.idCliente).text(jsonData.nombreComercial));
+                   // $('#Cliente').append($("<option />").val(jsonData.keyCliente).text(jsonData.descripcionCliente+"//"+jsonData.nombreComercial));
+                    $('#Cliente').val(jsonData.keyCliente);
 
                 }
             }
@@ -606,7 +613,7 @@ function loadTable() {
                         let str = full.nombreComercial;
                         var name=str.replace('"','');
                         //console.log(full.nombreComercial)
-                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm btn-warning' style=' color: white'  onclick =updateEstado('" + full.keyFacturaEstatus+ "');> <i class='material-icons'>Cerrar Orden</i><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verDetalle('" + full.keyFactura + "','" + encodeURIComponent(full.nombreComercial) + "','" + full.fechaElaboracion + "','" + full.keyFacturaEstatus +"');> <i class='material-icons'>Ver Detalle</i></div></div>";
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verDetalle('" + full.keyFactura + "','" + encodeURIComponent(full.nombreComercial) + "','" + full.fechaElaboracion + "','" + full.keyFacturaEstatus + "');> <i class='material-icons'>Ver Detalle</i><button class='btn  btn-sm' style='background: #6C757D; color: white' onclick =imprimirFactura('" + full.keyFactura + "');> <i class='material-icons'>Imprimir</i></div></div>";
                     } else if (full.keyFacturaEstatus>1) {
                         var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verDetalle('" + full.keyFactura + "','" + encodeURIComponent(full.nombreComercial) + "','" + full.fechaElaboracion + "','" + full.keyFacturaEstatus +"');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
                       
@@ -671,12 +678,84 @@ function loadTable() {
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 }
 
+function filtro() {
+    $("#example").DataTable({
+        "bDeferRender": true,
+
+
+
+        "keys": {
+            "clipboard": false
+        },
+        "ajax": {
+            "url": urlFiltro,
+            "method": 'POST', //usamos el metodo POST
+            "data": { fechaInicio: $("#DateInicio").val(), fechaFinal: $("#DateFinal").val() }, //enviamos opcion 4 para que haga un SELECT
+            "dataSrc": ""
+        },
+        "columns": [
+            { "data": "keyFactura" },
+            { "data": "noFactura" },
+            { "data": "nombreComercial" },
+            { "data": "fechaElaboracion" },
+            {
+                "data": null,
+                "className": 'dt-body-left1',
+                "render": function (data, type, full, meta) {
+                    var opcion = '<select class="form-control select2bs4" style="width: 100%;" id="estado' + full.keyFactura + '"> </select >';
+                    //  console.log(type)
+                    if (type === 'filter') {
+
+                        loadEstados(full.keyFactura, full.keyFacturaEstatus)
+
+                    }
+
+
+                    selectRefresh();
+
+                    return opcion;
+
+                }
+            },
+            {
+                "data": null,
+                "className": 'dt-body-left',
+                "render": function (data, type, full, meta) {
+                    if (full.keyFacturaEstatus == 1) {
+                        let str = full.nombreComercial;
+                        var name = str.replace('"', '');
+                        //console.log(full.nombreComercial)
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verDetalle('" + full.keyFactura + "','" + encodeURIComponent(full.nombreComercial) + "','" + full.fechaElaboracion + "','" + full.keyFacturaEstatus + "');> <i class='material-icons'>Ver Detalle</i><button class='btn  btn-sm' style='background: #6C757D; color: white' onclick =imprimirFactura('" + full.keyFactura + "');> <i class='material-icons'>Imprimir</i></div></div>";
+                    } else if (full.keyFacturaEstatus > 1) {
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verDetalle('" + full.keyFactura + "','" + encodeURIComponent(full.nombreComercial) + "','" + full.fechaElaboracion + "','" + full.keyFacturaEstatus + "');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
+
+                    }
+                    return opciones
+                }
+            }
+        ],
+        "destroy": true, "scrollX": "200%",
+        "scrollY": "350px",
+        "lengthMenu": [[10, 20, 50, 100, 1000, -1], [10, 20, 50, 100, 1000, "All"]],
+        "responsive": false, "lengthChange": true, "autoWidth": true, "searching": true
+        //"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+}
 function verDetalle(idFactura,cliente,fecha,estado) {
 
     window.location.href = '/Factura/FacturaDetalle?id=' + idFactura+'&cliente='+cliente+'&fecha='+fecha+'&estado='+estado;
 }
 
+function descargarExcel() {
+    const d = new Date($("#DateInicio").val())
+    const d2 = new Date($("#DateFinal").val())
+   // console.log(d.toISOString().split('T')[0])
+    window.open('/Factura/DownloadExcelFactura?fecha1=' + d.toISOString().split('T')[0] + '&fecha2=' + d2.toISOString().split('T')[0], '_blank');
+}
 
+function imprimirFactura(id) {
+    window.open('/Factura/imprimirFactura/' + id, '_blank');
+}
 function loadTipoPaquete(id) {
     // $('#tipoPaquete').html("");
 
@@ -687,7 +766,7 @@ function loadTipoPaquete(id) {
     })
         // Se ejecuta si todo fue bien.
         .done(function (result) {
-            console.log(result)
+           // console.log(result)
             if (result != null) {
 
                 var outObjA = JSON.parse(JSON.stringify(result));
@@ -721,4 +800,123 @@ function loadTipoPaquete(id) {
 
         });
 
+}
+
+function loadTags() {
+    // $('#tipoPaquete').html("");
+    $.ajax({
+        url: urlClientes, // Url
+        data: "",
+        type: "post"  // Verbo HTTP
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+            console.log(result)
+            if (result != null) {
+
+                var outObjA = JSON.parse(JSON.stringify(result));
+
+                for (var i = 0; i < outObjA.length; i++) {
+                    var jsonData = outObjA[i];
+
+                    //$('#tipoPaquete' + id).append($("<option />").val(jsonData.idTipoPaquete).text(jsonData.desTipoPaquete));
+                    Tags.push(jsonData.nombreCliente);
+                   // TagsComercial.push(jsonData.nombreComercial)
+                    //   console.log(jsonData.descripcionDep)
+                    //$('#cargo_2').append($("<option />").val(jsonData.cargo).text(jsonData.cargo));
+                    // 
+                }
+                AutoComplete();
+            }
+        })
+        // Se ejecuta si se produjo un error.
+        .fail(function (xhr, status, error) {
+            // Mostramos un mensaje de error.
+            //    $("#ErrorAlert").show("slow").delay(2000).hide("slow");
+
+            // Escondemos el Ajax Loader
+            //  $("#AjaxLoader").hide("slow");
+
+            // Habilitamos el botón de Submit
+            //  $("#SubmitBtn").prop("disabled", false);
+        })
+        // Hacer algo siempre, haya sido exitosa o no.
+        .always(function () {
+
+        });
+
+}
+
+function AutoComplete() {
+    $("#Cliente").autocomplete({
+        source: Tags,
+        select: function (event, ui) {
+            //  alert();
+            clienteNombre(ui.item.label)
+        }
+    });
+}
+
+
+var input = document.getElementById("Cliente");
+input.addEventListener("keyup", function (event) {
+    // Number 13 is the "Enter" key on the keyboard
+    if (event.keyCode === 13) {
+        // Cancel the default action, if needed
+        event.preventDefault();
+
+        if ($("#Cliente").val() != "") {
+            //console.log($("#Cliente").val())
+            //  descuento=parseFloat($("#descuento").val()/100)
+            //  descuento = parseFloat($("#total").val().replace("$", "")) * parseFloat($("#descuento").val() / 100)
+            //  alertify.alert($("#Codigo").val())
+            //  clienteNombre($("#nombreCliente").val());
+        } else {
+            // descuento = 0;
+        }
+        //   calcularMontos();
+        // Trigger the button element with a click
+        // document.getElementById("myBtn").click();
+        //console.log(descuento)
+        // $("#total").val(parseFloat($("#total").val().replace("$","")-descuento))
+        //    $('#descuento').prop('readonly', true);
+    }
+});
+
+function clienteNombre(Nombre) {
+    $.ajax({
+        url: urlGetClienteNombre, // Url
+        data: {
+            Nombre: Nombre
+        },
+        type: "post"  // Verbo HTTP
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+            if (result != null) {
+                var outObjA = JSON.parse(JSON.stringify(result));
+                $("#keyCliente").val(outObjA[0].idCliente)
+                /*$("#Codigo").val(outObjA[0].codigo)
+                $("#idCliente").val(outObjA[0].idCliente)
+                $("#nombreCliente").val(outObjA[0].nombreCliente)
+                $("#nombreComercial").val(outObjA[0].nombreComercial)
+                $('#idMunicipio').val(outObjA[0].keyMunicipio);
+                $('#idMunicipio').trigger('change');
+                $("#direccion").val(outObjA[0].direccion)*/
+                //  console.log(outObjA.direccion)
+
+            }
+        })
+        // Se ejecuta si se produjo un error.
+        .fail(function (xhr, status, error) {
+
+        })
+        // Hacer algo siempre, haya sido exitosa o no.
+        .always(function () {
+
+        });
+}
+
+function verOrden(id) {
+    window.open('/Orden/OrdenDetalle/' + id,'_blank');
 }

@@ -8,6 +8,7 @@ namespace Ser_Etiqueta.Models.DB
 {
     public partial class FacturaDetalle
     {
+        internal int keyDestino;
 
         public int KeyFacturaDetalle { get; set; }
         public int KeyFactura { get; set; }

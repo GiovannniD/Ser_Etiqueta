@@ -34,6 +34,9 @@ namespace Ser_Etiqueta
             services.AddControllersWithViews();
             services.AddMvc().AddRazorRuntimeCompilation();
 
+            services.AddDbContext<SERSAContext>(options =>
+           options.UseSqlServer(Configuration.GetConnectionString("Sersa")));
+
             services.AddDbContext<Ser_EtiquetaContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Ser_EtiquetaContextConnection")));
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<Ser_EtiquetaContext>()

@@ -17,7 +17,7 @@ namespace Ser_Etiqueta.Models.DB
 
         public string serie { get; set; }
 
-        public int Factura { get; set; }
+        public string Factura { get; set; }
         public string nombreComercial { get; set; }
         public DateTime fechaCreacion { get; set; }
         public string estado { get; set; }
@@ -28,7 +28,7 @@ namespace Ser_Etiqueta.Models.DB
         public string Destino { get; set; }
         public string Direccion { get; set; }
         public int cantidad { get; set; }
-        public double peso { get; set; }
+        public decimal peso { get; set; }
 
 
     }

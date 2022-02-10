@@ -137,7 +137,54 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header ui-sortable-handle" style="cursor: move;">
+                <h3 class="card-title" style="color: #014377;">
+                    <i class="fas fa-bus mr-1"></i>
+                 Destinos
+                </h3>
+                <div class="card-tools">
+                    <ul class="nav nav-pills ml-auto">
+                        <li class="nav-item">
+                            @*<a class="nav-link active" href="#revenue-chart" data-toggle="tab">Registro de empresas</a>*@
+                        </li>
+                        <li class="nav-item">
+                            @*<a class="nav-link" href="#sales-chart" data-toggle="tab">Sucursales</a>*@
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="hidden"  id="idLogo"  value="0"/>
+                        <label>Destinos Actuales</label>
+                        <select class="form-control select2bs4" style="width: 100%;" id=Destino>
+                        </select>
+                    </div>
+                 <h4 style="color:#014377">Nuevo Destino</h4>
+                     <div class="form-group">
+                        <label>Ddepartamento </label>
+                        <select class="form-control select2bs4" style="width: 100%;" id=dDepartamento  onchange="getMunicipio(this.value,3)">
+                        </select>
+                    </div>
+                 <div class="form-group">
+                        <label>Municipio </label>
+                        <select class="form-control select2bs4" style="width: 100%;" id=dMunicipio>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text"  class="form-control" id="nDestino" placeholder="Nuevo destino"/>
 
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn col-12" style="background:#014377; color:white;"  id="crearDestino">Crear nuevo destino</button>
+                    </div>
+                </div>
+            </div><!-- /.card-body -->
+        </div>
 
 <div class="modal fade" id="modalCRUD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -195,6 +242,9 @@
     var urlUpload = "@Url.Action("cargarExcel", "Cliente")";
     var urlCargarEmpresas = "@Url.Action("cargarEmpresas","Empresa")";
      var urlSucursal = "@Url.Action("getSucursales", "Sucursal")";;
+     var urlDestinos = "@Url.Action("Destinos_Sersa", "Cliente")";
+     var urlCrearDestino = "@Url.Action("crearDestinoSersa", "Cliente")";
+     
 </script>
 
 <script src="~/adminlte/js/load_select.js"></script>

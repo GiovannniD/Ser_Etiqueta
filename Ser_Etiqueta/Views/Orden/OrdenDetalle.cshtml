@@ -115,9 +115,17 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="nombreCliente" class="col-sm-3 col-form-label">Municipio</label>
+                        <label for="nombreCliente" class="col-sm-3 col-form-label">Origen</label>
                         <div class="col-sm-9">
-                            <select class="form-control select2bs4" style="width: 100%;" id=idMunicipio name=idMunicipio>
+                            <select class="form-control select2bs4" style="width: 100%;" id=keyOrigen name=keyOrigen>
+                            </select>
+                        </div>
+                    </div>
+
+                          <div class="form-group row">
+                        <label for="nombreCliente" class="col-sm-3 col-form-label">Destino</label>
+                        <div class="col-sm-9">
+                            <select class="form-control select2bs4" style="width: 100%;" id=keyDestino name=keyDestino>
                             </select>
                         </div>
                     </div>
@@ -220,6 +228,7 @@
     var urlMunicipio = "@Url.Action("getAllMunicipio", "Departamento")";
         var idEmpresa = "@Model.idEmpresa";
         var idOrdenTrabajo = "@ViewData["orden"]";
+        var idSersa = "@ViewData["idSersa"]";
         var SerieCodigoEtiqueta = "@ViewData["serieCodigo"]";
         var Estado= "@estado";
     var urlInsert  = "@Url.Action("insertDetalleOrden", "Orden")";
@@ -235,16 +244,19 @@
         var urlDelete = "@Url.Action("eliminarOrden", "Orden")";
     var urlUpdateSucursal = "@Url.Action("UpdateSucursal", "Sucursal")";
         var urlUpload = "@Url.Action("cargarExcel", "Cliente")";
-
+         var urlDestinos = "@Url.Action("cargarDestinos_Sersa", "Cliente")";
         var urlClientes = "@Url.Action("cargarClientes", "Cliente")";
         var Tags = [];
         var TagsComercial = [];
+       // console.log(idSersa)
         $(function () {
             loadTags();
             loadTipoPaquete();
+        getDestinos(idSersa)
+
         });
 
     </script>
 
-    <script src="~/adminlte/js/load_select.js"></script>
+   <script src="~/adminlte/js/load_select.js"></script>
     <script src="~/adminlte/js/Ordenes.js"></script>

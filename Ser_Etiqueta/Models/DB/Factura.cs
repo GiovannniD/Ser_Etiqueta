@@ -27,7 +27,12 @@ namespace Ser_Etiqueta.Models.DB
 
         public int IsGeneraOT { get; set; }
 
-      
-      //  public virtual ICollection<OrdenTrabajo> OrdenTrabajos { get; set; }
+        public int idSersa { get; set; }
+        public string Prefijo { get; set; }
+        public int? idOrdentrabajo { get; set; }
+
+
+
+        //  public virtual ICollection<OrdenTrabajo> OrdenTrabajos { get; set; }
     }
 }

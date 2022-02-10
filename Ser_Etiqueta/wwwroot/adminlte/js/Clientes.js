@@ -4,7 +4,8 @@ $(function () {
     loadTable();
     loadEmpresa()
         bsCustomFileInput.init();
-       $("#cargando").hide()
+    $("#cargando").hide()
+    getDestinos()
 });
 
 function loadEmpresa() {
@@ -54,7 +55,7 @@ function loadEmpresa() {
 
 function getSucursal(idEmpresa) {
     //  alert(idEmpresa)
-    $("#idSucursal").html("")
+    $("#Sucursal").html("")
     $.ajax({
         url: urlSucursal, // Url
         data: { idEmpresa: idEmpresa },
@@ -490,4 +491,88 @@ $("#btnGuardar").click(function () {
     }
 });
 
+function getDestinos() {
+    $('#Destino').html("");
 
+    $.ajax({
+        url: urlDestinos, // Url
+        data: "",
+        type: "post"  // Verbo HTTP
+    })
+        // Se ejecuta si todo fue bien.
+        .done(function (result) {
+            // console.log(result)
+            if (result != null) {
+                var outObjA = JSON.parse(JSON.stringify(result));
+
+                for (var i = 0; i < outObjA.length; i++) {
+                    var jsonData = outObjA[i];
+
+                    $('#Destino').append($("<option />").val("").text(jsonData.descripcionDestino));
+                    // destino.push(jsonData.descripcionMun);
+                }
+            }
+        })
+        // Se ejecuta si se produjo un error.
+        .fail(function (xhr, status, error) {
+            // Mostramos un mensaje de error.
+            //    $("#ErrorAlert").show("slow").delay(2000).hide("slow");
+
+            // Escondemos el Ajax Loader
+            //  $("#AjaxLoader").hide("slow");
+
+            // Habilitamos el botón de Submit
+            //  $("#SubmitBtn").prop("disabled", false);
+        })
+        // Hacer algo siempre, haya sido exitosa o no.
+        .always(function () {
+
+        });
+
+}
+
+$("#crearDestino").click(function () {
+    if ($("#nDestino").val() == "") {
+        alertify.alert("El campo destino no debe estar vacío")
+        return false;
+    }
+    alertify.confirm('Confirmar Accion', 'Esta seguro?', function () {
+        $.ajax({
+            url: urlCrearDestino, // Url
+            data: { KeyDepartamento: $("#dDepartamento").val(), KeyMunicipio: $("#dMunicipio").val(), DescripcionDestino: $("#nDestino").val()},
+            type: "post"  // Verbo HTTP
+        })
+            // Se ejecuta si todo fue bien.
+            .done(function (result) {
+                if (result != null) {
+                    //    console.log(result)
+                    if (result == "1") {
+                        alertify.alert("Destino agregado!")
+                        getDestinos();
+                        
+                    } else {
+
+
+                    }
+
+
+
+                }
+            })
+            // Se ejecuta si se produjo un error.
+            .fail(function (xhr, status, error) {
+                alertify.alert("Ocurrio un problema!")
+            })
+            // Hacer algo siempre, haya sido exitosa o no.
+            .always(function () {
+
+            });
+    }
+        , function () {
+            //  alertify.error('Cancelado')
+
+
+        });
+
+
+})

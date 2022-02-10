@@ -173,6 +173,10 @@ namespace Ser_Etiqueta.Controllers
             public int? CantidadBulto { get; set; }
             public string? Peso { get; set; }
 
+            public int KeyOrigen { get; set; }
+
+            public int keyDestino { get; set; }
+
         }
 
         [HttpPost]
@@ -203,7 +207,9 @@ namespace Ser_Etiqueta.Controllers
                     // IdTipoPaquete= Convert.ToInt16(tipo[i-1]),
                     direccion =detalle.direccion,
                     CantidadBulto=1,
-                    Peso = Convert.ToDecimal(peso)
+                    Peso = Convert.ToDecimal(peso),
+                    KeyOrigen=detalle.KeyOrigen,
+                    keyDestino=detalle.keyDestino
                     //  Peso=Convert.ToInt16(peso[i-1])
                 };
                 _context.OrdenTrabajoDetalles.Add(saveDetalle);
@@ -677,7 +683,11 @@ namespace Ser_Etiqueta.Controllers
                 return NotFound();
             }
             getInfo();
-
+            var idSersa = _context.Empresas.Where(p=> p.IdEmpresa==IdEmpresa).AsNoTracking();
+            foreach (var item in idSersa)
+            {
+                ViewData["idSersa"] = item.IdSersa;
+            }
             var estado = _context.OrdenTrabajos.Where(p => p.IdOrdenTrabajo == id).AsNoTracking().ToList();
 
             foreach (var item in estado)

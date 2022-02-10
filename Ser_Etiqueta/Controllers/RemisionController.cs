@@ -48,7 +48,7 @@ namespace Ser_Etiqueta.Controllers
                 IdSucursalOrden = Convert.ToInt32(item.IdSucursal);
                 fecha = item.FechaCreacion.ToString();
             }
-                var ordenes = _context.OrdenTrabajoDetalles.Where(p => p.IdOrdenTrabajo == id);
+                var ordenes = _context.OrdenTrabajoDetalles.Where(p => p.IdOrdenTrabajo == id).AsNoTracking();
             OrdenTrabajoDetalle model = new OrdenTrabajoDetalle();
            
 

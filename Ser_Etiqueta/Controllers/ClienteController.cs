@@ -22,6 +22,7 @@ namespace Ser_Etiqueta.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly SERETIQUETASContext _context;
+        private readonly SERSAContext sersa_context;
         private readonly ILogger<ClienteController> _logger;
         private readonly IEmailSender _emailSender;
         IWebHostEnvironment _env;
@@ -36,7 +37,8 @@ namespace Ser_Etiqueta.Controllers
             ILogger<ClienteController> logger,
             IEmailSender emailSender,
             SERETIQUETASContext context,
-            IWebHostEnvironment env
+            IWebHostEnvironment env,
+            SERSAContext sersa_context
             )
         {
             _userManager = userManager;
@@ -46,6 +48,7 @@ namespace Ser_Etiqueta.Controllers
            // this._usuarios = usuarios;
             this._context = context;
             _env = env;
+            this.sersa_context = sersa_context;
         }
 
         [Authorize]
@@ -53,9 +56,9 @@ namespace Ser_Etiqueta.Controllers
         public IActionResult Index()
         {
             var users = _userManager.Users.Where(p => p.Id== _userManager.GetUserId(User)).ToList();
-          //  String usuario= _userManager.GetUserName(User);
+            //  String usuario= _userManager.GetUserName(User);
            
-           foreach (ApplicationUser user in users)
+            foreach (ApplicationUser user in users)
            {
 
                 IdEmpresa = user.idEmpresa;
@@ -70,6 +73,11 @@ namespace Ser_Etiqueta.Controllers
                 idSucursal = IdSucursal
 
             };
+            var idSersa = _context.Empresas.Where(p => p.IdEmpresa == IdEmpresa).AsNoTracking();
+            foreach (var item in idSersa)
+            {
+                ViewData["idSersa"] = item.IdSersa;
+            }
             return View(rec);
         }
 
@@ -131,6 +139,81 @@ namespace Ser_Etiqueta.Controllers
             }
            
             
+        }
+
+        [HttpPost]
+        public IActionResult cargarClientes_Sersa()
+        {
+
+
+            IEnumerable<vw_Sersa_Clientes> Clientes_Sersa = _context.vw_Sersa_Clientes;
+
+            return  Json(Clientes_Sersa);
+          
+
+        }
+
+        [HttpPost]
+        public IActionResult cargarClientes_Sersa_etiqueta()
+        {
+
+
+            IEnumerable<vw_Sersa_Clientes> Clientes_Sersa = _context.vw_Sersa_Clientes;
+
+            return Json(Clientes_Sersa);
+
+
+        }
+
+
+        [HttpPost]
+        public IActionResult cargarDestinos_Sersa(int keyCliente)
+        {
+
+
+            var result = _context.vw_Sersa_Destinos.Where(p => p.KeyCliente == keyCliente).AsNoTracking();
+            return Json(result);
+
+
+        }
+
+
+        [HttpPost]
+        public IActionResult Destinos_Sersa()
+        {
+
+            getInfo();
+            var sucursales = _context.Empresas.Where(p => p.IdEmpresa == IdEmpresa).AsNoTracking().ToList();
+            foreach (var item in sucursales)
+            {
+                var result = _context.vw_Sersa_Destinos.Where(p => p.KeyCliente == item.IdSersa).AsNoTracking();
+                return Json(result);
+            }
+
+
+            return Json("Ocurrio algun problema");
+
+        }
+
+        [HttpPost]
+        public IActionResult crearDestinoSersa(Destinos des)
+        {
+
+            getInfo();
+            var sucursales = _context.Empresas.Where(p => p.IdEmpresa == IdEmpresa).AsNoTracking().ToList();
+            foreach (var item in sucursales)
+            {
+                des.KeyCliente = item.IdSersa;
+                des.Activo = true;
+                sersa_context.Destinos.Add(des);
+                sersa_context.SaveChanges();
+                //var result = _context.vw_Sersa_Destinos.Where(p => p.KeyCliente == item.IdSersa).AsNoTracking();
+                return Json("1");
+            }
+
+
+            return Json("Ocurrio algun problema");
+
         }
 
         [HttpPost]
