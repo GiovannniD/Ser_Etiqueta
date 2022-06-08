@@ -34,6 +34,8 @@ namespace Ser_Etiqueta.Models.DB
 
         public int? keyDestino { get; set; }
 
+        public string? Destinatario { get; set; }
+
 
         // public virtual OrdenTrabajo IdOrdenTrabajoNavigation { get; set; }
 

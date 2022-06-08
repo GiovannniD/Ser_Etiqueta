@@ -21,6 +21,8 @@ namespace Ser_Etiqueta.Models.DB
 
         public int? IdSucursal { get; set; }
 
+        public string? UserName { get; set; }
+
         // public virtual Cliente IdClienteNavigation { get; set; }
         // public virtual ClientesDireccion IdDireccionClienteNavigation { get; set; }
         //public virtual Ordene IdOrdenesNavigation { get; set; }

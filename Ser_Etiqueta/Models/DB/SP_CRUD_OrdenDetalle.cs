@@ -39,5 +39,11 @@ namespace Ser_Etiqueta.Models.DB
 
         public string CodigoSerie { get; set; }
         public byte[] Imagen { get; set; }
+
+        public int? keyOrigen { get; set; }
+        public int? keyDestino { get; set; }
+
+        public string? Destinatario { get; set; }
+
     }
 }

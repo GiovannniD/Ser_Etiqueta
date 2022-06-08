@@ -121,6 +121,7 @@ namespace Ser_Etiqueta.Controllers
             
             if (ModelState.IsValid)
             {
+                orden.UserName = _userManager.GetUserName(User);
                 _context.OrdenTrabajos.Add(orden);
                 _context.SaveChanges();
                 return Json("1");
@@ -430,10 +431,11 @@ namespace Ser_Etiqueta.Controllers
         public IActionResult imprimirEnvio(int id)
         {
             int idOtDetalle = 0;
+          
           //  int idOT = 0;
            // getInfo();
             
-           
+       
             var codigo = _context.OrdenTrabajoCodigos.Where(p=>p.IdOtcodigo==id);
           
             int idep = 0;
@@ -498,27 +500,42 @@ namespace Ser_Etiqueta.Controllers
                 gfx.DrawString("Factura:    "+item.Factura, font2, XBrushes.Black, new XPoint(5, 70));
                 gfx.DrawString("Fecha: " + item.fechaRegistro.ToShortDateString(), font2, XBrushes.Black, new XPoint(200, 70));
                 gfx.DrawString("Cliente:" , font2, XBrushes.Black, new XPoint(5, 90));
-                gfx.DrawString(""+item.nombreComercial, font, XBrushes.Black, new XPoint(50, 90));
-                   gfx.DrawString("Direccion:", font2, XBrushes.Black, new XPoint(5, 110));
+                gfx.DrawString("" + item.nombreComercial, font, XBrushes.Black, new XPoint(60, 90));
+                gfx.DrawString("Destinatario: " + item.Destinatario, font2, XBrushes.Black, new XPoint(5, 100));
+                gfx.DrawString("Direccion:", font2, XBrushes.Black, new XPoint(5, 115));
+
+                XRect rect = new XRect(50, 105, 230, 50);
+                tf.DrawString("" + item.direccion, font, XBrushes.Black, rect, format);
+                gfx.DrawString("Movil:", font2, XBrushes.Black, new XPoint(5, 135));
+                gfx.DrawString("" + item.Movil, font, XBrushes.Black, new XPoint(60, 135));
+                /* gfx.DrawString("Movil:", font2, XBrushes.Black, new XPoint(160, 135));
+                 gfx.DrawString(""+item.Movil, font, XBrushes.Black, new XPoint(205, 135));*/
 
 
-                XRect rect = new XRect(50, 100, 230, 50);
-                gfx.DrawRectangle(XBrushes.White, rect);
-                tf.DrawString(""+item.direccion,
-                font,
-               XBrushes.Black,
-                new XRect(rect.X + 5, rect.Y, rect.Width - 5, 34), format);
-                //gfx.DrawString(item.direccion, font, XBrushes.Black, new XPoint(60, 110));
-                gfx.DrawString("Telefono:", font2, XBrushes.Black, new XPoint(5, 135));
-                gfx.DrawString(""+item.Telefono, font, XBrushes.Black, new XPoint(60, 135));
-                gfx.DrawString("Movil:", font2, XBrushes.Black, new XPoint(160, 135));
-                gfx.DrawString(""+item.Movil, font, XBrushes.Black, new XPoint(205, 135));
-                var mun = _context.Municipios.Where(p => p.KeyMunicipio == item.idMunicipio).AsNoTracking();
-                foreach (var municipios in mun)
+               
+                if (item.keyDestino != null)
                 {
-                    idep = municipios.KeyDepartamento;
-                    gfx.DrawString(municipios.DescripcionMun, font2, XBrushes.Black, new XPoint(160, 175));
+                    var des = _context.vw_Sersa_Destinos.Where(p => p.KeyDestino == item.keyDestino).AsNoTracking().ToList();
+                    foreach (var destino in des)
+                    {
+                        var mun = _context.Municipios.Where(p => p.KeyMunicipio == destino.KeyMunicipio).AsNoTracking();
+                        foreach (var municipios in mun)
+                        {
+                            idep = municipios.KeyDepartamento;
+                            gfx.DrawString(municipios.DescripcionMun, font2, XBrushes.Black, new XPoint(160, 175));
+                        }
+                    }
                 }
+                else
+                {
+                    var mun = _context.Municipios.Where(p => p.KeyMunicipio == item.idMunicipio).AsNoTracking();
+                    foreach (var municipios in mun)
+                    {
+                        idep = municipios.KeyDepartamento;
+                        gfx.DrawString(municipios.DescripcionMun, font2, XBrushes.Black, new XPoint(160, 175));
+                    }
+                }
+               
                     var dep = _context.Departamentos.Where(p=>p.KeyDepartamento==idep).AsNoTracking();
                 foreach (var departamentos in dep)
                 {
@@ -571,7 +588,7 @@ namespace Ser_Etiqueta.Controllers
             XFont font4 = new XFont("Arial", 8);
             XFont font5 = new XFont("Arial", 8, XFontStyle.Bold);
 
-            XRect rect = new XRect(50, 100, 230, 50);
+            XRect rect = new XRect(50, 105, 230, 50);
             XStringFormat format = new XStringFormat();
             PdfPage page = document.AddPage();
             page.Width = XUnit.FromMillimeter(101.6);
@@ -614,7 +631,8 @@ namespace Ser_Etiqueta.Controllers
                 gfx.DrawString("Fecha: " + item.fechaRegistro.ToShortDateString(), font2, XBrushes.Black, new XPoint(200, 70));
                 gfx.DrawString("Cliente:", font2, XBrushes.Black, new XPoint(5, 90));
                 gfx.DrawString(""+ item.nombreComercial, font, XBrushes.Black, new XPoint(60, 90));
-                gfx.DrawString("Direccion:", font2, XBrushes.Black, new XPoint(5, 110));
+                gfx.DrawString("Destinatario: "+item.Destinatario, font2, XBrushes.Black, new XPoint(5, 100));
+                gfx.DrawString("Direccion:", font2, XBrushes.Black, new XPoint(5, 115));
                
                 gfx.DrawRectangle(XBrushes.White, rect);
               /*  tf.DrawString("" + item.direccion,
@@ -622,15 +640,31 @@ namespace Ser_Etiqueta.Controllers
                XBrushes.Black,
                 rect, format);*/
                 tf.DrawString(""+item.direccion, font, XBrushes.Black, rect,format);
-                gfx.DrawString("Telefono:", font2, XBrushes.Black, new XPoint(5, 135));
-                gfx.DrawString(""+item.Telefono, font, XBrushes.Black, new XPoint(60, 135));
-                gfx.DrawString("Movil:", font2, XBrushes.Black, new XPoint(160, 135));
-                gfx.DrawString(""+item.Movil, font, XBrushes.Black, new XPoint(205, 135));
-                var mun = _context.Municipios.Where(p => p.KeyMunicipio == item.idMunicipio).AsNoTracking();
-                foreach (var municipios in mun)
+                gfx.DrawString("Movil:", font2, XBrushes.Black, new XPoint(5, 135));
+                gfx.DrawString(""+item.Movil, font, XBrushes.Black, new XPoint(60, 135));
+               /* gfx.DrawString("Movil:", font2, XBrushes.Black, new XPoint(160, 135));
+                gfx.DrawString(""+item.Movil, font, XBrushes.Black, new XPoint(205, 135));*/
+                if (item.keyDestino != null)
                 {
-                    idep = municipios.KeyDepartamento;
-                    gfx.DrawString(municipios.DescripcionMun, font2, XBrushes.Black, new XPoint(160, 175));
+                    var des = _context.vw_Sersa_Destinos.Where(p => p.KeyDestino == item.keyDestino).AsNoTracking().ToList();
+                    foreach (var destino in des)
+                    {
+                        var mun = _context.Municipios.Where(p => p.KeyMunicipio == destino.KeyMunicipio).AsNoTracking();
+                        foreach (var municipios in mun)
+                        {
+                            idep = municipios.KeyDepartamento;
+                            gfx.DrawString(municipios.DescripcionMun, font2, XBrushes.Black, new XPoint(160, 175));
+                        }
+                    }
+                }
+                else
+                {
+                    var mun = _context.Municipios.Where(p => p.KeyMunicipio == item.idMunicipio).AsNoTracking();
+                    foreach (var municipios in mun)
+                    {
+                        idep = municipios.KeyDepartamento;
+                        gfx.DrawString(municipios.DescripcionMun, font2, XBrushes.Black, new XPoint(160, 175));
+                    }
                 }
                 var dep = _context.Departamentos.Where(p => p.KeyDepartamento == idep).AsNoTracking();
                 foreach (var departamentos in dep)

@@ -931,7 +931,7 @@ function addNewEnvio() {
         data: {
             IdOrdenTrabajo: idOrdenTrabajo, IdCliente: $("#idCliente").val(), Codigo: $("#Codigo").val(), Factura: $("#Factura").val(),idMunicipio:arrayDeCadenas[1],
             keyOrigen: $("#keyOrigen").val(), keyDestino: arrayDeCadenas[0], IdTipoPaquete: tipo, direccion: $.trim($("#direccion").val()),
-            CantidadBulto: cantidad, Peso: peso
+            CantidadBulto: cantidad, Peso: peso,Destinatario:$("#Destinatario").val()
         },
         type: "post"  // Verbo HTTP 
     })

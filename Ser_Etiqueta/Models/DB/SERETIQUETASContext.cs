@@ -480,6 +480,8 @@ namespace Ser_Etiqueta.Models.DB
                 entity.Property(e => e.Generada).HasColumnName("generada").HasDefaultValueSql("(1)");
                 entity.Property(e => e.IdSucursal).HasColumnName("idSucursal");
 
+                entity.Property(e => e.UserName).HasColumnName("UserName");
+
                 /*  entity.Property(e => e.IdCliente).HasColumnName("idCliente");
 
                   entity.Property(e => e.IdDireccionCliente).HasColumnName("idDireccionCliente");
@@ -568,6 +570,8 @@ namespace Ser_Etiqueta.Models.DB
                 entity.Property(e => e.KeyOrigen).HasColumnName("keyOrigen").HasDefaultValueSql("((null))");
 
                 entity.Property(e => e.keyDestino).HasColumnName("keyDestino").HasDefaultValueSql("((null))");
+
+                entity.Property(e => e.Destinatario).HasColumnName("Destinatario").HasDefaultValueSql("((null))");
 
                 /*   entity.HasOne(d => d.IdOrdenTrabajoNavigation)
                        .WithMany(p => p.OrdenTrabajoDetalles)

@@ -615,7 +615,7 @@ function loadTable() {
                         //console.log(full.nombreComercial)
                         var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verDetalle('" + full.keyFactura + "','" + encodeURIComponent(full.nombreComercial) + "','" + full.fechaElaboracion + "','" + full.keyFacturaEstatus + "');> <i class='material-icons'>Ver Detalle</i><button class='btn  btn-sm' style='background: #6C757D; color: white' onclick =imprimirFactura('" + full.keyFactura + "');> <i class='material-icons'>Imprimir</i></div></div>";
                     } else if (full.keyFacturaEstatus>1) {
-                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verDetalle('" + full.keyFactura + "','" + encodeURIComponent(full.nombreComercial) + "','" + full.fechaElaboracion + "','" + full.keyFacturaEstatus +"');> <i class='material-icons'>Ver Orden</i></button ></div></div>";
+                        var opciones = " <div class='text-left'><div class='btn-group'><button class='btn  btn-sm' style='background: #014377; color: white' onclick =verDetalle('" + full.keyFactura + "','" + encodeURIComponent(full.nombreComercial) + "','" + full.fechaElaboracion + "','" + full.keyFacturaEstatus +"');> <i class='material-icons'>Ver Detalle</i></button ></div></div>";
                       
                     }
                     return opciones

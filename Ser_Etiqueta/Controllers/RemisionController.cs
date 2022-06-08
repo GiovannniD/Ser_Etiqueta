@@ -39,8 +39,10 @@ namespace Ser_Etiqueta.Controllers
         public IActionResult Remision(int? id)
         {
             int IdEmpresaOrden=0;
+            
             int IdSucursalOrden=0;
             string fecha="";
+            int countFinal = 0;
             var OrdenTrabajo = _context.OrdenTrabajos.Where(p => p.IdOrdenTrabajo == id).AsNoTracking();
             foreach (var item in OrdenTrabajo)
             {
@@ -49,7 +51,10 @@ namespace Ser_Etiqueta.Controllers
                 fecha = item.FechaCreacion.ToString();
             }
                 var ordenes = _context.OrdenTrabajoDetalles.Where(p => p.IdOrdenTrabajo == id).AsNoTracking();
+            var count = _context.OrdenTrabajoDetalles
+            .Where(o => o.IdOrdenTrabajo == id).Count();
             OrdenTrabajoDetalle model = new OrdenTrabajoDetalle();
+            countFinal = Convert.ToInt32(count)+1;
            
 
             PdfDocument document = new PdfDocument();
@@ -76,6 +81,7 @@ namespace Ser_Etiqueta.Controllers
 
                 XFont fontParagraph = new XFont("Verdana", 8, XFontStyle.Regular);
                 XFont font2 = new XFont("Verdana", 12, XFontStyle.Bold);
+            XFont font3 = new XFont("Verdana", 8, XFontStyle.Bold);
 
             // Row elements
             int el1_width = 80;
@@ -110,16 +116,31 @@ namespace Ser_Etiqueta.Controllers
 
 
             XSolidBrush rect_style1 = new XSolidBrush(XColors.LightGray);
-                XSolidBrush rect_style2 = new XSolidBrush(XColors.DarkGreen);
+            XSolidBrush rect_style0 = new XSolidBrush(XColors.White);
+            XSolidBrush rect_style2 = new XSolidBrush(XColors.DarkGreen);
                 XSolidBrush rect_style3 = new XSolidBrush(XColors.Red);
                 int i = -1;
                 int a = 500;
                 int c = 1;
+                int total = 0;
                 XImage xfoto = XImage.FromFile(_env.WebRootPath + @"\logo_SER.jpg");
                 graph.DrawImage(xfoto, 12, 10, 120, 50);
-           /* XPen lineRed = new XPen(XColors.Red, 2);
 
-            graph.DrawLine(lineRed, 100, 100, 50, 50);*/
+            var logo = _context.LogoEmpresas.Where(p => p.IdEmpresa == IdEmpresaOrden).AsNoTracking();
+            if (logo != null)
+            {
+                foreach (var logos in logo)
+                {
+                    Stream stream3 = new System.IO.MemoryStream(logos.logoEmpresa);
+                    XImage xfoto3 = XImage.FromStream(stream3);
+                    graph.DrawImage(xfoto3, 580 , 10, 120, 50);
+                }
+            }
+            /* XPen lineRed = new XPen(XColors.Red, 2);
+
+             graph.DrawLine(lineRed, 100, 100, 50, 50);*/
+            double dist_Y = 0;
+            double dist_Y2 =0;
             foreach (var item in ordenes)
 
 
@@ -127,9 +148,10 @@ namespace Ser_Etiqueta.Controllers
                   //  model.Codigo = item.Codigo;
                     i++;
                     a++;
-                double dist_Y = lineHeight * (i + 1);
-                    double dist_Y2 = dist_Y - 2;
-                    a.ToString().PadLeft(8, '0');
+                count--;
+                dist_Y = lineHeight * (i + 1);
+                dist_Y2 = dist_Y - 2;
+                a.ToString().PadLeft(8, '0');
 a.ToString("00000000");
 a.ToString("D4");
                  
@@ -138,14 +160,14 @@ a.ToString("D4");
                     {
                     item.IdOrdenTrabajo.ToString().PadLeft(8, '0');
           
-                    graph.DrawString("Remision: #" + $"{item.IdOrdenTrabajo:00000000}", font2, XBrushes.Black, new XPoint(24, 92));
+                    graph.DrawString("Remision: #"+ $"{item.IdOrdenTrabajo:00000000}", font2, XBrushes.Black, new XPoint(24, 92));
                     var empresa = _context.Empresas.Where(p => p.IdEmpresa== IdEmpresaOrden).AsNoTracking();
                     foreach (var emp in empresa)
                     {
                         graph.DrawString(emp.NombreComercial, font2, XBrushes.Black, new XPoint(300, 30));
                     }
 
-                    graph.DrawString("Fecha de creacion: "+fecha, fontParagraph, XBrushes.Black, new XPoint(600, 20));
+                    graph.DrawString("Fecha de creacion: "+fecha, fontParagraph, XBrushes.Black, new XPoint(600, 10));
                     graph.DrawRectangle(rect_style2, marginLeft, marginTop, pdfPage.Width - 2 * marginLeft, rect_height);
 
                         tf.DrawString("Destino", fontParagraph, XBrushes.White,
@@ -334,13 +356,54 @@ a.ToString("D4");
                         tf = new XTextFormatter(graph);
                         xfoto = XImage.FromFile(_env.WebRootPath + @"\logo_SER.jpg");
                         graph.DrawImage(xfoto, 12, 10, 120, 50);
-                       // graph.DrawString("Remision: #00001", font2, XBrushes.Black, new XPoint(24, 92));
+                        var logo2 = _context.LogoEmpresas.Where(p => p.IdEmpresa == IdEmpresaOrden).AsNoTracking();
+                        if (logo2 != null)
+                        {
+                            foreach (var logos in logo)
+                            {
+                                Stream stream3 = new System.IO.MemoryStream(logos.logoEmpresa);
+                                XImage xfoto3 = XImage.FromStream(stream3);
+                                graph.DrawImage(xfoto3, 580, 10, 120, 50);
+                            }
+                        }
+                        // graph.DrawString("Remision: #00001", font2, XBrushes.Black, new XPoint(24, 92));
                         c = 1;
                         i = -1;
                     }
-                }
 
                 }
+
+
+            }
+            if (countFinal <= 15 && count == 0)
+            {
+                dist_Y = lineHeight * countFinal;
+                dist_Y2 = dist_Y - 2;
+                graph.DrawRectangle(rect_style0, marginLeft, dist_Y2 + marginTop + 10, el1_width + 5, rect_height + 10);
+                tf.DrawString("Total de Paquetes: " + countFinal, font3, XBrushes.Black,
+                              new XRect(marginLeft, dist_Y + marginTop + 10, el1_width + 50, el_height + 10), format);
+
+                XImage xfoto3 = XImage.FromFile(_env.WebRootPath + @"\LineaFirma.png");
+                graph.DrawImage(xfoto3, 150, 500, 150, 10);
+                graph.DrawString("Entregado por:", font3, XBrushes.Black, new XPoint(180, 520));
+
+                graph.DrawImage(xfoto3, 480, 500, 150, 10);
+                graph.DrawString("Recibido por:", font3, XBrushes.Black, new XPoint(510, 520));
+            }
+            else {
+                dist_Y = lineHeight * (c+1);
+                dist_Y2 = dist_Y - 2;
+                graph.DrawRectangle(rect_style0, marginLeft, dist_Y2 + marginTop + 10, el1_width + 5, rect_height + 10);
+                tf.DrawString("Total de Paquetes: " + countFinal, font3, XBrushes.Black,
+                              new XRect(marginLeft, dist_Y + marginTop + 10, el1_width + 50, el_height + 10), format);
+
+                XImage xfoto3 = XImage.FromFile(_env.WebRootPath + @"\LineaFirma.png");
+                graph.DrawImage(xfoto3, 150, 500, 150, 10);
+                graph.DrawString("Entregado por:", font3, XBrushes.Black, new XPoint(180, 520));
+
+                graph.DrawImage(xfoto3, 480, 500, 150, 10);
+                graph.DrawString("Recibido por:", font3, XBrushes.Black, new XPoint(510, 520));
+            }
 
 
 

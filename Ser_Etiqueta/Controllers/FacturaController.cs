@@ -463,14 +463,16 @@ namespace Ser_Etiqueta.Controllers
         [HttpPost]
         public IActionResult getFacturas()
         {
+            DateTime fecha = DateTime.Now;
+            string cadenaFecha = fecha.ToShortDateString();
             if (User.IsInRole("SuperAdmin"))
             {
-                var facturas = _context.vw_Facturas.AsNoTracking().ToList();
+                var facturas = _context.vw_Facturas.Where(p=>p.FechaElaboracion==Convert.ToDateTime(cadenaFecha)).AsNoTracking().ToList();
                 return Json(facturas);
             }
             else if (User.IsInRole("Facturacion"))
             {
-                var facturas = _context.vw_Facturas.Where(p=>p.UserName==_userManager.GetUserName(User)).AsNoTracking().ToList();
+                var facturas = _context.vw_Facturas.Where(p=>p.UserName==_userManager.GetUserName(User) && p.FechaElaboracion == fecha).AsNoTracking().ToList();
                 return Json(facturas);
             }
             return Json("Ocurrio un error");
@@ -610,7 +612,7 @@ namespace Ser_Etiqueta.Controllers
 
 
             PdfDocument document = new PdfDocument();
-            document.Info.Title = "Factura de envios";
+            document.Info.Title = "Cotizacion de envios";
 
 
             // Page Options
@@ -710,7 +712,7 @@ namespace Ser_Etiqueta.Controllers
             
             graph.DrawString("Ant. Hospital Militar 3C. al Lago, 20 Vrs Este #30. Managua-Nicaragua", info, XBrushes.Black, new XPoint(140, 48));
             graph.DrawString("Administración: (505) 2222 6356 Operaciones: (505) 2254 5529", info, XBrushes.Black, new XPoint(140, 60));
-            graph.DrawString("AUTORIZADO DGI      ASFC 04/0090/06/2016/9", info, XBrushes.Black, new XPoint(140, 72));
+          //  graph.DrawString("AUTORIZADO DGI      ASFC 04/0090/06/2016/9", info, XBrushes.Black, new XPoint(140, 72));
             XPen pen = new XPen(XColors.Black, 2);
             /* XPen lineRed = new XPen(XColors.Red, 2);
 
@@ -735,7 +737,7 @@ namespace Ser_Etiqueta.Controllers
                 var sucursal = _context.Sucursales.Where(p => p.IdSucursal == idSucursal).AsNoTracking();
                 foreach (var suc in sucursal)
                 {
-                    graph.DrawString("Factura #   "+suc.codigoFactura+"-" + $"{ item.KeyFactura:000}", titulo, XBrushes.Black, new XPoint(450, 39));
+                    graph.DrawString("Cotizacion #   "+suc.codigoFactura+"-" + $"{ item.KeyFactura:000}", titulo, XBrushes.Black, new XPoint(450, 39));
                 }
                 var cliente= _context.vw_Sersa_Clientes.Where(p => p.KeyCliente == idSersa).AsNoTracking();
                 foreach (var clientes in cliente)
